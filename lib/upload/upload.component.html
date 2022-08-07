@@ -1,0 +1,45 @@
+<nz-upload
+  [nzType]="nzType"
+  [nzAccept]="nzAccept"
+  [nzAction]="nzAction"
+  [nzDirectory]="nzDirectory"
+  [nzOpenFileDialogOnClick]="nzOpenFileDialogOnClick"
+  [nzBeforeUpload]="_nzBeforeUpload"
+  [nzCustomRequest]="nzCustomRequest"
+  [nzData]="nzData"
+  [nzFilter]="nzFilter"
+  [(nzFileList)]="nzFileList"
+  [nzDisabled]="nzDisabled"
+  [nzHeaders]="nzHeaders"
+  [nzListType]="nzListType"
+  [nzMultiple]="nzMultiple"
+  [nzName]="nzName"
+  [nzShowUploadList]="nzShowUploadList"
+  [nzShowButton]="nzShowButton"
+  [nzWithCredentials]="nzWithCredentials"
+  [nzRemove]="nzRemove"
+  [nzPreview]="nzPreview"
+  [nzPreviewFile]="nzPreviewFile"
+  [nzPreviewIsImage]="nzPreviewIsImage"
+  [nzTransformFile]="nzTransformFile"
+  [nzDownload]="nzDownload"
+  [nzIconRender]="nzIconRender"
+  [nzFileListRender]="nzFileListRender"
+  (nzChange)="onNzChange($event)"
+  (nzFileListChange)="nzFileListChange.emit($event)"
+>
+  <ng-container *nzStringTemplateOutlet="nzxUploadButton; context: { $implicit: this, nzFileList: nzFileList }">
+    <button nz-button [disabled]="nzDisabled" type="button" *ngIf="nzType === 'select' && nzxShowUploadButtonIcon !== false">
+      <i *ngIf="nzxUploadButtonIcon" nz-icon [nzType]="nzxUploadButtonIcon"></i>
+      {{ nzxUploadButton || '上传' }}
+    </button>
+  </ng-container>
+
+  <ng-container *ngIf="nzType === 'drag'">
+    <p class="ant-upload-drag-icon">
+      <i *ngIf="nzxUploadButtonIcon" nz-icon [nzType]="nzxUploadButtonIcon"></i>
+    </p>
+    <p class="ant-upload-text">点击或拖拽上传文件</p>
+    <p class="ant-upload-hint">{{ nzxHint }}</p>
+  </ng-container>
+</nz-upload>

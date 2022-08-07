@@ -1,0 +1,84 @@
+@import '../../../base.less';
+@nzx-column-setting-prefix-cls: ~'@{nzx-prefix}-column-setting';
+
+.@{nzx-column-setting-prefix-cls} {
+  &__popover-title {
+    display: flex;
+    align-items: center;
+  }
+
+  &__flex {
+    display: flex;
+    align-items: center;
+  }
+
+  &__cloumn-box {
+    .ant-popover-inner-content {
+      padding-right: 0;
+      padding-left: 0;
+    }
+
+    .cdk-drop-list-dragging .cdk-drag {
+      transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    }
+
+    .cdk-drag-placeholder {
+      opacity: 0;
+    }
+  }
+
+  &__drag-preview {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+
+  &__column-list {
+    padding: 0;
+  }
+
+  &__check-item {
+    display: flex;
+    align-items: center;
+    padding: 6px 16px 6px 0;
+    justify-content: space-between;
+
+    .drag-box {
+      display: flex;
+      align-items: center;
+      flex: 1;
+    }
+
+    .ant-checkbox-wrapper {
+      flex: 1;
+      &:hover {
+        color: @primary-color;
+      }
+    }
+  }
+
+  &__fixed-left,
+  &__fixed-right {
+    color: #666;
+    cursor: pointer;
+    font-size: 16px;
+    transform: rotate(-90deg);
+
+    &.active,
+    &:hover {
+      color: @primary-color;
+    }
+
+    &.disabled {
+      color: @disabled-color;
+      cursor: not-allowed;
+    }
+  }
+
+  &__drag-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin: 0 5px;
+    font-size: 16px;
+    cursor: move;
+  }
+}

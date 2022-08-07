@@ -1,0 +1,42 @@
+@import '../base.less';
+@nzx-page-prefix: ~'@{nzx-prefix}-page';
+@nzx-page-header-prefix: ~'@{nzx-prefix}-page-header';
+@nzx-page-content-prefix: ~'@{nzx-prefix}-page-content';
+@nzx-page-background-color: #f0f2f5;
+
+.@{nzx-page-prefix}{
+  flex-direction: column;
+  display: flex;
+  height: 100%;
+  background: @nzx-page-background-color;
+}
+
+.@{nzx-page-content-prefix}{
+  padding: 6px;
+  flex: 1;
+  background-color: #fff;
+  border-radius: 2px;
+
+  &.hide-form-item-bottom .ant-form-item {
+    margin-bottom: 3px;
+  }
+}
+
+.@{nzx-page-header-prefix}{
+  background-color: #fff;
+  padding: 12px 10px;
+  border-radius: 2px;
+
+  &.hide-form-item-bottom .ant-form-item {
+    margin-bottom: 3px;
+  }
+  .page-header_row {
+    display: flex;
+  }
+  .page-header_col {
+    flex: 1;
+  }
+  .header-content-wrapper {
+    padding-left: 10px;
+  }
+}

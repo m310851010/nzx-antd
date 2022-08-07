@@ -1,0 +1,51 @@
+@import '../base.less';
+@nzx-table-prefix-cls: ~'@{nzx-prefix}-table';
+
+.@{nzx-table-prefix-cls} {
+  .ant-table-column-title {
+    position: initial;
+  }
+  .nz-resizable-handle-right {
+    width: 8px;
+    right: 0;
+  }
+
+  .ant-table:not(.ant-table-bordered) .ant-table-thead > tr > th:not(:last-child) .nz-resizable-handle-right:after {
+    content: ' ';
+    position: absolute;
+    width: 1px;
+    background: #e8e8e8;
+    right: 0;
+    height: 18px;
+    top: 50%;
+    margin-top: -9px;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    padding-bottom: 8px;
+  }
+  &__title {
+    display: flex;
+    align-items: center;
+    > * {
+      margin-right: 8px;
+    }
+  }
+
+  &__toolbar {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    > * {
+      margin-right: 8px;
+    }
+    .anticon[tabindex] {
+      cursor: pointer;
+      font-size: 18px;
+    }
+  }
+}

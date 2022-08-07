@@ -1,0 +1,19 @@
+<nz-checkbox-wrapper (nzOnChange)="ngModelChange($event)">
+  <ng-container *ngFor="let item of nzxOptions">
+    <label
+      *ngIf="item.hide !== false"
+      nz-checkbox
+      (focus)="nzxFocus.emit(item)"
+      (blur)="nzxBlur.emit(item)"
+      [nzValue]="item.value"
+      [ngModel]="item.checked"
+      [nzDisabled]="nzxDisabled || item.disabled"
+      [nzIndeterminate]="item.indeterminate"
+      (ngModelChange)="item.ngModelChange?.($event)"
+    >
+      <ng-container *nzStringTemplateOutlet="item.label; context: { $implicit: item, options: nzxOptions }">
+        <div [innerHTML]="item.label"></div>
+      </ng-container>
+    </label>
+  </ng-container>
+</nz-checkbox-wrapper>

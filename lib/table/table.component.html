@@ -1,0 +1,345 @@
+<nzx-table-header
+  *ngIf="toolbarVisible !== false"
+  [actionVisible]="actionVisible"
+  [tableSize]="nzSize"
+  (tableSizeChange)="nzSize = $event"
+  (reloadClick)="reloadClick()"
+>
+  <ng-container *nzStringTemplateOutlet="title; context: { $implicit: { context: this } }">
+    <div [innerHTML]="title"></div>
+  </ng-container>
+  <ng-content select="[title]"></ng-content>
+
+  <ng-container *nzStringTemplateOutlet="toolbar; context: { $implicit: { context: this } }">
+    <div [innerHTML]="toolbar"></div>
+  </ng-container>
+  <ng-container toolbar>
+    <ng-content select="[toolbar]"></ng-content>
+  </ng-container>
+
+  <nzx-column-setting
+    *ngIf="nzxSettingVisible"
+    setting
+    [nzxColumns]="_bodyColumns"
+    (sortedColumn)="sortedColumn($event)"
+    (fixedClick)="fixedClick($event)"
+  ></nzx-column-setting>
+</nzx-table-header>
+
+<nz-table
+  #basicTable
+  [nzData]="nzData"
+  [nzTableLayout]="nzTableLayout"
+  [nzFrontPagination]="nzFrontPagination"
+  [nzTotal]="nzTotal"
+  [(nzPageIndex)]="nzPageIndex"
+  [(nzPageSize)]="nzPageSize"
+  [nzShowPagination]="nzShowPagination"
+  [nzPaginationPosition]="nzPaginationPosition"
+  [nzPaginationType]="nzPaginationType"
+  [nzBordered]="nzBordered"
+  [nzOuterBordered]="nzOuterBordered"
+  [nzWidthConfig]="nzWidthConfig"
+  [nzSize]="nzSize"
+  [nzLoading]="nzLoading"
+  [nzLoadingIndicator]="nzLoadingIndicator"
+  [nzLoadingDelay]="nzLoadingDelay"
+  [nzScroll]="{ x: scrollX, y: scrollY }"
+  [nzTitle]="nzTitle"
+  [nzFooter]="nzFooter"
+  [nzNoResult]="nzNoResult"
+  [nzPageSizeOptions]="nzPageSizeOptions || defaultPageSizeOptions"
+  [nzShowQuickJumper]="nzShowQuickJumper"
+  [nzShowSizeChanger]="nzShowSizeChanger"
+  [nzShowTotal]="nzShowTotal === undefined ? totalTemplate : nzShowTotal"
+  [nzItemRender]="nzItemRender"
+  [nzHideOnSinglePage]="nzHideOnSinglePage"
+  [nzSimple]="nzSimple"
+  [nzTemplateMode]="nzTemplateMode"
+  [nzVirtualItemSize]="nzVirtualItemSize"
+  [nzVirtualMaxBufferPx]="nzVirtualMaxBufferPx"
+  [nzVirtualMinBufferPx]="nzVirtualMinBufferPx"
+  [nzVirtualForTrackBy]="nzVirtualForTrackBy"
+  (nzPageIndexChange)="nzPageIndexChange.emit($event); fetch(false)"
+  (nzPageSizeChange)="nzPageSizeChange.emit($event); fetch(false)"
+  (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+  (nzQueryParams)="nzQueryParams.emit($event)"
+>
+  <thead>
+    <ng-container *ngIf="!nzxDefaultRenderHeader">
+      <tr *ngFor="let row of _headerColumns">
+        <ng-container *ngFor="let col of row">
+          <th
+            *ngIf="!col.nzShowCheckbox && col.visible !== false"
+            nz-resizable
+            [nzDisabled]="nzxResizable === false"
+            nzBounds="window"
+            (nzResize)="onResize($event, col)"
+            (click.once)="headerClick.emit({ column: col, event: $event })"
+            (dblclick)="headerDblclick.emit({ column: col, event: $event })"
+            (contextmenu)="headerContextmenu.emit({ column: col, event: $event })"
+            [nzShowSort]="col.nzShowSort"
+            [nzCustomFilter]="col.nzCustomFilter"
+            [nzSortFn]="col.nzSortFn == null ? true : col.nzSortFn"
+            [nzSortDirections]="col.nzSortDirections"
+            [(nzSortOrder)]="col.nzSortOrder"
+            (nzSortOrderChange)="sortOrderChange($event, col)"
+            [nzColumnKey]="col.nzColumnKey || col.name"
+            [nzShowFilter]="col.nzShowFilter"
+            [nzSortPriority]="col.nzSortPriority"
+            [nzFilterFn]="col.nzFilterFn"
+            [nzFilters]="col.nzFilters"
+            [nzFilterMultiple]="col.nzFilterMultiple !== false"
+            [nzWidth]="col.nzWidth"
+            [nzLeft]="col.fixed === 'left'"
+            [nzRight]="col.fixed === 'right'"
+            [nzAlign]="col.nzAlign"
+            [nzBreakWord]="col.nzBreakWord"
+            [nzEllipsis]="col.nzEllipsis"
+            [colspan]="col.colspan"
+            [rowspan]="col.rowspan"
+            [ngClass]="col.thNgClass"
+            [ngStyle]="col.thNgStyle"
+          >
+            <nz-resize-handles [nzDirections]="['right']"></nz-resize-handles>
+            <ng-container
+              *ngTemplateOutlet="
+                thRenderTemplate;
+                context: { $implicit: { col: col, row: row, context: this }, row: row }
+              "
+            ></ng-container>
+          </th>
+
+          <th
+            *ngIf="col.nzShowCheckbox && col.visible !== false"
+            nz-resizable
+            [nzDisabled]="nzxResizable === false"
+            nzBounds="window"
+            (nzResize)="onResize($event, col)"
+            (click.once)="headerClick.emit({ column: col, event: $event })"
+            (dblclick)="headerDblclick.emit({ column: col, event: $event })"
+            (contextmenu)="headerContextmenu.emit({ column: col, event: $event })"
+            [nzShowCheckbox]="col.nzShowCheckbox"
+            [nzIndeterminate]="col.nzIndeterminate"
+            [(nzChecked)]="col.checked"
+            (nzCheckedChange)="thCheckedChange($event, col)"
+            [nzShowRowSelection]="col.nzShowRowSelection"
+            [nzSelections]="col.nzSelections"
+            [nzWidth]="col.nzWidth == null && col.isIndex ? '60px' : col.nzWidth"
+            [nzLeft]="col.fixed === 'left'"
+            [nzRight]="col.fixed === 'right'"
+            [nzAlign]="col.nzAlign"
+            [nzBreakWord]="col.nzBreakWord"
+            [nzEllipsis]="col.nzEllipsis"
+            [colspan]="col.colspan"
+            [rowspan]="col.rowspan"
+            [ngClass]="col.thClassName"
+            [ngStyle]="col.thStyle"
+          >
+            <nz-resize-handles [nzDirections]="['right']"></nz-resize-handles>
+            <ng-container
+              *ngTemplateOutlet="
+                thRenderTemplate;
+                context: { $implicit: { col: col, row: row, context: this }, row: row }
+              "
+            ></ng-container>
+          </th>
+        </ng-container>
+      </tr>
+    </ng-container>
+  </thead>
+
+  <tbody>
+    <ng-container
+      *ngFor="let row of basicTable.data; index as index; first as first; last as last; even as even; odd as odd"
+    >
+      <tr
+        *ngIf="row.parent?.expand || !row.parent"
+        (click.once)="
+          rowClick.emit({
+            row: row,
+            rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
+            event: $event
+          })
+        "
+        (dblclick)="
+          rowDblclick.emit({
+            row: row,
+            rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
+            event: $event
+          })
+        "
+        (contextmenu)="
+          rowContextmenu.emit({
+            row: row,
+            rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
+            event: $event
+          })
+        "
+        [ngClass]="row.className"
+        [ngStyle]="row.style"
+      >
+        <ng-container
+          *ngFor="let col of _bodyColumns; index as _index; first as _first; last as _last; even as _even; odd as _odd"
+        >
+          <td
+            *ngIf="col.visible !== false"
+            (click.once)="
+              cellClick.emit({
+                row: row,
+                column: col,
+                rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
+                columnIndex: {
+                  index: _index,
+                  first: _first,
+                  last: _last,
+                  even: _even,
+                  odd: _odd
+                },
+                event: $event
+              })
+            "
+            (dblclick)="
+              cellDblclick.emit({
+                row: row,
+                column: col,
+                rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
+                columnIndex: {
+                  index: _index,
+                  first: _first,
+                  last: _last,
+                  even: _even,
+                  odd: _odd
+                },
+                event: $event
+              })
+            "
+            (contextmenu)="
+              cellContextmenu.emit({
+                row: row,
+                column: col,
+                rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
+                columnIndex: {
+                  index: _index,
+                  first: _first,
+                  last: _last,
+                  even: _even,
+                  odd: _odd
+                },
+                event: $event
+              })
+            "
+            [nzShowCheckbox]="col.nzShowCheckbox || row.showCheckbox"
+            [nzDisabled]="row.disabled"
+            [nzIndeterminate]="row.indeterminate"
+            [(nzChecked)]="row.checked"
+            (nzCheckedChange)="tdCheckedChange($event, col, row, {index, first, last, even, odd})"
+            [nzShowExpand]="col.showExpand && row.showExpand"
+            [(nzExpand)]="row.expand"
+            (nzExpandChange)="col.nzExpandChange && col.nzExpandChange($event, col, row, {index, first, last, even, odd})"
+            [nzIndentSize]="col.showExpand && row.nzIndentSize ? row.nzIndentSize : null"
+            [nzLeft]="col.fixed === 'left'"
+            [nzRight]="col.fixed === 'right'"
+            [nzAlign]="col.tdAlign || col.nzAlign"
+            [nzBreakWord]="col.nzBreakWord"
+            [nzEllipsis]="col.nzEllipsis"
+            [attr.colspan]="row.colspan"
+            [attr.rowspan]="row.rowspan"
+            [ngClass]="col.tdNgClass"
+            [ngStyle]="col.tdNgStyle"
+          >
+            <ng-container
+              *ngTemplateOutlet="
+                tdDataRender;
+                context: {
+                  $implicit: {
+                    col: col,
+                    row: row,
+                    context: this,
+                    indexAttr: { index: index, first: first, last: last, even: even, odd: odd }
+                  },
+                  row: row
+                }
+              "
+            ></ng-container>
+          </td>
+        </ng-container>
+      </tr>
+    </ng-container>
+  </tbody>
+</nz-table>
+
+<ng-template #thRenderTemplate let-data>
+  <ng-container *ngIf="data.col._thTemplate; else textThTemplate">
+    <ng-container *ngTemplateOutlet="data.col._thTemplate; context: { $implicit: data }"></ng-container>
+  </ng-container>
+
+  <ng-template #textThTemplate>
+    {{ data.col.thText }}
+  </ng-template>
+</ng-template>
+
+<ng-template #tdDataRender let-data let-row="row">
+  <ng-container *ngIf="!data.col.isIndex; else tdTemplateTemplate">
+    <ng-container *ngIf="data.col._tdTemplate; else buttonControlTemplate">
+      <ng-container *ngTemplateOutlet="data.col._tdTemplate; context: { $implicit: data, row: row }"></ng-container>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #tdTemplateTemplate>
+    {{ nzPageSize * (nzPageIndex - 1) + data.indexAttr.index + 1 }}
+  </ng-template>
+
+  <ng-template #buttonControlTemplate>
+    <ng-container *ngIf="data.col.buttons?.length; else textValueTemplate">
+      <ng-container *ngFor="let btn of data.col.buttons; index as index; count as count; last as last">
+        <button
+          *ngIf="btn.link === false && (btn.visible !== false || row.buttons?.[index]?.visible !== false)"
+          type="button"
+          nz-button
+          [type]="btn.type"
+          [nzBlock]="btn.nzBlock"
+          [nzDanger]="btn.nzDanger"
+          [nzGhost]="btn.nzGhost"
+          [nzSize]="btn.nzSize || 'small'"
+          [nzLoading]="btn.nzLoading || row.buttons?.[index]?.nzLoading"
+          [nzSearch]="btn.nzSearch"
+          [nzShape]="btn.nzShape"
+          [nzType]="btn.nzType || 'link'"
+          [disabled]="row.buttons?.[index]?.disabled"
+          (click.once)="btn.click && btn.click(row, data, $event)"
+        >
+          {{ row.buttons?.[index]?.text || btn.text }}
+        </button>
+        <a
+          *ngIf="btn.link !== false && (btn.visible !== false || row.buttons?.[index]?.visible !== false)"
+          [attr.href]="getLinkHref(btn, row, data)"
+          [attr.target]="btn.target || row.buttons?.[index]?.target"
+          (click.once)="btn.click && row.buttons?.[index]?.disabled !== true && btn.click(row, data, $event)"
+        >
+          {{ btn.text || row.buttons?.[index]?.text }}
+        </a>
+        <nz-divider nzType="vertical" *ngIf="count > 1 && !last"></nz-divider>
+      </ng-container>
+
+      <ng-container *ngTemplateOutlet="data.col._tdTemplate; context: { $implicit: data, row: row }"></ng-container>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #textValueTemplate>
+    <ng-container *ngIf="data.col.name">
+      <!--处理异步数据-->
+      <ng-container *ngIf="data.row['$async-' + data.col.name]; else simpleValue">
+        {{ data.row['$async-' + data.col.name] | async | defaultify }}
+      </ng-container>
+
+      <ng-template #simpleValue>
+        {{ data.row[data.col.name] | async | defaultify }}
+      </ng-template>
+    </ng-container>
+  </ng-template>
+</ng-template>
+
+<ng-template #totalTemplate let-range="range" let-total>
+  第 {{ range[0] / nzPageSize | math: 'ceil' }}/{{ total / nzPageSize | math: 'ceil' }} 页 共 {{ total }} 条
+</ng-template>

@@ -1,0 +1,71 @@
+<nzx-between
+  [nzxDisabled]="nzxDisabled"
+  [nzxStartDisabled]="nzxStartDisabled"
+  [nzxEndDisabled]="nzxEndDisabled"
+  [nzxSize]="nzxSize"
+>
+  <ng-container
+    start
+    *ngTemplateOutlet="
+      typeTemplate;
+      context: {
+        $implicit: {
+          dir: nzxStartReName || 'start',
+          disabled: nzxDisabled || nzxStartDisabled,
+          placeholder: nzxStartPlaceholder,
+          step: nzxStarStep,
+          id: nzxStarId,
+          formatter: nzxStartFormatter,
+          max: nzxStartMax,
+          min: nzxStartMin
+        }
+      }
+    "
+  ></ng-container>
+  <ng-container
+    end
+    *ngTemplateOutlet="
+      typeTemplate;
+      context: {
+        $implicit: {
+          dir: nzxEndReName || 'end',
+          disabled: nzxDisabled || nzxEndDisabled,
+          placeholder: nzxEndPlaceholder,
+          step: nzxEndStep,
+          id: nzxEndId,
+          formatter: nzxEndFormatter,
+          max: nzxEndMax,
+          min: nzxEndMin
+        }
+      }
+    "
+  ></ng-container>
+</nzx-between>
+
+<ng-template #typeTemplate let-data>
+  <ng-container [ngSwitch]="nzxType">
+    <input
+      *ngSwitchCase="'input'"
+      nz-input
+      [disabled]="data.disabled"
+      [nzSize]="nzxSize"
+      [(ngModel)]="nzxValue[data.dir]"
+      [attr.placeholder]="data.placeholder"
+      (ngModelChange)="ngModelChange()"
+    />
+    <nz-input-number
+      *ngSwitchCase="'number'"
+      [nzDisabled]="data.disabled"
+      [(ngModel)]="nzxValue[data.dir]"
+      [nzPlaceHolder]="data.placeholder"
+      [nzSize]="nzxSize"
+      [nzStep]="data.step"
+      [nzPrecision]="data.precision"
+      [nzId]="data.id"
+      [nzFormatter]="data.formatter"
+      [nzMax]="data.max"
+      [nzMin]="data.min"
+      (ngModelChange)="ngModelChange()"
+    ></nz-input-number>
+  </ng-container>
+</ng-template>

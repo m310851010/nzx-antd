@@ -1,0 +1,46 @@
+<div class="nzx-table__header">
+  <div class="nzx-table__title">
+    <ng-content></ng-content>
+  </div>
+
+  <div class="nzx-table__toolbar">
+    <ng-content select="[toolbar]"></ng-content>
+    <ng-container *ngIf="actionVisible !== false">
+      <i
+        (click.once)="reloadClick.emit()"
+        nz-icon
+        nzType="reload"
+        nzTheme="outline"
+        nz-tooltip
+        nzTooltipTitle="刷新"
+        tabindex="-1"
+      ></i>
+      <i
+        nzTrigger="click"
+        nz-dropdown
+        [nzDropdownMenu]="tableSizeMenu"
+        nz-icon
+        nzType="column-height"
+        nzTheme="outline"
+        nz-tooltip
+        tabindex="-1"
+        nzTooltipTitle="密度"
+      ></i>
+
+      <ng-content select="[setting]"></ng-content>
+    </ng-container>
+  </div>
+</div>
+
+<nz-dropdown-menu #tableSizeMenu>
+  <ul nz-menu>
+    <li
+      nz-menu-item
+      (click)="item.value !== tableSize && tableSizeChange.emit(item.value)"
+      [nzSelected]="item.selected"
+      *ngFor="let item of tableSizeOptions"
+    >
+      <span>{{ item.sizeName }}</span>
+    </li>
+  </ul>
+</nz-dropdown-menu>

@@ -1,0 +1,87 @@
+<i
+  nz-icon
+  nzType="setting"
+  nzTheme="outline"
+  tabindex="-1"
+  nz-popover
+  nzPopoverTrigger="click"
+  nzPopoverOverlayClassName="nzx-column-setting__cloumn-box"
+  [nzPopoverTitle]="titleTemplate"
+  [nzPopoverPlacement]="'bottomRight'"
+  [nzPopoverContent]="contentTemplate"
+  nz-tooltip
+  nzTooltipTitle="列设置"
+></i>
+
+<ng-template #titleTemplate>
+  <div class="nzx-column-setting__popover-title">
+    <div class="nzx-column-setting__flex" style="flex: 1">
+      <label
+        *ngIf="columnNameVisible !== false"
+        nz-checkbox
+        [(ngModel)]="_columnNameChecked"
+        [nzIndeterminate]="_indeterminate"
+        (ngModelChange)="columnNameChange($event)"
+      >
+        展示列
+      </label>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #contentTemplate>
+  <ul
+    style="min-width: 315px"
+    cdkDropList
+    (cdkDropListDropped)="dropColumn($event, _nzxColumns)"
+    class="nzx-column-setting__column-list"
+  >
+    <ng-container *ngFor="let item of _nzxColumns">
+      <li
+        *ngIf="item.settingVisible !== false"
+        class="nzx-column-setting__check-item"
+        cdkDrag
+        cdkDragLockAxis="y"
+        cdkDragBoundary=".nzx-column-setting__column-list"
+        (cdkDragStarted)="cdkDragStarted($event)"
+        (cdkDragReleased)="cdkDragReleased($event)"
+      >
+        <div class="drag-box">
+          <i cdkDragHandle nz-icon nzType="drag" class="nzx-column-setting__drag-icon"></i>
+          <label
+            nz-checkbox
+            [nzDisabled]="item.settingDisabled === true"
+            [(ngModel)]="item.visible"
+            (ngModelChange)="columnVisible(item, $event)"
+          >
+            {{ item.settingText || item.thText }}
+          </label>
+        </div>
+
+        <div class="nzx-column-setting__flex">
+          <i
+            nz-icon
+            nzType="vertical-align-top"
+            class="nzx-column-setting__fixed-left"
+            [class.active]="item.fixed === 'left'"
+            [class.disabled]="item.visible === false"
+            (click)="fixedColumn(item, item.fixed == 'left' ? null : 'left')"
+            nz-tooltip
+            nzTooltipTitle="固定到左侧"
+          ></i>
+          <nz-divider nzType="vertical"></nz-divider>
+          <i
+            nz-icon
+            nzType="vertical-align-bottom"
+            class="nzx-column-setting__fixed-right"
+            [class.active]="item.fixed === 'right'"
+            [class.disabled]="item.visible === false"
+            (click)="fixedColumn(item, item.fixed == 'right' ? null : 'right')"
+            nz-tooltip
+            nzTooltipTitle="固定到右侧"
+          ></i>
+        </div>
+      </li>
+    </ng-container>
+  </ul>
+</ng-template>

@@ -1,0 +1,112 @@
+<nzx-between
+  [nzxDisabled]="nzxDisabled"
+  [nzxStartDisabled]="nzxStartDisabled"
+  [nzxEndDisabled]="nzxEndDisabled"
+  [nzxSize]="nzxSize"
+>
+  <ng-container
+    start
+
+    *ngTemplateOutlet="
+      typeTemplate;
+      context: {
+        $implicit: {
+          dir: nzxStartReName,
+          disabled: nzxDisabled || nzxStartDisabled,
+          placeholder: nzxStartPlaceholder,
+          nzSuffixIcon: nzxStartSuffixIcon,
+          nzAllowClear: nzxStartAllowClear,
+          nzRenderExtraFooter: nzxStartRenderExtraFooter,
+          nzBackdrop: nzxStartBackdrop,
+          nzAutoFocus: nzxStartAutoFocus,
+          nzDateRender: nzxStartDateRender,
+          nzDefaultPickerValue: nzxStartDefaultPickerValue,
+          nzDisabledDate: nzxStartDisabledDate,
+          nzDisabledTime: nzxStartDisabledTime,
+          nzDropdownClassName: nzxStartDropdownClassName,
+          nzId: nzxStartId,
+          nzInputReadOnly: nzxStartInputReadOnly,
+          nzLocale: nzLocale,
+          nzPopupStyle: nzxStartPopupStyle,
+          nzSeparator: nzxStartSeparator,
+          nzShowNow: nzxStartShowNow,
+          nzShowTime: nzxStartShowTime,
+          nzShowToday: nzxStartShowToday,
+          nzOnOpenChange: nzxStartOnOpenChange,
+          nzOnOk: nzxStartOnOk,
+          nzOnCalendarChange: nzxStartOnCalendarChange,
+          nzOnPanelChange: nzxStartOnPanelChange
+        }
+      }
+    "
+  ></ng-container>
+  <ng-container
+    end
+    *ngTemplateOutlet="
+      typeTemplate;
+      context: {
+        $implicit: {
+          dir: nzxEndReName,
+          disabled: nzxDisabled || nzxEndDisabled,
+          placeholder: nzxEndPlaceholder,
+          nzSuffixIcon: nzxEndSuffixIcon,
+          nzAllowClear: nzxEndAllowClear,
+          nzRenderExtraFooter: nzxEndRenderExtraFooter,
+          nzBackdrop: nzxEndBackdrop,
+          nzAutoFocus: nzxEndAutoFocus,
+          nzDateRender: nzxEndDateRender,
+          nzDefaultPickerValue: nzxEndDefaultPickerValue,
+          nzDisabledDate: nzxEndDisabledDate,
+          nzDisabledTime: nzxEndDisabledTime,
+          nzDropdownClassName: nzxEndDropdownClassName,
+          nzId: nzxEndId,
+          nzInputReadOnly: nzxEndInputReadOnly,
+          nzLocale: nzLocale,
+          nzPopupStyle: nzxEndPopupStyle,
+          nzSeparator: nzxEndSeparator,
+          nzShowNow: nzxEndShowNow,
+          nzShowTime: nzxEndShowTime,
+          nzShowToday: nzxEndShowToday,
+          nzOnOpenChange: nzxEndOnOpenChange,
+          nzOnOk: nzxEndOnOk,
+          nzOnCalendarChange: nzxEndOnCalendarChange,
+          nzOnPanelChange: nzxEndOnPanelChange
+        }
+      }
+    "
+  ></ng-container>
+</nzx-between>
+
+<ng-template #typeTemplate let-data>
+  <nz-date-picker
+    [(ngModel)]="nzxValue[data.dir]"
+    (ngModelChange)="ngModelChange()"
+    [nzDisabled]="data.disabled"
+    [nzPlaceHolder]="data.placeholder"
+    [nzSize]="nzxSize"
+    [nzMode]="nzMode"
+    [nzSuffixIcon]="data.nzSuffixIcon || 'calendar'"
+    [nzAllowClear]="data.nzAllowClear == null ? true : data.nzAllowClear"
+    [nzRenderExtraFooter]="data.nzRenderExtraFooter"
+    [nzBackdrop]="data.nzBackdrop"
+    [nzAutoFocus]="data.nzAutoFocus"
+    [nzDateRender]="data.nzDateRender"
+    [nzDefaultPickerValue]="data.nzDefaultPickerValue"
+    [nzDisabledDate]="data.nzDisabledDate"
+    [nzDisabledTime]="data.nzDisabledTime"
+    [nzDropdownClassName]="data.nzDropdownClassName"
+    [nzFormat]="nzFormat"
+    [nzId]="data.nzId"
+    [nzInputReadOnly]="data.nzInputReadOnly"
+    [nzLocale]="nzLocale"
+    [nzPopupStyle]="data.nzPopupStyle"
+    [nzSeparator]="data.nzSeparator"
+    [nzShowNow]="data.nzShowNow"
+    [nzShowTime]="data.nzShowTime == null ? nzShowTime : data.nzShowTime"
+    [nzShowToday]="data.nzShowToday == null ? nzShowToday : data.nzShowToday"
+    (nzOnOpenChange)="data.nzOnOpenChange.emit($event)"
+    (nzOnOk)="data.nzOnOk.emit($event)"
+    (nzOnCalendarChange)="data.nzOnCalendarChange.emit($event)"
+    (nzOnPanelChange)="data.nzOnPanelChange.emit($event)"
+  ></nz-date-picker>
+</ng-template>

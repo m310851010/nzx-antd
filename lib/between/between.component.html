@@ -1,0 +1,10 @@
+<nz-input-group
+  nzCompact
+  class="nzx-between"
+  [class.nzx-between-disabled]="nzxDisabled || (nzxStartDisabled && nzxEndDisabled)"
+  [nzSize]="nzxSize"
+>
+  <ng-content select="[start]"></ng-content>
+  <input type="text" disabled nz-input placeholder="~" class="nzx-between-placeholder" />
+  <ng-content select="[end]"></ng-content>
+</nz-input-group>

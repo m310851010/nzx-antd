@@ -1,0 +1,31 @@
+@import '../base.less';
+@nzx-between-prefix: ~'@{nzx-prefix}-between';
+
+.@{nzx-between-prefix}{
+  display: flex !important;
+
+  > :first-child {
+    border-right: none;
+    flex: 1;
+  }
+
+  > :last-child {
+    border-left: none;
+    flex: 1;
+  }
+
+  &:not(.@{nzx-between-prefix}-disabled) {
+    .@{nzx-between-prefix}-placeholder{
+      background-color: #fff !important;
+    }
+  }
+  &-placeholder {
+    width: 20px !important;
+    border-left: none;
+    border-right: none;
+    pointer-events: none;
+    padding-left: 0;
+    padding-right: 0;
+    text-align: center;
+  }
+}
