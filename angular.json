@@ -33,6 +33,41 @@
           }
         }
       }
+    },
+    "storybook": {
+      "projectType": "application",
+      "root": "",
+      "sourceRoot": "stories",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "tsConfig": "tsconfig.json",
+            "styles": ["node_modules/ng-zorro-antd/ng-zorro-antd.less", "lib/nzx-antd.less"],
+            "scripts": [],
+            "assets": [
+              {
+                "glob": "**/*",
+                "ignore": ["fill/*", "twotone/*"],
+                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "output": "/assets/"
+              }
+            ]
+          }
+        },
+        "storybook": {
+          "builder": "@storybook/angular:start-storybook",
+          "options": {
+            "browserTarget": "angular-cli:build"
+          }
+        },
+        "build-storybook": {
+          "builder": "@storybook/angular:build-storybook",
+          "options": {
+            "browserTarget": "angular-cli:build"
+          }
+        }
+      }
     }
   },
   "defaultProject": "nzx-antd"
