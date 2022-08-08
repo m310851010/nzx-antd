@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-	"build:nzx-antd": "ng build nzx-antd && node version path=./dist/nzx-antd/version",
+    "build:nzx-antd": "ng build nzx-antd && node version path=./dist/nzx-antd/version",
     "publish:nzx-antd": "cd dist/nzx-antd &&　npm publish --access public"
   },
   "private": true,
