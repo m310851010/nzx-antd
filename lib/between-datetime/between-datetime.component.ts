@@ -46,12 +46,12 @@ import {
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => BetweenDatetimeComponent),
+      useExisting: forwardRef(() => NzxBetweenDatetimeComponent),
       multi: true
     }
   ]
 })
-export class BetweenDatetimeComponent extends NzxBetweenComponent implements ControlValueAccessor {
+export class NzxBetweenDatetimeComponent extends NzxBetweenComponent implements ControlValueAccessor {
   nzxValue: DatetimeValueType = {};
   /**
    * 默认配置

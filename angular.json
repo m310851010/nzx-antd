@@ -43,7 +43,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "tsConfig": "tsconfig.json",
-            "styles": ["node_modules/ng-zorro-antd/ng-zorro-antd.less", "lib/nzx-antd.less"],
+            "styles": ["stories/styles.less"],
             "scripts": [],
             "assets": [
               {
@@ -58,13 +58,7 @@
         "storybook": {
           "builder": "@storybook/angular:start-storybook",
           "options": {
-            "browserTarget": "angular-cli:build"
-          }
-        },
-        "build-storybook": {
-          "builder": "@storybook/angular:build-storybook",
-          "options": {
-            "browserTarget": "angular-cli:build"
+            "browserTarget": "storybook:build"
           }
         }
       }

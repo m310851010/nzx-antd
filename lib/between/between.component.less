@@ -4,14 +4,21 @@
 .@{nzx-between-prefix}{
   display: flex !important;
 
-  > :first-child {
-    border-right: none;
+  > :first-child, .between-start {
+    border-right-color: transparent;
     flex: 1;
+    .ant-select-selector{
+      border-right-color: transparent;
+    }
   }
 
-  > :last-child {
-    border-left: none;
+
+  > :last-child, .between-end {
+    border-left-color: transparent;
     flex: 1;
+    .ant-select-selector{
+      border-left-color: transparent;
+    }
   }
 
   &:not(.@{nzx-between-prefix}-disabled) {

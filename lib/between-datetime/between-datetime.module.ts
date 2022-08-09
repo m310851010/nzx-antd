@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BetweenDatetimeComponent } from './between-datetime.component';
+import { NzxBetweenDatetimeComponent } from './between-datetime.component';
 import { FormsModule } from '@angular/forms';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
-import { NzxBetweenModule } from '@xmagic/nzx-antd/between'
+import { NzxBetweenModule } from '@xmagic/nzx-antd/between';
 
 @NgModule({
-  declarations: [BetweenDatetimeComponent],
+  declarations: [NzxBetweenDatetimeComponent],
   imports: [CommonModule, FormsModule, NzxBetweenModule, NzDatePickerModule],
-  exports: [BetweenDatetimeComponent]
+  exports: [NzxBetweenDatetimeComponent]
 })
-export class BetweenDatetimeModule {}
+export class NzxBetweenDatetimeModule {}
