@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NZ_I18N, zh_CN } from 'ng-zorro-antd/i18n';
+import { BrowserModule } from '@angular/platform-browser';
 setCompodocJson(docJson);
 
 registerLocaleData(zh);
@@ -30,7 +31,7 @@ export const parameters = {
 // 全局模块配置
 export const decorators = [
   moduleMetadata({
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule],
+    imports: [CommonModule, BrowserModule, BrowserAnimationsModule, FormsModule, ReactiveFormsModule],
     providers: [{ provide: NZ_I18N, useValue: zh_CN }]
   })
 ];
