@@ -4,6 +4,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzFormModule } from 'ng-zorro-antd/form';
+import { SIZE_ARG_TYPE } from '@stories';
 
 export default {
   title: '组件/Between 区间',
@@ -14,9 +15,8 @@ export default {
       imports: [NzInputModule, NzSelectModule, NzDatePickerModule, NzFormModule]
     })
   ],
-  argTypes: {},
-  parameters: {
-    nzxSize: 'default'
+  argTypes: {
+    nzxSize: SIZE_ARG_TYPE
   }
 } as Meta;
 
@@ -35,7 +35,6 @@ const Template: Story<NzxBetweenComponent> = args => {
     `
   };
 };
-
 
 export const NzxSize = Template.bind({});
 NzxSize.storyName = 'Nzx Size';
@@ -63,9 +62,12 @@ export const SelectControl: Story = args => {
   return {
     props: args,
     template: `
-    <nzx-between>
-       <nz-select start nzPlaceHolder="开始控件" [nzOptions]="nzOptions"></nz-select>
-       <nz-select end nzPlaceHolder="结束控件" [nzOptions]="nzOptions"></nz-select>
+    <nzx-between  [nzxSize]="nzxSize"
+      [nzxDisabled]="nzxDisabled"
+      [nzxEndDisabled]="nzxEndDisabled"
+      [nzxStartDisabled]="nzxStartDisabled">
+       <nz-select start nzPlaceHolder="开始控件" [nzOptions]="nzOptions" [nzDisabled]="nzxDisabled || nzxStartDisabled"></nz-select>
+       <nz-select end nzPlaceHolder="结束控件" [nzOptions]="nzOptions" [nzDisabled]="nzxDisabled || nzxEndDisabled"></nz-select>
     </nzx-between>
     `
   };
@@ -79,9 +81,12 @@ export const DatePickerControl: Story<NzxBetweenComponent> = args => {
   return {
     props: args,
     template: `
-    <nzx-between>
-       <nz-date-picker start nzPlaceHolder="开始控件" ></nz-date-picker>
-       <nz-date-picker end nzPlaceHolder="结束控件"></nz-date-picker>
+    <nzx-between  [nzxSize]="nzxSize"
+      [nzxDisabled]="nzxDisabled"
+      [nzxEndDisabled]="nzxEndDisabled"
+      [nzxStartDisabled]="nzxStartDisabled">
+       <nz-date-picker start nzPlaceHolder="开始控件" [nzSize]="nzxSize" [nzDisabled]="nzxDisabled || nzxStartDisabled"></nz-date-picker>
+       <nz-date-picker end nzPlaceHolder="结束控件" [nzSize]="nzxSize" [nzDisabled]="nzxDisabled || nzxEndDisabled"></nz-date-picker>
     </nzx-between>
     `
   };
@@ -95,9 +100,12 @@ export const WidthFormItem: Story<NzxBetweenComponent> = args => {
     <nz-form-item>
       <nz-form-label>label1</nz-form-label>
       <nz-form-control>
-        <nzx-between>
-            <input nz-input start placeholder="开始控件">
-            <input nz-input end placeholder="结束控件">
+        <nzx-between  [nzxSize]="nzxSize"
+          [nzxDisabled]="nzxDisabled"
+          [nzxEndDisabled]="nzxEndDisabled"
+          [nzxStartDisabled]="nzxStartDisabled">
+            <input nz-input start placeholder="开始控件" [disabled]="nzxDisabled || nzxStartDisabled">
+            <input nz-input end placeholder="结束控件" [disabled]="nzxDisabled || nzxEndDisabled">
         </nzx-between>
       </nz-form-control>
     </nz-form-item>

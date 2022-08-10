@@ -3,6 +3,8 @@ import { NzxBetweenDatetimeComponent } from './between-datetime.component';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzxBetweenModule } from '@xmagic/nzx-antd/between';
+import { EXCLUDE_PARAMS, hideControlArgType, SIZE_ARG_TYPE } from '@stories';
+import { action } from '@storybook/addon-actions';
 
 export default {
   title: '组件/BetweenDatetime 日期区间',
@@ -13,49 +15,54 @@ export default {
       imports: [NzFormModule, NzxBetweenModule, NzDatePickerModule]
     })
   ],
-  args: {},
   argTypes: {
-    nzxValue: { table: { disable: true }, control: false, disable: true },
-    getDisabledMaxDate: { table: { disable: true }, control: false, disable: true },
-    getDisabledTime: { table: { disable: true }, control: false, disable: true },
-    nzxStartOnPanelChange: { table: { disable: true }, control: false, disable: true },
-    nzxStartOnOpenChange: { table: { disable: true }, control: false, disable: true },
-    defaultDisabledTime: { table: { disable: true }, control: false, disable: true },
-    nzxStartDisabledDate: { table: { disable: true }, control: false, disable: true },
-    nzxEndDisabledDate: { table: { disable: true }, control: false, disable: true },
-    getDisabledMinDate: { table: { disable: true }, control: false, disable: true },
-    setDisabledState: { table: { disable: true }, control: false, disable: true },
-    nzxStartDisabledTime: { table: { disable: true }, control: false, disable: true },
-    nzxEndDisabledTime: { table: { disable: true }, control: false, disable: true },
-    registerOnChange: { table: { disable: true }, control: false, disable: true },
-    registerOnTouched: { table: { disable: true }, control: false, disable: true },
-    onChange: { table: { disable: true }, control: false, disable: true },
-    onTouched: { table: { disable: true }, control: false, disable: true },
-    writeValue: { table: { disable: true }, control: false, disable: true },
-    ngModelChange: { table: { disable: true }, control: false, disable: true }
+    nzxSize: SIZE_ARG_TYPE,
+    nzMode: { control: 'select', options: ['date', 'week', 'month', 'year'] },
+    defaultDisabledTime: { table: { disable: true } },
+    nzShowTime: { control: { type: 'boolean' }, type: 'boolean' },
+    nzxStartShowTime: { control: { type: 'boolean' }, type: 'boolean' },
+    nzxEndShowTime: { control: { type: 'boolean' }, type: 'boolean' },
+    nzLocale: { control: false },
+    ...hideControlArgType<NzxBetweenDatetimeComponent>(
+      'nzxStartOnOpenChange',
+      'nzxEndOnOpenChange',
+      'nzxStartOnOk',
+      'nzxEndOnOk',
+      'nzxStartOnCalendarChange',
+      'nzxEndOnCalendarChange',
+      'nzxStartOnPanelChange',
+      'nzxEndOnPanelChange'
+    )
   },
   parameters: {
     controls: {
       exclude: [
-        'nzxValue',
         'nzxStartDisabledDate',
         'nzxEndDisabledDate',
         'nzxStartDisabledTime',
         'nzxEndDisabledTime',
-        'registerOnChange',
-        'registerOnTouched',
-        'onChange',
-        'onTouched',
-        'writeValue',
-        'ngModelChange',
+        'getDisabledMaxDate',
+        'getDisabledMinDate',
+        'getDisabledTime',
+        ...EXCLUDE_PARAMS
       ]
-    }
+    },
   }
 } as Meta;
 
 const Template: Story<NzxBetweenDatetimeComponent> = args => {
+  const evts = {
+    nzxStartOnOpenChange: action('nzxStartOnOpenChange'),
+    nzxEndOnOpenChange: action('nzxEndOnOpenChange'),
+    nzxStartOnOk: action('nzxStartOnOk'),
+    nzxEndOnOk: action('nzxEndOnOk'),
+    nzxStartOnCalendarChange: action('nzxStartOnCalendarChange'),
+    nzxEndOnCalendarChange: action('nzxEndOnCalendarChange'),
+    nzxStartOnPanelChange: action('nzxStartOnPanelChange'),
+    nzxEndOnPanelChange: action('nzxEndOnPanelChange')
+  };
   return {
-    props: args
+    props: { ...args, ...evts }
   };
 };
 

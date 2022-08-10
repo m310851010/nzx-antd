@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NZ_I18N, zh_CN } from 'ng-zorro-antd/i18n';
 import { BrowserModule } from '@angular/platform-browser';
+import { EXCLUDE_PARAMS } from '../stories';
 setCompodocJson(docJson);
 
 registerLocaleData(zh);
@@ -17,10 +18,11 @@ export const parameters = {
   controls: {
     matchers: {
       color: /(background|color)$/i,
-      date: /Date$/
-    }
+      date: /(Date|Time)$/
+    },
+    exclude: EXCLUDE_PARAMS
   },
-  docs: { inlineStories: true },
+  docs: { inlineStories: false },
   options: {
     storySort: {
       order: ['介绍', '组件', '指令', '管道', '服务', '工具类']
@@ -35,11 +37,3 @@ export const decorators = [
     providers: [{ provide: NZ_I18N, useValue: zh_CN }]
   })
 ];
-
-// 设置所有属性默认值
-export const argTypes = {
-  nzxSize: {
-    control: 'radio',
-    options: ['large', 'default', 'small']
-  }
-};
