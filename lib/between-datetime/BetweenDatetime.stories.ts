@@ -46,12 +46,12 @@ export default {
         'getDisabledTime',
         ...EXCLUDE_PARAMS
       ]
-    },
+    }
   }
 } as Meta;
 
 const Template: Story<NzxBetweenDatetimeComponent> = args => {
-  const evts = {
+  const evt = {
     nzxStartOnOpenChange: action('nzxStartOnOpenChange'),
     nzxEndOnOpenChange: action('nzxEndOnOpenChange'),
     nzxStartOnOk: action('nzxStartOnOk'),
@@ -62,12 +62,13 @@ const Template: Story<NzxBetweenDatetimeComponent> = args => {
     nzxEndOnPanelChange: action('nzxEndOnPanelChange')
   };
   return {
-    props: { ...args, ...evts }
+    props: { ...args, ...evt }
   };
 };
 
 export const Default = Template.bind({});
 Default.args = {};
+
 export const NzxSize = Template.bind({});
 NzxSize.args = { nzxSize: 'large' };
 
@@ -79,3 +80,29 @@ NzxStartDisabled.args = { nzxStartDisabled: true };
 
 export const NzxEndDisabled = Template.bind({});
 NzxEndDisabled.args = { nzxEndDisabled: true };
+
+export const StartMinDate = Template.bind({});
+const start = new Date();
+start.setDate(start.getDate() - 2);
+StartMinDate.args = { startMinDateTime: start };
+
+export const EndMaxDateTime = Template.bind({});
+EndMaxDateTime.args = { endMaxDateTime: new Date() };
+
+export const ShowTimeStart = Template.bind({});
+ShowTimeStart.args = { nzxStartShowTime: true };
+
+export const ShowTimeEnd = Template.bind({});
+ShowTimeEnd.args = { nzxEndShowTime: true };
+
+export const ShowTime = Template.bind({});
+ShowTime.args = { nzShowTime: true };
+
+export const ShowToday = Template.bind({});
+ShowToday.args = { nzShowToday: false };
+
+export const ShowTodayStart = Template.bind({});
+ShowTodayStart.args = { nzxStartShowToday: true };
+
+export const ShowTodayEnd = Template.bind({});
+ShowTodayEnd.args = { nzxEndShowToday: true };

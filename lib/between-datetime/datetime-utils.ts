@@ -69,11 +69,17 @@ export function getTimeValue(date: Date, value?: Date | null): { hour: number; m
  * @param date,
  * @param disabledDateType
  */
-export function getRealDateTime(
-  date: Date,
-  disabledDateType?: DisabledDateType
-): Date | null | undefined {
-  return Utils.isFunction(disabledDateType) ? disabledDateType(date) : disabledDateType;
+export function getRealDateTime(date: Date, disabledDateType?: DisabledDateType): Date | null | undefined {
+  if (!disabledDateType) {
+    return null;
+  }
+  if (Utils.isFunction(disabledDateType)) {
+    return disabledDateType(date);
+  }
+  if (Utils.isDate(disabledDateType)) {
+    return disabledDateType;
+  }
+  return new Date(disabledDateType);
 }
 
 export type DisabledDateType = Date | null | ((current: Date) => Date | null);

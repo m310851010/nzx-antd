@@ -3,8 +3,8 @@ import docJson from '../documentation.json';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import zh from '@angular/common/locales/zh';
 import { moduleMetadata } from '@storybook/angular';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NZ_I18N, zh_CN } from 'ng-zorro-antd/i18n';
 import { BrowserModule } from '@angular/platform-browser';
@@ -22,10 +22,16 @@ export const parameters = {
     },
     exclude: EXCLUDE_PARAMS
   },
-  docs: { inlineStories: false },
+  docs: {
+    inlineStories: true,
+    source: {
+      language: 'typescript',
+      format: true
+    }
+  },
   options: {
     storySort: {
-      order: ['介绍', '组件', '指令', '管道', '服务', '工具类']
+      // order: ['介绍', '组件', '指令', '管道', '服务', '工具类']
     }
   }
 };
