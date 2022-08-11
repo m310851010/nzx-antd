@@ -27,7 +27,6 @@
           nzInputReadOnly: nzxStartInputReadOnly,
           nzLocale: nzLocale,
           nzPopupStyle: nzxStartPopupStyle,
-          nzSeparator: nzxStartSeparator,
           nzShowNow: nzxStartShowNow,
           nzShowTime: nzxStartShowTime,
           nzShowToday: nzxStartShowToday,
@@ -62,7 +61,6 @@
           nzInputReadOnly: nzxEndInputReadOnly,
           nzLocale: nzLocale,
           nzPopupStyle: nzxEndPopupStyle,
-          nzSeparator: nzxEndSeparator,
           nzShowNow: nzxEndShowNow,
           nzShowTime: nzxEndShowTime,
           nzShowToday: nzxEndShowToday,
@@ -85,7 +83,7 @@
     [nzSize]="nzxSize"
     [nzMode]="nzMode"
     [nzSuffixIcon]="data.nzSuffixIcon || 'calendar'"
-    [nzAllowClear]="data.nzAllowClear == null ? true : data.nzAllowClear"
+    [nzAllowClear]="nzAllowClear || data.nzAllowClear"
     [nzRenderExtraFooter]="data.nzRenderExtraFooter"
     [nzBackdrop]="data.nzBackdrop"
     [nzAutoFocus]="data.nzAutoFocus"
@@ -99,10 +97,9 @@
     [nzInputReadOnly]="data.nzInputReadOnly"
     [nzLocale]="nzLocale"
     [nzPopupStyle]="data.nzPopupStyle"
-    [nzSeparator]="data.nzSeparator"
     [nzShowNow]="data.nzShowNow"
     [nzShowTime]="data.nzShowTime || nzShowTime"
-    [nzShowToday]="data.nzShowToday || nzShowToday"
+    [nzShowToday]="nzShowToday || data.nzShowToday"
     (nzOnOpenChange)="data.nzOnOpenChange.emit($event)"
     (nzOnOk)="data.nzOnOk.emit($event)"
     (nzOnCalendarChange)="data.nzOnCalendarChange.emit($event)"

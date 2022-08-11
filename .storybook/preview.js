@@ -41,5 +41,8 @@ export const decorators = [
   moduleMetadata({
     imports: [CommonModule, BrowserModule, BrowserAnimationsModule, FormsModule, ReactiveFormsModule],
     providers: [{ provide: NZ_I18N, useValue: zh_CN }]
-  })
+  }),
+  // (Story, { id, kind, name, story, parameters, hooks, args, argTypes, globals, viewMode, loaded }) => {
+  //   console.log('==================');
+  // }
 ];

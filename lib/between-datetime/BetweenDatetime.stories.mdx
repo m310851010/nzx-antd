@@ -1,0 +1,22 @@
+import { Canvas, Story, ArgsTable, StoryTable } from '@storybook/addon-docs';
+import { NzxBetweenDatetimeComponent } from './between-datetime.component';
+
+# BetweenDatetime - 日期区间
+
+包含开始日期和结束日期两个日期控件，默认实现开始时间小于结束日期，也可以设置日期的最大值和最小值。
+
+绑定的表单数据为 `{ start: Date, end: Date }`，修改属`start`和`end`属性名称可以使用`nzxStartReName`和`nzxEndReName`。
+
+## 使用
+
+``` ts
+import { NzxBetweenDatetimeModule } from '@xmgagic/nzx-antd/between-datetime';
+```
+
+<Canvas withToolbar>
+  <Story id="组件-betweendatetime-日期区间--default" />
+</Canvas>
+
+## 参数定义
+
+<ArgsTable of={NzxBetweenDatetimeComponent} />

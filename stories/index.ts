@@ -1,4 +1,5 @@
 import { InputType } from '@storybook/csf';
+import { Story } from '@storybook/angular';
 // 控件类型
 // https://storybook.js.org/docs/angular/essentials/controls
 export const EXCLUDE_PARAMS = [
@@ -20,9 +21,20 @@ export const SIZE_ARG_TYPE = {
 
 export const HIDE_CONTROL = {
   table: { defaultValue: { summary: null } },
-  defaultValue: null,
   control: false
 };
+
+export function storyFactory<T>(props?: Partial<T> ): Story<T> {
+  const fn: Story<T> = args => {
+    return {
+      props: args
+    };
+  };
+  if (props) {
+    fn.args = props;
+  }
+  return fn;
+}
 
 /**
  * 隐藏指定属性的control,　属性不隐藏

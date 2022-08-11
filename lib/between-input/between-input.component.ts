@@ -39,27 +39,45 @@ export class NzxBetweenInputComponent extends NzxBetweenComponent implements Con
   @Input() nzxEndPlaceholder = '结束值';
 
   /**
-   * 最大值
+   * 最大值-开始
    */
   @Input() nzxStartMax = Infinity;
+  /**
+   * 最大值-结束
+   */
   @Input() nzxEndMax = Infinity;
   /**
-   * 最小值
+   * 最小值-开始
    */
   @Input() nzxStartMin = -Infinity;
+  /**
+   * 最小值-结束
+   */
   @Input() nzxEndMin = -Infinity;
   /**
-   * 	数值精度
+   * 	数值精度-开始
    */
   @Input() nzxStarPrecision?: number;
+  /**
+   * 	数值精度-结束
+   */
   @Input() nzxEndPrecision?: number;
   /**
-   * 	Step
+   * 	每次改变步数，可以为小数-开始
    */
   @Input() nzxStarStep = 1;
+  /**
+   * 	每次改变步数，可以为小数-结束
+   */
   @Input() nzxEndStep = 1;
 
+  /**
+   * 组件内部 input 的 id 值-开始
+   */
   @Input() nzxStarId?: string;
+  /**
+   * 组件内部 input 的 id 值-结束
+   */
   @Input() nzxEndId?: string;
   /**
    * 开始字段重命名
@@ -71,9 +89,12 @@ export class NzxBetweenInputComponent extends NzxBetweenComponent implements Con
   @Input() nzxEndReName?: string;
 
   /**
-   * 指定输入框展示值的格式
+   * 指定输入框展示值的格式-开始
    */
   @Input() nzxStartFormatter: (value: number | string) => string | number = v => v;
+  /**
+   * 指定输入框展示值的格式-结束
+   */
   @Input() nzxEndFormatter: (value: number | string) => string | number = v => v;
 
   constructor(protected cdr: ChangeDetectorRef) {
@@ -105,4 +126,4 @@ export class NzxBetweenInputComponent extends NzxBetweenComponent implements Con
   onTouched: () => void = () => null;
 }
 
-export type InputValueType = Record<string, string | number | null> | null
+export type InputValueType = Record<string, string | number | null> | null;

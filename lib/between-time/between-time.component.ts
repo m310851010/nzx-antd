@@ -25,12 +25,12 @@ import { Utils } from '@xmagic/nzx-antd/util';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => BetweenTimeComponent),
+      useExisting: forwardRef(() => NzxBetweenTimeComponent),
       multi: true
     }
   ]
 })
-export class BetweenTimeComponent extends NzxBetweenComponent implements ControlValueAccessor {
+export class NzxBetweenTimeComponent extends NzxBetweenComponent implements ControlValueAccessor {
   nzxValue: DatetimeValueType = {};
   /**
    * 开始字段重命名

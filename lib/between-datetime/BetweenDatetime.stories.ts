@@ -3,9 +3,11 @@ import { NzxBetweenDatetimeComponent } from './between-datetime.component';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzxBetweenModule } from '@xmagic/nzx-antd/between';
-import { EXCLUDE_PARAMS, hideControlArgType, SIZE_ARG_TYPE } from '@stories';
+import { EXCLUDE_PARAMS, hideControlArgType, SIZE_ARG_TYPE, storyFactory } from '@stories';
 import { action } from '@storybook/addon-actions';
+import DocPage from './BetweenDatetime.stories.mdx';
 
+console.log(DocPage);
 export default {
   title: '组件/BetweenDatetime 日期区间',
   component: NzxBetweenDatetimeComponent,
@@ -34,7 +36,20 @@ export default {
       'nzxEndOnPanelChange'
     )
   },
+  args: {
+    nzxStartOnOpenChange: action('nzxStartOnOpenChange'),
+    nzxEndOnOpenChange: action('nzxEndOnOpenChange'),
+    nzxStartOnOk: action('nzxStartOnOk'),
+    nzxEndOnOk: action('nzxEndOnOk'),
+    nzxStartOnCalendarChange: action('nzxStartOnCalendarChange'),
+    nzxEndOnCalendarChange: action('nzxEndOnCalendarChange'),
+    nzxStartOnPanelChange: action('nzxStartOnPanelChange'),
+    nzxEndOnPanelChange: action('nzxEndOnPanelChange')
+  },
   parameters: {
+    docs: {
+      page: DocPage.parameters.docs.page
+    },
     controls: {
       exclude: [
         'nzxStartDisabledDate',
@@ -50,59 +65,36 @@ export default {
   }
 } as Meta;
 
-const Template: Story<NzxBetweenDatetimeComponent> = args => {
-  const evt = {
-    nzxStartOnOpenChange: action('nzxStartOnOpenChange'),
-    nzxEndOnOpenChange: action('nzxEndOnOpenChange'),
-    nzxStartOnOk: action('nzxStartOnOk'),
-    nzxEndOnOk: action('nzxEndOnOk'),
-    nzxStartOnCalendarChange: action('nzxStartOnCalendarChange'),
-    nzxEndOnCalendarChange: action('nzxEndOnCalendarChange'),
-    nzxStartOnPanelChange: action('nzxStartOnPanelChange'),
-    nzxEndOnPanelChange: action('nzxEndOnPanelChange')
-  };
-  return {
-    props: { ...args, ...evt }
-  };
-};
+const Template: (props?: Partial<NzxBetweenDatetimeComponent>) => Story<NzxBetweenDatetimeComponent> = storyFactory;
 
-export const Default = Template.bind({});
-Default.args = {};
+export const Default = Template();
 
-export const NzxSize = Template.bind({});
-NzxSize.args = { nzxSize: 'large' };
+export const NzxSize = Template({ nzxSize: 'large' });
 
-export const NzxDisabled = Template.bind({});
-NzxDisabled.args = { nzxDisabled: true };
+export const NzxDisabled = Template({ nzxDisabled: true });
 
-export const NzxStartDisabled = Template.bind({});
-NzxStartDisabled.args = { nzxStartDisabled: true };
+export const NzxStartDisabled = Template({ nzxStartDisabled: true });
 
-export const NzxEndDisabled = Template.bind({});
-NzxEndDisabled.args = { nzxEndDisabled: true };
+export const NzxEndDisabled = Template({ nzxEndDisabled: true });
 
-export const StartMinDate = Template.bind({});
 const start = new Date();
 start.setDate(start.getDate() - 2);
-StartMinDate.args = { startMinDateTime: start };
+export const StartMinDate = Template({ startMinDateTime: start });
 
-export const EndMaxDateTime = Template.bind({});
-EndMaxDateTime.args = { endMaxDateTime: new Date() };
+export const EndMaxDateTime = Template({ endMaxDateTime: new Date() });
 
-export const ShowTimeStart = Template.bind({});
-ShowTimeStart.args = { nzxStartShowTime: true };
+export const ShowTimeStart = Template({ nzxStartShowTime: true });
 
-export const ShowTimeEnd = Template.bind({});
-ShowTimeEnd.args = { nzxEndShowTime: true };
+export const ShowTimeEnd = Template({ nzxEndShowTime: true });
 
-export const ShowTime = Template.bind({});
-ShowTime.args = { nzShowTime: true };
+export const ShowTime = Template({ nzShowTime: true });
 
-export const ShowToday = Template.bind({});
-ShowToday.args = { nzShowToday: false };
+export const ShowToday = Template({ nzShowToday: true });
 
-export const ShowTodayStart = Template.bind({});
-ShowTodayStart.args = { nzxStartShowToday: true };
+export const ShowTodayStart = Template({ nzxStartShowToday: true });
 
-export const ShowTodayEnd = Template.bind({});
-ShowTodayEnd.args = { nzxEndShowToday: true };
+export const ShowTodayEnd = Template({ nzxEndShowToday: true });
+
+export const NzMode = Template({ nzMode: 'week' });
+
+export const NzAllowClear = Template({ nzAllowClear: true });

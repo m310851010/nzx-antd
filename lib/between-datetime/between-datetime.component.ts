@@ -98,6 +98,10 @@ export class NzxBetweenDatetimeComponent extends NzxBetweenComponent implements 
   /**
    * 是否显示清除按钮
    */
+  @Input() nzAllowClear = true;
+  /**
+   * 是否显示结束清除按钮
+   */
   @Input() nzxEndAllowClear?: boolean;
   /**
    * 自动获取焦点
@@ -127,18 +131,39 @@ export class NzxBetweenDatetimeComponent extends NzxBetweenComponent implements 
    */
   @Input() nzxEndDefaultPickerValue?: Date;
 
-  @Input() nzxStartSeparator?: string;
-  @Input() nzxEndSeparator?: string;
-
+  /**
+   * 显示此刻-开始
+   */
   @Input() nzxStartShowNow = true;
+  /**
+   * 显示此刻-结束
+   */
   @Input() nzxEndShowNow = true;
 
+  /**
+   * 显示今天-开始和结束同时生效
+   */
   @Input() nzShowToday = true;
+  /**
+   * 显示今天-开始
+   */
   @Input() nzxStartShowToday?: boolean;
+  /**
+   * 显示今天-结束
+   */
   @Input() nzxEndShowToday?: boolean;
 
+  /**
+   * 显示时间选择器-开始和结束同时生效
+   */
   @Input() nzShowTime: SupportTimeOptions | boolean = false;
+  /**
+   * 显示时间选择器-开始
+   */
   @Input() nzxStartShowTime?: SupportTimeOptions | boolean;
+  /**
+   * 显示时间选择器-结束
+   */
   @Input() nzxEndShowTime?: SupportTimeOptions | boolean;
 
   /**
@@ -196,8 +221,13 @@ export class NzxBetweenDatetimeComponent extends NzxBetweenComponent implements 
    * 自定义的后缀图标
    */
   @Input() nzxEndSuffixIcon?: string | TemplateRef<NzSafeAny>;
-
+  /**
+   * 自定义渲染日期-开始
+   */
   @Input() nzxStartDateRender?: TemplateRef<NzSafeAny> | string | FunctionProp<TemplateRef<Date> | string>;
+  /**
+   * 自定义渲染日期-结束
+   */
   @Input() nzxEndDateRender?: TemplateRef<NzSafeAny> | string | FunctionProp<TemplateRef<Date> | string>;
 
   /**
@@ -393,6 +423,7 @@ export class NzxBetweenDatetimeComponent extends NzxBetweenComponent implements 
       this.endMinDateTime === undefined ? this._defaultEndMinDateTime : this.endMinDateTime
     );
     const maxValue = getRealDateTime(date, this.endMaxDateTime);
+    console.log(this.endMaxDateTime)
     if (!maxValue && !minValue) {
       return false;
     }
