@@ -36,6 +36,11 @@ import {
   getTimeValue
 } from './datetime-utils';
 
+/**
+ * 包含开始日期和结束日期两个日期控件，默认实现开始时间小于结束日期，也可以设置日期的最大值和最小值。
+ *
+ * 绑定的表单数据为 `{ start: Date, end: Date }`，修改属`start`和`end`属性名称可以使用`nzxStartReName`和`nzxEndReName`。
+ */
 @Component({
   selector: 'nzx-between-datetime',
   exportAs: 'nzxBetweenDatetime',
@@ -423,7 +428,6 @@ export class NzxBetweenDatetimeComponent extends NzxBetweenComponent implements 
       this.endMinDateTime === undefined ? this._defaultEndMinDateTime : this.endMinDateTime
     );
     const maxValue = getRealDateTime(date, this.endMaxDateTime);
-    console.log(this.endMaxDateTime)
     if (!maxValue && !minValue) {
       return false;
     }

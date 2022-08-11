@@ -7,7 +7,6 @@ import { EXCLUDE_PARAMS, hideControlArgType, SIZE_ARG_TYPE, storyFactory } from 
 import { action } from '@storybook/addon-actions';
 import DocPage from './BetweenDatetime.stories.mdx';
 
-console.log(DocPage);
 export default {
   title: '组件/BetweenDatetime 日期区间',
   component: NzxBetweenDatetimeComponent,
@@ -47,9 +46,6 @@ export default {
     nzxEndOnPanelChange: action('nzxEndOnPanelChange')
   },
   parameters: {
-    docs: {
-      page: DocPage.parameters.docs.page
-    },
     controls: {
       exclude: [
         'nzxStartDisabledDate',

@@ -8,7 +8,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NZ_I18N, zh_CN } from 'ng-zorro-antd/i18n';
 import { BrowserModule } from '@angular/platform-browser';
-import { EXCLUDE_PARAMS } from '../stories';
+import { EXCLUDE_PARAMS } from '@stories';
+import { page } from './block/docPage';
 setCompodocJson(docJson);
 
 registerLocaleData(zh);
@@ -27,7 +28,8 @@ export const parameters = {
     source: {
       language: 'typescript',
       format: true
-    }
+    },
+    page
   },
   options: {
     storySort: {
@@ -41,7 +43,7 @@ export const decorators = [
   moduleMetadata({
     imports: [CommonModule, BrowserModule, BrowserAnimationsModule, FormsModule, ReactiveFormsModule],
     providers: [{ provide: NZ_I18N, useValue: zh_CN }]
-  }),
+  })
   // (Story, { id, kind, name, story, parameters, hooks, args, argTypes, globals, viewMode, loaded }) => {
   //   console.log('==================');
   // }

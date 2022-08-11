@@ -16,7 +16,11 @@ export default {
   ],
   args: {
     nzxStartFormatter: (v: number | string) => v,
-    nzxEndFormatter: (v: number | string) => v
+    nzxEndFormatter: (v: number | string) => v,
+    nzxStartMax: Infinity,
+    nzxEndMax: Infinity,
+    nzxStartMin: -Infinity,
+    nzxEndMin: -Infinity
   },
   argTypes: {
     nzxSize: SIZE_ARG_TYPE,

@@ -14,7 +14,8 @@
   "include": [
     "../lib/**/*",
     "../projects/**/*",
-    "../stories/**/*"
+    "../stories/**/*",
+    "./block/**/*"
   ],
   "files": [
     "./typings.d.ts"

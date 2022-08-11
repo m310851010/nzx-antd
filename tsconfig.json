@@ -21,12 +21,17 @@
     "target": "es2017",
     "module": "es2020",
     "lib": ["ESNext", "dom"],
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "allowSyntheticDefaultImports": true,
     "paths": {
       "@xmagic/nzx-antd": ["dist/nzx-antd", "lib/public-api"],
       "@xmagic/nzx-antd/*": ["dist/nzx-antd/*", "lib/*"],
       "@stories": ["stories"],
       "@stories/*": ["stories/*"]
-    }
+    },
+    "typeRoots": ["./stories/@types", "./node_modules/@types"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
