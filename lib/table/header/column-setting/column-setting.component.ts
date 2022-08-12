@@ -25,7 +25,7 @@ import { NzxColumn } from '../../table.type';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ColumnSettingComponent<T> implements OnInit /*, OnChanges*/ {
+export class NzxColumnSettingComponent<T> implements OnInit /*, OnChanges*/ {
   _nzxColumns: NzxColumn<T>[] = [];
   _columnNameChecked!: boolean | null;
   _indeterminate!: boolean | null;

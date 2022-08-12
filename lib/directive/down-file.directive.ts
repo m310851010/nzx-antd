@@ -1,5 +1,5 @@
 import { Directive, HostListener, Input } from '@angular/core';
-import { DownloadOption, DownloadService } from '@xmagic/nzx-antd/service';
+import { DownloadOption, NzxDownloadService } from '@xmagic/nzx-antd/service';
 import { FetchOptions } from '@xmagic/nzx-antd/service';
 
 @Directive({
@@ -38,7 +38,7 @@ export class DownFileDirective {
    */
   @Input() downloadDone?: DownloadOption['downloadDone'];
 
-  constructor(private downloadService: DownloadService) {}
+  constructor(private downloadService: NzxDownloadService) {}
 
   @HostListener('click', ['$event'])
   clickEventHandler(event: MouseEvent) {

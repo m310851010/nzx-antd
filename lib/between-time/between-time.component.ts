@@ -14,7 +14,7 @@ import { InputBoolean } from 'ng-zorro-antd/core/util';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NzxBetweenComponent } from '@xmagic/nzx-antd/between';
 import { DatetimeValueType, DisabledDateType, getRealDateTime } from '@xmagic/nzx-antd/between-datetime';
-import { Utils } from '@xmagic/nzx-antd/util';
+import { NzxUtils } from '@xmagic/nzx-antd/util';
 
 @Component({
   selector: 'nzx-between-time',
@@ -172,10 +172,10 @@ export class NzxBetweenTimeComponent extends NzxBetweenComponent implements Cont
     }
     let hours: number[] = [];
     if (minValue) {
-      hours = Utils.range(0, minValue.getHours());
+      hours = NzxUtils.range(0, minValue.getHours());
     }
     if (maxValue) {
-      hours = hours.concat(Utils.range(maxValue.getHours() + 1, 24));
+      hours = hours.concat(NzxUtils.range(maxValue.getHours() + 1, 24));
     }
     return hours;
   }
@@ -196,10 +196,10 @@ export class NzxBetweenTimeComponent extends NzxBetweenComponent implements Cont
 
     let minutes: number[] = [];
     if (minValue && minValue.getHours() === hour) {
-      minutes = Utils.range(0, minValue.getMinutes());
+      minutes = NzxUtils.range(0, minValue.getMinutes());
     }
     if (maxValue && maxValue.getHours() === hour) {
-      minutes = minutes.concat(Utils.range(maxValue.getMinutes() + 1, 60));
+      minutes = minutes.concat(NzxUtils.range(maxValue.getMinutes() + 1, 60));
     }
     return minutes;
   }
@@ -226,10 +226,10 @@ export class NzxBetweenTimeComponent extends NzxBetweenComponent implements Cont
 
     let seconds: number[] = [];
     if (minValue && minValue.getHours() === hour && minValue.getMinutes() === minute) {
-      seconds = Utils.range(0, minValue.getSeconds());
+      seconds = NzxUtils.range(0, minValue.getSeconds());
     }
     if (maxValue && maxValue.getHours() === hour && maxValue.getMinutes() === minute) {
-      seconds = seconds.concat(Utils.range(maxValue.getSeconds() + 1, 60));
+      seconds = seconds.concat(NzxUtils.range(maxValue.getSeconds() + 1, 60));
     }
     return seconds;
   }

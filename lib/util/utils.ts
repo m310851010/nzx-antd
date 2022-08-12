@@ -51,7 +51,7 @@ class UtilsClass {
    * @param target
    */
   clone<T = NzSafeAny>(target: T): T {
-    const _target = Utils.isArray(target) ? [] : {};
+    const _target = NzxUtils.isArray(target) ? [] : {};
     return this.extend(_target as T, target);
   }
 
@@ -105,12 +105,12 @@ class UtilsClass {
         }
 
         // tslint:disable-next-line:no-conditional-assignment
-        if (Utils.isPlainObject(copy) || (copyIsArray = Utils.isArray(copy))) {
+        if (NzxUtils.isPlainObject(copy) || (copyIsArray = NzxUtils.isArray(copy))) {
           if (copyIsArray) {
             copyIsArray = false;
-            clone = src && Utils.isArray(src) ? src : [];
+            clone = src && NzxUtils.isArray(src) ? src : [];
           } else {
-            clone = src && Utils.isPlainObject(src) ? src : {};
+            clone = src && NzxUtils.isPlainObject(src) ? src : {};
           }
 
           this.setProperty(target, { name, newValue: this.extend(clone, copy) });
@@ -648,7 +648,7 @@ class UtilsClass {
   }
 }
 
-export const Utils = new UtilsClass();
+export const NzxUtils = new UtilsClass();
 export interface TreeNode {
   [key: string]: NzSafeAny;
   children?: TreeNode[];

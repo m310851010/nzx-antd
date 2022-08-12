@@ -7,7 +7,7 @@ import { ModalTypes, NzModalService } from 'ng-zorro-antd/modal';
  * 对话框拖动服务
  */
 @Injectable()
-export class ModalDragService {
+export class NzxModalDragService {
   static readonly DRAG_CLS_PREFIX = 'NZ-MODAL-WRAP-CLS-';
   constructor(public modal: NzModalService, public dragDrop: DragDrop) {}
 
@@ -35,7 +35,7 @@ export class ModalDragService {
    * 获取随机类名
    */
   getRandomCls() {
-    return ModalDragService.DRAG_CLS_PREFIX + Date.now() + Math.random().toString().replace('0.', '');
+    return NzxModalDragService.DRAG_CLS_PREFIX + Date.now() + Math.random().toString().replace('0.', '');
   }
 
   /**

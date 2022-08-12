@@ -10,7 +10,7 @@ import {
   RouterStateSnapshot
 } from '@angular/router';
 import { Observable, of, tap } from 'rxjs';
-import { Utils } from '@xmagic/nzx-antd/util';
+import { NzxUtils } from '@xmagic/nzx-antd/util';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzxAntdService } from '@xmagic/nzx-antd';
 
@@ -20,17 +20,17 @@ import { NzxAntdService } from '@xmagic/nzx-antd';
  * const routes: Routes = [
  * {
  *    path: 'xxx',
- *    canActivate: [ AuthGuardService ],
+ *    canActivate: [ NzxAuthGuardService ],
  *    data: { guard: 'user1', noAuthUrl: '/no-permisseion' }
  * },
  * {
  *    path: 'xxx',
- *    canActivate: [ AuthGuardService ],
+ *    canActivate: [ NzxAuthGuardService ],
  *    data: { guard: { auth: ['user1', 'user2'], noAuthUrl: '/no-permisseion'} }}
  * },
  * {
  *    path: 'yyy',
- *    canActivate: [ AuthGuardService ],
+ *    canActivate: [ NzxAuthGuardService ],
  *    data: { guard: ((router, injector, antdService) => of(true)) as AuthGuardType, noAuthUrl: '/no-permisseion' }
  * }
  * ];
@@ -38,7 +38,7 @@ import { NzxAntdService } from '@xmagic/nzx-antd';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuardService implements CanActivate, CanActivateChild, CanLoad {
+export class NzxAuthGuardService implements CanActivate, CanActivateChild, CanLoad {
   protected hasAuth: Required<NzxAntdService>['hasAuth'] = () => of(true);
 
   constructor(private antdService: NzxAntdService, private router: Router, private injector: Injector) {
@@ -50,7 +50,7 @@ export class AuthGuardService implements CanActivate, CanActivateChild, CanLoad 
   private process(data: Data): Observable<boolean> {
     const guard: AuthGuardType = data.guard;
 
-    if (Utils.isFunction(guard)) {
+    if (NzxUtils.isFunction(guard)) {
       return guard(this.router, this.injector, this.antdService);
     }
 

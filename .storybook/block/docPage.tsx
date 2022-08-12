@@ -12,6 +12,6 @@ export const page = () => (
     <Primary />
     <H2>参数定义</H2>
     <ArgsTable story={PRIMARY_STORY} />
-    <Stories title="所有示例" />
+    <Stories title="所有示例" includePrimary={false} />
   </>
 );

@@ -22,7 +22,7 @@ import { isContentEmpty } from './is-content-empty';
     '[class.nzx-page-header]': 'true'
   }
 })
-export class HeaderComponent {
+export class NzxHeaderComponent {
   hasContent = false;
   /**
    * 显示验证占位符(是否显示form-item底部的空白)

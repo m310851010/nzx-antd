@@ -7,6 +7,6 @@ import { Component } from '@angular/core';
     '[class.nzx-page]': 'true'
   }
 })
-export class PageComponent {
+export class NzxPageComponent {
   constructor() {}
 }

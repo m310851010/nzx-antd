@@ -20,7 +20,7 @@ import {
 import { FunctionProp, NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzDatePickerI18nInterface } from 'ng-zorro-antd/i18n';
 import { NzxBetweenComponent } from '@xmagic/nzx-antd/between';
-import { Utils } from '@xmagic/nzx-antd/util';
+import { NzxUtils } from '@xmagic/nzx-antd/util';
 import {
   DatetimeValueType,
   DisabledDateType,
@@ -363,18 +363,18 @@ export class NzxBetweenDatetimeComponent extends NzxBetweenComponent implements 
     let seconds: number[] = [];
     if (start) {
       const equalsHour = start.hour === date.getHours();
-      hours = Utils.range(0, start.hour);
-      minutes = equalsHour ? Utils.range(0, start.minute) : [];
-      seconds = equalsHour && start.minute === date.getMinutes() ? Utils.range(0, start.second) : [];
+      hours = NzxUtils.range(0, start.hour);
+      minutes = equalsHour ? NzxUtils.range(0, start.minute) : [];
+      seconds = equalsHour && start.minute === date.getMinutes() ? NzxUtils.range(0, start.second) : [];
     }
 
     const end = getTimeValue(date, maxValue);
     if (end) {
       const equalsHour = end.hour === date.getHours();
-      hours = hours.concat(Utils.range(end.hour + 1, 24));
-      minutes = equalsHour ? minutes.concat(Utils.range(end.minute + 1, 60)) : minutes;
+      hours = hours.concat(NzxUtils.range(end.hour + 1, 24));
+      minutes = equalsHour ? minutes.concat(NzxUtils.range(end.minute + 1, 60)) : minutes;
       seconds =
-        equalsHour && end.minute === date.getMinutes() ? seconds.concat(Utils.range(end.second + 1, 60)) : seconds;
+        equalsHour && end.minute === date.getMinutes() ? seconds.concat(NzxUtils.range(end.second + 1, 60)) : seconds;
     }
 
     return {

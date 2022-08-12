@@ -1,4 +1,4 @@
-import { Utils } from '@xmagic/nzx-antd/util';
+import { NzxUtils } from '@xmagic/nzx-antd/util';
 
 export function getStartDate(date: Date) {
   const time = new Date(date.getTime());
@@ -73,10 +73,10 @@ export function getRealDateTime(date: Date, disabledDateType?: DisabledDateType)
   if (!disabledDateType) {
     return null;
   }
-  if (Utils.isFunction(disabledDateType)) {
+  if (NzxUtils.isFunction(disabledDateType)) {
     return disabledDateType(date);
   }
-  if (Utils.isDate(disabledDateType)) {
+  if (NzxUtils.isDate(disabledDateType)) {
     return disabledDateType;
   }
   return new Date(disabledDateType);

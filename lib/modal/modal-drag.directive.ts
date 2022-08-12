@@ -1,6 +1,6 @@
 import { Directive, Host } from '@angular/core';
 import { NzModalComponent } from 'ng-zorro-antd/modal';
-import { ModalDragService } from './modal-drag.service';
+import { NzxModalDragService } from './modal-drag.service';
 
 /**
  * 可拖动的对话框
@@ -12,12 +12,12 @@ import { ModalDragService } from './modal-drag.service';
 @Directive({
   selector: 'nz-modal[nzxModalDrag]'
 })
-export class ModalDragDirective {
-  constructor(@Host() protected modal: NzModalComponent, public modalDragService: ModalDragService) {
+export class NzxModalDragDirective {
+  constructor(@Host() protected modal: NzModalComponent, public modalDragService: NzxModalDragService) {
     const wrapCls = this.modalDragService.getRandomCls();
     modal.afterOpen.subscribe(() => {
       const modelElement = modal.getElement()!;
-      if (!modelElement || modelElement.className.indexOf(ModalDragService.DRAG_CLS_PREFIX) !== -1) {
+      if (!modelElement || modelElement.className.indexOf(NzxModalDragService.DRAG_CLS_PREFIX) !== -1) {
         return;
       }
 

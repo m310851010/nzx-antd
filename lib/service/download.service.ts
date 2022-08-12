@@ -4,7 +4,7 @@ import { FetcherService, FetchOptions } from './fetcher.service';
 import { NzSafeAny } from 'ng-zorro-antd/core/types'
 
 @Injectable()
-export class DownloadService {
+export class NzxDownloadService {
   constructor(protected fetcher: FetcherService) {}
 
   /**

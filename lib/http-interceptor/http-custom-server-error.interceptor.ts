@@ -5,7 +5,7 @@ import { HttpNotifyService } from './http-notify.service';
 import { HttpError } from './http.model';
 import { LogoutService } from './logout.service';
 import { DEFAULT_RESPONSE_SETTING, NzxAntdService, ResponseSetting } from '@xmagic/nzx-antd';
-import { Utils } from '@xmagic/nzx-antd/util';
+import { NzxUtils } from '@xmagic/nzx-antd/util';
 
 /**
  * 在 http-error-interceptor 后，进行自定义错误处理。
@@ -19,7 +19,7 @@ export class HttpCustomServerErrorInterceptor implements HttpInterceptor {
     protected logoutNotify: LogoutService,
     protected antdService: NzxAntdService
   ) {
-    this.settings = Utils.extend({}, DEFAULT_RESPONSE_SETTING, this.antdService.response) as Required<ResponseSetting>;
+    this.settings = NzxUtils.extend({}, DEFAULT_RESPONSE_SETTING, this.antdService.response) as Required<ResponseSetting>;
   }
 
   intercept<T>(req: HttpRequest<T>, next: HttpHandler): Observable<HttpEvent<T>> {

@@ -3,11 +3,11 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ConfirmType, ModalOptions, NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
-import { ModalDragService } from './modal-drag.service';
+import { NzxModalDragService } from './modal-drag.service';
 
 @Injectable()
-export class NzModalWrapService {
-  constructor(public modal: NzModalService, public modalDragService: ModalDragService) {}
+export class NzxModalWrapService {
+  constructor(public modal: NzModalService, public modalDragService: NzxModalDragService) {}
 
   /**
    * 创建对话框, 增加可拖拽功能

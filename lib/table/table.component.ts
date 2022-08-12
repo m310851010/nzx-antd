@@ -31,7 +31,7 @@ import { PaginationItemRenderContext } from 'ng-zorro-antd/pagination';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { CdkDragDrop } from '@angular/cdk/drag-drop/drag-events';
 import { moveItemInArray } from '@angular/cdk/drag-drop';
-import { Utils } from '@xmagic/nzx-antd/util';
+import { NzxUtils } from '@xmagic/nzx-antd/util';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import {
   CellEventArg,
@@ -415,7 +415,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny>> implements O
     const fetchSetting = Object.assign({}, FETCH_SETTING, this.antdService.table, this.fetchSetting);
     const setResult: (value: Record<string, NzSafeAny> | T[]) => void = res =>
       this.setFetchResult(res, fetchSetting, reset);
-    if (Utils.isString(this.api)) {
+    if (NzxUtils.isString(this.api)) {
       FetcherService.resolveParams(this.params)
         .pipe(
           switchMap(_params => {
@@ -434,11 +434,11 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny>> implements O
       return;
     }
 
-    if (Utils.isObservable(this.api)) {
+    if (NzxUtils.isObservable(this.api)) {
       (this.api as Observable<T[]>).subscribe(setResult);
       return;
     }
-    if (Utils.isPromise(this.api)) {
+    if (NzxUtils.isPromise(this.api)) {
       (this.api as Promise<T[]>).then(setResult);
       return;
     }
@@ -461,9 +461,9 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny>> implements O
 
   private setFetchResult(res: Record<string, NzSafeAny> | T[], fetchSetting: FetchSetting, reset: boolean): void {
     let result: PageInfo<T> = { total: 0, list: [] };
-    if (this.afterFetch && Utils.isFunction(this.afterFetch)) {
+    if (this.afterFetch && NzxUtils.isFunction(this.afterFetch)) {
       const data = this.afterFetch(res, this.nzPageIndex);
-      if (Utils.isPromise(data)) {
+      if (NzxUtils.isPromise(data)) {
         data.then(v => this.setPageInfo(v));
         return;
       }
@@ -473,9 +473,9 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny>> implements O
         result.list = res;
         result.total = res.length;
       } else {
-        result.list = Utils.get(res, fetchSetting.listField);
-        result.total = Utils.get(res, fetchSetting.totalField);
-        result.pageIndex = reset ? 1 : Utils.get(res, fetchSetting.pageIndexField);
+        result.list = NzxUtils.get(res, fetchSetting.listField);
+        result.total = NzxUtils.get(res, fetchSetting.totalField);
+        result.pageIndex = reset ? 1 : NzxUtils.get(res, fetchSetting.pageIndexField);
       }
     }
 
@@ -535,7 +535,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny>> implements O
     };
 
     if (this.sortInfo) {
-      const sortInfo = Utils.isFunction(this.sortFn) ? this.sortFn(this.sortInfo) : this.sortInfo;
+      const sortInfo = NzxUtils.isFunction(this.sortFn) ? this.sortFn(this.sortInfo) : this.sortInfo;
       delete sortInfo.column;
       Object.assign(params, sortInfo);
     }
@@ -548,7 +548,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny>> implements O
    * @protected
    */
   protected isAsync(obj: NzSafeAny): boolean {
-    return Utils.isObservable(obj) || Utils.isPromise(obj);
+    return NzxUtils.isObservable(obj) || NzxUtils.isPromise(obj);
   }
 
   /**
@@ -707,7 +707,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny>> implements O
   } {
     let maxLevel = 0;
     const allColumns: NzxColumn<T>[] = [];
-    Utils.forEachTree(originColumns, (node, parent, level) => {
+    NzxUtils.forEachTree(originColumns, (node, parent, level) => {
       this.normalProps(node);
 
       allColumns.push(node);

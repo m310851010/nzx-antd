@@ -26,7 +26,7 @@ import { Observable, Subscription } from 'rxjs';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { BaseControl } from '@xmagic/nzx-antd/util';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { Utils } from '@xmagic/nzx-antd/util';
+import { NzxUtils } from '@xmagic/nzx-antd/util';
 import { NzBytesPipe } from 'ng-zorro-antd/pipes';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 
@@ -321,7 +321,7 @@ export class NzxUploadComponent extends BaseControl<NzUploadFile[]> implements C
     return {
       errorType,
       file,
-      message: Utils.format(messages[errorType], fmtData)
+      message: NzxUtils.format(messages[errorType], fmtData)
     };
   }
 }

@@ -3,7 +3,7 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpParams, HttpRequest } from
 import { Observable } from 'rxjs';
 import { HttpDefaultCodec } from './http-default-encoder';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
-import { Utils } from '@xmagic/nzx-antd/util';
+import { NzxUtils } from '@xmagic/nzx-antd/util';
 
 /**
  * 请求参数处理
@@ -37,6 +37,6 @@ export class HttpParamsInterceptor implements HttpInterceptor {
       return acc;
     }, result);
 
-    return new HttpParams({ fromString: Utils.serialize(result), encoder: HttpDefaultCodec });
+    return new HttpParams({ fromString: NzxUtils.serialize(result), encoder: HttpDefaultCodec });
   }
 }

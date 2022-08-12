@@ -7,7 +7,7 @@ import { Component, HostBinding, Input, OnInit } from '@angular/core';
     '[class.nzx-page-content]': 'true'
   }
 })
-export class ContentComponent {
+export class NzxContentComponent {
   /**
    * 显示验证占位符(是否显示form-item底部的空白)
    */

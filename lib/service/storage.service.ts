@@ -4,7 +4,7 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
 @Injectable({
   providedIn: 'root'
 })
-export class StorageService {
+export class NzxStorageService {
   /**
    * 获取长度
    */

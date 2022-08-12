@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ContentComponent } from './content.component';
-import { PageComponent } from './page.component';
-import { HeaderComponent } from './header.component';
+import { NzxContentComponent } from './content.component';
+import { NzxPageComponent } from './page.component';
+import { NzxHeaderComponent } from './header.component';
 import { ObserversModule } from '@angular/cdk/observers';
 
-const COMPONENTS = [ContentComponent, PageComponent, HeaderComponent];
+const COMPONENTS = [NzxContentComponent, NzxPageComponent, NzxHeaderComponent];
 
 @NgModule({
   declarations: [COMPONENTS],
   imports: [CommonModule, ObserversModule],
   exports: [COMPONENTS]
 })
-export class LayoutPageModule {}
+export class NzxLayoutPageModule {}

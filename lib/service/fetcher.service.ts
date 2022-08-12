@@ -3,7 +3,7 @@ import { HttpClient, HttpContext, HttpContextToken } from '@angular/common/http'
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
-import { Utils } from '@xmagic/nzx-antd/util';
+import { NzxUtils } from '@xmagic/nzx-antd/util';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 /**
@@ -47,7 +47,7 @@ export class FetcherService {
    * @param data 参数
    */
   static resolveParams<T>(data?: FetchParams<T>): Observable<T | undefined> {
-    if (Utils.isFunction(data)) {
+    if (NzxUtils.isFunction(data)) {
       const result = data();
       if (result instanceof Observable) {
         return result;
@@ -79,7 +79,7 @@ export class FetcherService {
    * @param option 请求配置
    */
   fetchSync<T>(option: Omit<FetchOptions, 'async'>): T {
-    return Utils.getAjaxValue<T>(this.fetch({ ...option, async: false }));
+    return NzxUtils.getAjaxValue<T>(this.fetch({ ...option, async: false }));
   }
 
   /**
@@ -104,7 +104,7 @@ export class FetcherService {
       option.context.set(LOADING_ENABLED, false);
     }
 
-    const data = Utils.isFunction(options.data) ? options.data() : options.data;
+    const data = NzxUtils.isFunction(options.data) ? options.data() : options.data;
     if (/^post|put$/i.test(options.method!)) {
       option.body = data;
     } else {
@@ -119,7 +119,7 @@ export class FetcherService {
    * @param options
    */
   doFetchSync<T>(options: Omit<FetchOptions, 'async'>): T {
-    return Utils.getAjaxValue<T>(this.doFetch({ ...options, async: false }));
+    return NzxUtils.getAjaxValue<T>(this.doFetch({ ...options, async: false }));
   }
 
   /**
@@ -138,7 +138,7 @@ export class FetcherService {
         };
       }
 
-      if (options.data && Utils.isFunction(options.data)) {
+      if (options.data && NzxUtils.isFunction(options.data)) {
         const dataFn = options.data;
         options.data = () => {
           return dataFn(control);
@@ -155,7 +155,7 @@ export class FetcherService {
         return null;
       }
 
-      if (Utils.isBoolean(data)) {
+      if (NzxUtils.isBoolean(data)) {
         return data ? null : { remote: { message: options.message || '格式不正确' } };
       }
       return data;

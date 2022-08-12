@@ -1,6 +1,6 @@
 import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
-import { Utils } from './utils';
+import { NzxUtils } from './utils';
 
 /**
  * 表单工具
@@ -117,7 +117,7 @@ export class FormUtilsClass {
    * @param message 错误信息
    */
   pattern(exp: RegExp | string, message: string): ValidatorFn {
-    const reg = Utils.isString(exp) ? new RegExp(exp, 'mig') : exp;
+    const reg = NzxUtils.isString(exp) ? new RegExp(exp, 'mig') : exp;
     return this.singleValidator<string>(v => reg.test(v), { pattern: { message } });
   }
 
@@ -193,7 +193,7 @@ export class FormUtilsClass {
    * @param message 错误提示信息
    */
   number(minus?: boolean, fraction?: number, message: string = '数字格式错误'): ValidatorFn {
-    return this.singleValidator<string>(value => Utils.isNum(value, minus, fraction), { number: { message } });
+    return this.singleValidator<string>(value => NzxUtils.isNum(value, minus, fraction), { number: { message } });
   }
 
   /**
@@ -201,7 +201,7 @@ export class FormUtilsClass {
    * @param message 错误提示信息
    */
   mobile(message: string = '手机号格式错误'): ValidatorFn {
-    return this.singleValidator<string>(value => Utils.isMobile(value), { mobile: { message } });
+    return this.singleValidator<string>(value => NzxUtils.isMobile(value), { mobile: { message } });
   }
 
   /**
@@ -209,7 +209,7 @@ export class FormUtilsClass {
    * @param message 错误提示信息
    */
   email(message: string = '邮箱格式错误'): ValidatorFn {
-    return this.singleValidator<string>(value => Utils.isEmail(value), { email: { message } });
+    return this.singleValidator<string>(value => NzxUtils.isEmail(value), { email: { message } });
   }
 
   /**
@@ -217,7 +217,7 @@ export class FormUtilsClass {
    * @param message 错误提示信息
    */
   ip(message: string = 'IP格式错误'): ValidatorFn {
-    return this.singleValidator<string>(value => Utils.isIp(value), { ip: { message } });
+    return this.singleValidator<string>(value => NzxUtils.isIp(value), { ip: { message } });
   }
 
   /**
@@ -225,7 +225,7 @@ export class FormUtilsClass {
    * @param message 错误提示信息
    */
   url(message: string = 'URL格式错误'): ValidatorFn {
-    return this.singleValidator<string>(value => Utils.isUrl(value), { url: { message } });
+    return this.singleValidator<string>(value => NzxUtils.isUrl(value), { url: { message } });
   }
 
   /**
@@ -233,7 +233,7 @@ export class FormUtilsClass {
    * @param message 错误提示信息
    */
   chinese(message: string = '只允许输入中文字符'): ValidatorFn {
-    return this.singleValidator<string>(value => Utils.isChinese(value), { chinese: { message } });
+    return this.singleValidator<string>(value => NzxUtils.isChinese(value), { chinese: { message } });
   }
 
   /**
@@ -249,7 +249,7 @@ export class FormUtilsClass {
     compare: (v1: NzSafeAny, v2: NzSafeAny) => boolean,
     errMessage: ValidationErrors
   ): ValidatorFn {
-    const fn = Utils.isFunction(form) ? form : () => form;
+    const fn = NzxUtils.isFunction(form) ? form : () => form;
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control?.value) {
         return null;
@@ -365,4 +365,4 @@ export class FormUtilsClass {
   }
 }
 
-export const FormUtils = new FormUtilsClass();
+export const NzxFormUtils = new FormUtilsClass();

@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
-import { Utils } from '@xmagic/nzx-antd/util';
+import { NzxUtils } from '@xmagic/nzx-antd/util';
 
 @Pipe({
   name: 'filter'
@@ -16,13 +16,13 @@ export class FilterPipe implements PipeTransform {
    */
   transform<T = NzSafeAny>(array: T[], matcher: FilterMatcherFn<T> | string, searchText?: string): T[] {
     if (typeof matcher === 'string') {
-      if (Utils.isEmpty(searchText)) {
+      if (NzxUtils.isEmpty(searchText)) {
         return array;
       }
 
       // @ts-ignore
       const text = searchText.toLowerCase();
-      return (array || []).filter(v => Utils.get(v, matcher, '').toLowerCase().indexOf(text) !== -1);
+      return (array || []).filter(v => NzxUtils.get(v, matcher, '').toLowerCase().indexOf(text) !== -1);
     }
     return (array || []).filter(v => matcher(v));
   }

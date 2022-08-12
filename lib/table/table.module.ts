@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzxTableComponent } from './table.component';
-import { TableHeaderComponent } from './header/table-header/table-header.component';
-import { ColumnSettingComponent } from './header/column-setting/column-setting.component';
+import { NzxTableHeaderComponent } from './header/table-header/table-header.component';
+import { NzxColumnSettingComponent } from './header/column-setting/column-setting.component';
 import { NzResizableModule } from 'ng-zorro-antd/resizable';
 import { NzxDirectiveModule } from '@xmagic/nzx-antd/directive';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -19,7 +19,7 @@ import { NzxServiceModule } from '@xmagic/nzx-antd/service';
 import { NzOutletModule } from 'ng-zorro-antd/core/outlet';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 
-const COMPONENT = [NzxTableComponent, TableHeaderComponent, ColumnSettingComponent];
+const COMPONENT = [NzxTableComponent, NzxTableHeaderComponent, NzxColumnSettingComponent];
 @NgModule({
   declarations: [COMPONENT],
   imports: [

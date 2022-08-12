@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { from, map, Observable, of } from 'rxjs';
 import { FetcherService, FetchOptions } from '@xmagic/nzx-antd/service';
-import { Utils } from '@xmagic/nzx-antd/util';
+import { NzxUtils } from '@xmagic/nzx-antd/util';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 
 /**
@@ -27,17 +27,17 @@ export class ToAsyncPipe implements PipeTransform {
     }
 
     const opt = option || ({} as AsyncOption<T, U>);
-    const mapFn = Utils.isFunction(opt.map) ? opt.map : (data: T) => data as unknown as U;
+    const mapFn = NzxUtils.isFunction(opt.map) ? opt.map : (data: T) => data as unknown as U;
     if (typeof value === 'string') {
       return this.fetcher.fetch<T>({ ...opt, url: value }).pipe(
-        map(v => Utils.defaultIfy(v, option?.defaultValue)),
+        map(v => NzxUtils.defaultIfy(v, option?.defaultValue)),
         map<T, U>(mapFn)
       );
     }
 
-    if (Utils.isPromise(value) || Utils.isObservable(value)) {
+    if (NzxUtils.isPromise(value) || NzxUtils.isObservable(value)) {
       return from(value).pipe(
-        map(v => Utils.defaultIfy(v, option?.defaultValue)),
+        map(v => NzxUtils.defaultIfy(v, option?.defaultValue)),
         map<T, U>(mapFn)
       );
     }

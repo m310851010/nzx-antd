@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-export class LoadingService {
+export class NzxLoadingService {
   readonly loadingId = '__MESSAGE_LOADING__';
 
   /**
@@ -88,4 +88,4 @@ export class LoadingService {
   }
 }
 
-export const loadingService = new LoadingService();
+export const loadingService = new NzxLoadingService();

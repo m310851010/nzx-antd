@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NzModalWrapService } from '@xmagic/nzx-antd/modal';
+import { NzxModalWrapService } from '@xmagic/nzx-antd/modal';
 import { HttpError, ResponseModel } from './http.model';
 
 /**
@@ -8,7 +8,7 @@ import { HttpError, ResponseModel } from './http.model';
 @Injectable({ providedIn: 'root' })
 export class HttpNotifyService {
   private isOpen = false;
-  constructor(protected modal: NzModalWrapService) {}
+  constructor(protected modal: NzxModalWrapService) {}
 
   /**
    * 通用的业务异常

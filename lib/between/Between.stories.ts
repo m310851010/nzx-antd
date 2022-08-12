@@ -17,6 +17,13 @@ export default {
   ],
   argTypes: {
     nzxSize: SIZE_ARG_TYPE
+  },
+  parameters: {
+    docs: {
+      // 传给
+      moduleName: '',
+      importName: ''
+    }
   }
 } as Meta;
 

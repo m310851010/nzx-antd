@@ -10,4 +10,4 @@ import { NzxBetweenModule } from '@xmagic/nzx-antd/between'
   imports: [CommonModule, NzTimePickerModule, FormsModule, NzxBetweenModule],
   exports: [NzxBetweenTimeComponent]
 })
-export class BetweenTimeModule {}
+export class NzxBetweenTimeModule {}

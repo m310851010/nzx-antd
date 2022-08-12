@@ -10,9 +10,9 @@ export const ImportInfo = () => {
   if (!componentName) {
     return null;
   }
-  const moduleName = componentName.replace(/Component$/, 'Module');
+  const moduleName = componentName.replace(/(Component|Directive|Service|Pipe)$/, 'Module');
   const importName = componentName
-    .replace(/(^Nzx)|(Component$)/g, '')
+    .replace(/(^Nzx)|((Component|Directive|Service|Pipe)$)/g, '')
     .replace(/\w([A-Z])/g, '-$1')
     .toLowerCase();
   const importStatement = `import { ${moduleName} } from '@xmagic/nzx-antd/${importName}';`;

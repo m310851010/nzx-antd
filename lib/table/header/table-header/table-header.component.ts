@@ -20,7 +20,7 @@ import { NzTableSize } from 'ng-zorro-antd/table';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TableHeaderComponent implements OnInit, OnChanges {
+export class NzxTableHeaderComponent implements OnInit, OnChanges {
   @Input() tableSize: NzTableSize = 'small';
   /**
    * 是否显示操作按钮小图标
