@@ -147,6 +147,4 @@ export class AppComponent implements OnInit {
 
 ## 👍支持
 
-<div className="doc-tip-wrapper">
-  <span className="doc-tip">提示</span> 为该项目点个免费的星⭐
-</div>
+为该项目点个免费的星⭐
