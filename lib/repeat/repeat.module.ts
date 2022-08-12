@@ -7,4 +7,4 @@ import { RepeatComponent } from './repeat.component';
   imports: [CommonModule],
   exports: [RepeatComponent]
 })
-export class RepeatModule {}
+export class NzxRepeatModule {}

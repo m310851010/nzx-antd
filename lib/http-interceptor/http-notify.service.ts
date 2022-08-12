@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { NzxModalWrapService } from '@xmagic/nzx-antd/modal';
 import { HttpError, ResponseModel } from './http.model';
+import { DEFAULT_STATUS_MESSAGE_MAP, NzxAntdService } from '@xmagic/nzx-antd';
+import { Subject, filter } from 'rxjs';
 
 /**
  * 对于异常的处理
@@ -8,14 +10,20 @@ import { HttpError, ResponseModel } from './http.model';
 @Injectable({ providedIn: 'root' })
 export class HttpNotifyService {
   private isOpen = false;
-  constructor(protected modal: NzxModalWrapService) {}
+  private readonly errorSubject = new Subject<string>();
+  private readonly statusMessageMap: Record<string, string> = {};
+
+  constructor(protected modal: NzxModalWrapService, protected antdService: NzxAntdService) {
+    this.statusMessageMap = Object.assign({}, DEFAULT_STATUS_MESSAGE_MAP, antdService.response?.statusMessageMap || {});
+    this.errorSubject.pipe(filter(() => !this.isOpen)).subscribe(message => this.showErrorModal(message));
+  }
 
   /**
    * 通用的业务异常
    * @param error
    */
   notifyCustomServerError(error: HttpError<ResponseModel>) {
-    this.showErrorModal(error.message);
+    this.errorSubject.next(error.message);
   }
 
   /**
@@ -23,23 +31,15 @@ export class HttpNotifyService {
    * @param error
    */
   notifyHttpOriginError(error: HttpError): void {
-    const messageMap: Record<string, string> = {
-      0: '请求网络错误，请检查网络是否正常',
-      404: '请求的地址不存在，请检查地址是否正确',
-      403: '您没有操作权限'
-    };
-    this.showErrorModal(messageMap[error.code] || '请求发生错误，请联系管理员');
+    this.errorSubject.next(this.statusMessageMap[error.code] || this.statusMessageMap.other);
   }
 
-  private showErrorModal(message: string) {
-    if (this.isOpen) {
-      return;
-    }
+  protected showErrorModal(nzContent: string) {
     this.isOpen = true;
     this.modal
       .error({
         nzTitle: '错误',
-        nzContent: message
+        nzContent
       })
       .afterClose.subscribe(() => (this.isOpen = false));
   }

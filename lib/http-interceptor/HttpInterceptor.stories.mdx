@@ -1,0 +1,162 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="HttpInterceptor" />
+
+## 特性
+
+- `URL` 统一添加 `context path`
+- 自动显示`loading`效果，请求发起前显示`loading`, 请求结束隐藏`loading`, 同时提供关闭`loading`参数配置
+- 自动处理请求接口异常，`HTTP`异常自动显示错误提示框，允许自定义业务异常让框架提示错误，同时支持下载文件(Blob 数据)提示错误
+- 允许自定义`HTTP`异常提示错误信息
+- 登录`session`超时处理，自动跳转到登录页面
+- 将请求错误信息统一包装成`HttpError`对象，方便业务处理异常
+- 重新定义参数序列化，允许`queryParams`请求参数传复杂对象数据，比如数组对象等, 同时对参数值做编码处理, 防止乱码
+- 修改正常业务接口的响应`body`体，直接拿到业务数据，比如取响应体的`result`属性返回给接口调用者
+- 支持同步请求，通常情况下不建议开启，可以用在表单远程校验上， 使之变成同步校验
+
+## 使用
+
+```ts
+import { NzxHttpInterceptorModule } from '@xmagic/nzx-antd/http-interceptor';
+```
+
+## url处理
+
+> 建议使用`/`开头的`url`发起请求
+
+在`NzxAntdService`中, 配置`basePath`属性，所有请求将自动添加前缀.例如:
+
+配置 `basePath: '/ctxt'`, 代码中请求地址 `/api/test`, 实际发起请求地址为 `/ctx/api/test`
+
+
+## 请求参数为复杂对象
+
+```ts
+import { Injectable } from '@angular/core';
+import {NzSafeAny} from 'ng-zorro-antd/core/types';
+import { HttpClient } from '@angular/common/http';
+
+@Injectable()
+export class TestService {
+   constructor(private http: HttpClient) {}
+  /**
+   * 请求参数为复杂对象
+   */
+    getInfo(): Observable<string> {
+      const data = {id: 1, details: [ {name: 'test', info: {level: 1, code: 'test code'}}]};
+      return this.http.get<string>('/api/test', {params: data as NzSafeAny})
+    }
+}
+```
+
+
+
+## 请求 `loading` 配置
+
+> 请求`loading`效果默认是开启状态，使用`LOADING_ENABLED`来控制是否显示`loading`
+
+```ts
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpContext } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { LOADING_ENABLED } from '@xmagic/nzx-antd/service';
+
+@Injectable()
+export class TestService {
+  constructor(private http: HttpClient) {}
+
+  /**
+   * 请求时关闭loading
+   */
+  getInfo(): Observable<string> {
+    return this.http.get<string>('/api/test', { context: new HttpContext().set(LOADING_ENABLED, false) });
+  }
+}
+```
+
+## 同步请求配置
+
+> 开启同步请求时 loading 效果会因为浏览器阻塞而显示不出来
+
+> 同步请求默认为关闭状态, 即异步请求, 两种方式开启同步请求:
+
+- 使用`HttpContext`的`SYNCED_ENABLED`方式
+
+- 使用`synced`模板函数方式
+
+```ts
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpContext } from '@angular/common/http';
+import { NzxUtils } from '@xmagic/nzx-antd/util';
+import { SYNCED_ENABLED, synced } from '@xmagic/nzx-antd/service';
+
+@Injectable()
+export class TestService {
+  constructor(private http: HttpClient) {}
+
+  /**
+   * 使用`SYNCED_ENABLED`方式同步请求数据
+   */
+  getInfo(): string {
+    return NzxUtils.getAjaxValue(
+      this.http.get<string>('/api/test', { context: new HttpContext().set(SYNCED_ENABLED, true) })
+    );
+  }
+
+  /**
+   * 使用`synced`模板函数方式同步请求数据
+   */
+  getId(): string {
+    return NzxUtils.getAjaxValue(this.http.get<string>(synced`api/test`));
+  }
+
+  /**
+   * 使用原生Observable对象获取数据
+   */
+  getTest(): string {
+    let result!: string;
+    this.http.get<string>(synced`api/test`).subscribe(value => (result = value));
+    return result;
+  }
+}
+```
+
+## 表单远程验证变成同步验证器
+
+```ts
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { AbstractControl, FormBuilder, ValidatorFn } from '@angular/forms';
+import { NzxUtils } from '@xmagic/nzx-antd/util';
+import { synced } from '@xmagic/nzx-antd/service';
+
+@Component({...})
+export class TestComponent  {
+  profileForm = this.fb.group({
+    id: ['', this.uniqueValidator]
+  });
+
+  constructor(private fb: FormBuilder, private http: HttpClient) {}
+
+  /**
+   * 远程同步校验
+   * @param data
+   */
+  uniqueValidator(data: string): ValidatorFn {
+    return (control: AbstractControl) => {
+      if (NzxUtils.isEmpty(control.value)) {
+        return null;
+      }
+      const isUnique = NzxUtils.getAjaxValue(
+        this.http.get<boolean>(synced`/api/test`, { params: { data, id: control.value } })
+      );
+      return isUnique ? null : { unique: { message: '远程校验失败,不是唯一值' } };
+    };
+  }
+}
+```
+
+<div className="doc-tip-wrapper">
+  <span className="doc-tip">提示</span>
+  <code>NzxHttpInterceptorModule</code>对调用者透明，仍然使用<code>HttpClient</code> API
+</div>

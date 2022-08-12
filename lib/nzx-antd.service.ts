@@ -61,6 +61,16 @@ export const DEFAULT_RESPONSE_SETTING: ResponseSetting = {
 };
 
 /**
+ * 默认状态错误信息
+ */
+export const DEFAULT_STATUS_MESSAGE_MAP: Record<string, string> = {
+  0: '请求网络错误，请检查网络是否正常',
+  404: '请求的地址不存在，请检查地址是否正确',
+  403: '您没有操作权限',
+  other: '请求发生错误，请联系管理员'
+};
+
+/**
  * 响应配置
  */
 export interface ResponseSetting {
@@ -76,6 +86,12 @@ export interface ResponseSetting {
    * data字段名称, 支持路径属性
    */
   data?: string;
+  /**
+   * http错误码和错误信息映射,比如 `{404: '请求的地址不存在，请检查地址是否正确', 500: '服务器错误'}`
+   * other 表示不匹配任何错误时显示other信息
+   */
+  statusMessageMap?: { [status: string]: string; other: string };
+
   /**
    * 是否请求成功
    * @param body 响应对象

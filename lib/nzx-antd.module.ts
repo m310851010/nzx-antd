@@ -9,11 +9,11 @@
 // import { NzxBetweenInputModule } from '@xmagic/nzx-antd/between-input';
 // import { NzxCheckboxModule } from '@xmagic/nzx-antd/checkbox';
 // import { NzxUploadModule } from '@xmagic/nzx-antd/upload';
-// import { BetweenDatetimeModule } from '@xmagic/nzx-antd/between-datetime';
-// import { BetweenTimeModule } from '@xmagic/nzx-antd/between-time';
+// import { NzxBetweenDatetimeModule } from '@xmagic/nzx-antd/between-datetime';
+// import { NzxBetweenTimeModule } from '@xmagic/nzx-antd/between-time';
 // import { NzxHttpInterceptorModule } from '@xmagic/nzx-antd/http-interceptor';
-// import { RepeatModule } from '@xmagic/nzx-antd/repeat';
-// import { LayoutPageModule } from '@xmagic/nzx-antd/layout-page';
+// import { NzxRepeatModule } from '@xmagic/nzx-antd/repeat';
+// import { NzxLayoutPageModule } from '@xmagic/nzx-antd/layout-page';
 //
 // @NgModule({
 //   imports: [],
@@ -28,11 +28,11 @@
 //     NzxSwitchModule,
 //     NzxServiceModule,
 //     NzxUploadModule,
-//     BetweenDatetimeModule,
-//     BetweenTimeModule,
+//     NzxBetweenDatetimeModule,
+//     NzxBetweenTimeModule,
 //     NzxHttpInterceptorModule,
-//     LayoutPageModule,
-//     RepeatModule
+//     NzxLayoutPageModule,
+//     NzxRepeatModule
 //   ],
 //   declarations: []
 // })
