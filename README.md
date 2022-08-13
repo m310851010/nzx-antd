@@ -81,15 +81,15 @@ export class NzxAntdConfigService extends NzxAntdService {
 
 2. 修改`AppModule`
 
-```ts
+```diff
 // app.module.ts
 
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { NzxModalModule } from '@xmagic/nzx-antd/modal';
 import { NzxHttpInterceptorModule } from '@xmagic/nzx-antd/http-interceptor';
-import { NzxAntdService } from '@xmagic/nzx-antd';
-import { NzxAntdConfigService } from './nzx-antd-config.service';
++import { NzxAntdService } from '@xmagic/nzx-antd';
++import { NzxAntdConfigService } from './nzx-antd-config.service';
 
 @NgModule({
   imports: [
@@ -97,7 +97,7 @@ import { NzxAntdConfigService } from './nzx-antd-config.service';
     NzxHttpInterceptorModule
   ],
   providers: [
-    { provide: NzxAntdService, useExisting: NzxAntdConfigService }
++   { provide: NzxAntdService, useExisting: NzxAntdConfigService }
   ],
   bootstrap: [AppComponent]
 })

@@ -32,6 +32,10 @@ import { NzxUtils } from '@xmagic/nzx-antd/util';
 })
 export class NzxBetweenTimeComponent extends NzxBetweenComponent implements ControlValueAccessor {
   nzxValue: DatetimeValueType = {};
+  get nzDefaultOpenValue() {
+    return new Date();
+  }
+
   /**
    * 开始字段重命名
    */
@@ -53,7 +57,7 @@ export class NzxBetweenTimeComponent extends NzxBetweenComponent implements Cont
   @Input() nzxStartPlaceholder = '起始值';
   @Input() nzxStartAddOn?: TemplateRef<void>;
   @Input() nzxStartDefaultOpenValue?: Date;
-  @Input() nzFormat?: string;
+  @Input() nzFormat = 'HH:mm:ss';
   @Input() @InputBoolean() nzxStartUse12Hours = false;
   @Input() nzxStartSuffixIcon?: string | TemplateRef<NzSafeAny>;
   @Input() @InputBoolean() nzxStartHideDisabledOptions?: boolean;
@@ -64,9 +68,9 @@ export class NzxBetweenTimeComponent extends NzxBetweenComponent implements Cont
 
   @Input() nzxEndId: string | null = null;
   @Input() nzxEndStatus: NzStatus = '';
-  @Input() nzxEndHourStep?: number;
-  @Input() nzxEndMinuteStep?: number;
-  @Input() nzxEndSecondStep?: number;
+  @Input() nzxEndHourStep?: number = 1;
+  @Input() nzxEndMinuteStep?: number = 1;
+  @Input() nzxEndSecondStep?: number = 1;
   @Input() nzxEndClearText?: string;
   @Input() nzxEndNowText?: string;
   @Input() nzxEndOkText?: string;

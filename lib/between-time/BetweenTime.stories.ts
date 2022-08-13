@@ -1,9 +1,8 @@
 import { moduleMetadata, Story, Meta } from '@storybook/angular';
 import { NzxBetweenTimeComponent } from './between-time.component';
 import { NzxBetweenModule } from '@xmagic/nzx-antd/between';
-import { EXCLUDE_PARAMS, SIZE_ARG_TYPE, storyFactory } from '@stories';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { EXCLUDE_PARAMS, hideControlArgType, SIZE_ARG_TYPE, storyFactory } from '@stories';
+import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 
 export default {
   title: '组件/BetweenDatetime 时间区间',
@@ -11,24 +10,31 @@ export default {
   decorators: [
     moduleMetadata({
       declarations: [NzxBetweenTimeComponent],
-      imports: [NzxBetweenModule, NzInputModule, NzInputNumberModule]
+      imports: [NzTimePickerModule, NzxBetweenModule]
     })
   ],
-  args: {
-    nzxStartFormatter: (v: number | string) => v,
-    nzxEndFormatter: (v: number | string) => v
-  },
   argTypes: {
     nzxSize: SIZE_ARG_TYPE,
-    nzxType: { control: 'inline-radio' },
-    nzxStartMax: { control: 'number' },
-    nzxEndMax: { control: 'number' },
-    nzxStartMin: { control: 'number' },
-    nzxEndMin: { control: 'number' }
+    nzxEndStatus: { control: 'inline-radio', options: ['', 'error', 'warning'], defaultValue: '' },
+    ...hideControlArgType<NzxBetweenTimeComponent>('nzxEndOpenChange', 'nzxStartOpenChange')
   },
   parameters: {
     controls: {
-      exclude: EXCLUDE_PARAMS
+      exclude: [
+        ...EXCLUDE_PARAMS,
+        'nzxStartDisabledHours',
+        'nzxStartDisabledMinutes',
+        'nzxStartDisabledSeconds',
+        'nzxEndDisabledHours',
+        'nzxEndDisabledMinutes',
+        'nzxEndDisabledSeconds',
+        'getDefaultMinValue',
+        'getDefaultMaxValue',
+        'getDisabledHour',
+        'getDisabledMinutes',
+        'getDisabledSeconds',
+        'nzDefaultOpenValue'
+      ]
     }
   }
 } as Meta;
