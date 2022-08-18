@@ -32,7 +32,8 @@
           nzPopupClassName: nzxStartPopupClassName,
           nzSecondStep: nzxStartSecondStep,
           nzUse12Hours: nzxStartUse12Hours,
-          nzOpenChange: nzxStartOpenChange
+          nzOpenChange: nzxStartOpenChange,
+          nzStatus: nzxStartStatus
         }
       }
     "
@@ -65,7 +66,8 @@
           nzPopupClassName: nzxEndPopupClassName,
           nzSecondStep: nzxEndSecondStep,
           nzUse12Hours: nzxEndUse12Hours,
-          nzOpenChange: nzxEndOpenChange
+          nzOpenChange: nzxEndOpenChange,
+          nzStatus: nzxEndStatus
         }
       }
     "
@@ -86,7 +88,7 @@
     [nzId]="data.nzId"
     [nzAddOn]="data.nzAddOn"
     [nzAllowEmpty]="data.nzAllowEmpty == null ? true : data.nzAllowEmpty"
-    [nzClearText]="data.nzClearText == null ? 'clear' : data.nzClearText"
+    [nzClearText]="data.nzClearText == null ? '清空' : data.nzClearText"
     [nzDefaultOpenValue]="data.nzDefaultOpenValue || nzDefaultOpenValue"
     [nzDisabledHours]="data.nzDisabledHours"
     [nzDisabledMinutes]="data.nzDisabledMinutes"
@@ -100,5 +102,6 @@
     [nzSecondStep]="data.nzSecondStep == null ? 1 : data.nzSecondStep"
     [nzUse12Hours]="data.nzUse12Hours"
     (nzOpenChange)="data.nzOpenChange.emit($event)"
+    [nzStatus]="data.nzStatus"
   ></nz-time-picker>
 </ng-template>

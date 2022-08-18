@@ -15,6 +15,7 @@ export default {
   ],
   argTypes: {
     nzxSize: SIZE_ARG_TYPE,
+    nzxStartStatus: { control: 'inline-radio', options: ['', 'error', 'warning'], defaultValue: '' },
     nzxEndStatus: { control: 'inline-radio', options: ['', 'error', 'warning'], defaultValue: '' },
     ...hideControlArgType<NzxBetweenTimeComponent>('nzxEndOpenChange', 'nzxStartOpenChange')
   },

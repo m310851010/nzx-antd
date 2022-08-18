@@ -44,47 +44,162 @@ export class NzxBetweenTimeComponent extends NzxBetweenComponent implements Cont
    * 结束字段重命名
    */
   @Input() nzxEndReName = 'end';
-
+  /**
+   * 控件id-开始
+   */
   @Input() nzxStartId: string | null = null;
+  /**
+   * 设置校验状态-开始
+   */
   @Input() nzxStartStatus: NzStatus = '';
+  /**
+   * 小时选项间隔-开始
+   */
   @Input() nzxStartHourStep = 1;
+  /**
+   * 分钟选项间隔-开始
+   */
   @Input() nzxStartMinuteStep = 1;
+  /**
+   * 秒选项间隔-开始
+   */
   @Input() nzxStartSecondStep = 1;
+  /**
+   * 清除按钮的提示文案-开始
+   */
   @Input() nzxStartClearText?: string;
+  /**
+   *  此刻按钮文本
+   */
   @Input() nzxStartNowText?: string;
+  /**
+   * 确认按钮文本
+   */
   @Input() nzxStartOkText?: string;
+  /**
+   * 弹出层类名
+   */
   @Input() nzxStartPopupClassName?: string;
+  /**
+   * 没有值的时候显示的内容
+   */
   @Input() nzxStartPlaceholder = '起始值';
+  /**
+   * 选择框底部显示自定义的内容
+   */
   @Input() nzxStartAddOn?: TemplateRef<void>;
+  /**
+   * 当 [ngModel] 不存在时，可以设置面板打开时默认选中的值
+   */
   @Input() nzxStartDefaultOpenValue?: Date;
+  /**
+   * 展示的时间格式
+   */
   @Input() nzFormat = 'HH:mm:ss';
+  /**
+   * 使用12小时制，为true时format默认为h:mm:ss a
+   */
   @Input() @InputBoolean() nzxStartUse12Hours = false;
+  /**
+   * 自定义的后缀图标
+   */
   @Input() nzxStartSuffixIcon?: string | TemplateRef<NzSafeAny>;
+  /**
+   * 隐藏禁止选择的选项
+   */
   @Input() @InputBoolean() nzxStartHideDisabledOptions?: boolean;
+  /**
+   * 是否展示清除按钮
+   */
   @Input() @InputBoolean() nzxStartAllowEmpty?: boolean;
+  /**
+   * 自动获取焦点
+   */
   @Input() @InputBoolean() nzxStartAutoFocus?: boolean;
+  /**
+   *  浮层是否应带有背景板
+   */
   @Input() nzxStartBackdrop?: boolean;
+  /**
+   * 面板打开/关闭事件
+   */
   @Output() readonly nzxStartOpenChange = new EventEmitter<boolean>();
 
+  /**
+   * 控件id-结束
+   */
   @Input() nzxEndId: string | null = null;
+  /**
+   * 设置校验状态-结束
+   */
   @Input() nzxEndStatus: NzStatus = '';
+  /**
+   * 小时选项间隔-结束
+   */
   @Input() nzxEndHourStep?: number = 1;
+  /**
+   * 分钟选项间隔-结束
+   */
   @Input() nzxEndMinuteStep?: number = 1;
+  /**
+   * 秒选项间隔-结束
+   */
   @Input() nzxEndSecondStep?: number = 1;
+  /**
+   * 清除按钮的提示文案-结束
+   */
   @Input() nzxEndClearText?: string;
+  /**
+   *  此刻按钮文本
+   */
   @Input() nzxEndNowText?: string;
+  /**
+   * 确认按钮文本
+   */
   @Input() nzxEndOkText?: string;
+  /**
+   * 弹出层类名
+   */
   @Input() nzxEndPopupClassName?: string;
+  /**
+   * 没有值的时候显示的内容
+   */
   @Input() nzxEndPlaceholder = '结束值';
+  /**
+   * 选择框底部显示自定义的内容
+   */
   @Input() nzxEndAddOn?: TemplateRef<void>;
+  /**
+   * 当 [ngModel] 不存在时，可以设置面板打开时默认选中的值
+   */
   @Input() nzxEndDefaultOpenValue?: Date;
-
+  /**
+   * 使用12小时制，为true时format默认为h:mm:ss a
+   */
   @Input() @InputBoolean() nzxEndUse12Hours = false;
+  /**
+   * 自定义的后缀图标
+   */
   @Input() nzxEndSuffixIcon?: string | TemplateRef<NzSafeAny>;
+  /**
+   * 隐藏禁止选择的选项
+   */
   @Input() @InputBoolean() nzxEndHideDisabledOptions?: boolean;
+  /**
+   * 是否展示清除按钮
+   */
   @Input() @InputBoolean() nzxEndAllowEmpty?: boolean;
+  /**
+   * 自动获取焦点
+   */
   @Input() @InputBoolean() nzxEndAutoFocus?: boolean;
+  /**
+   *  浮层是否应带有背景板
+   */
   @Input() nzxEndBackdrop?: boolean;
+  /**
+   * 面板打开/关闭事件
+   */
   @Output() readonly nzxEndOpenChange = new EventEmitter<boolean>();
 
   /**

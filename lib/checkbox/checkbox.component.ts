@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { BaseControl } from '@xmagic/nzx-antd/util';
-import { NzSafeAny } from 'ng-zorro-antd/core/types'
+import { NzSafeAny } from 'ng-zorro-antd/core/types';
 
 @Component({
   selector: 'nzx-checkbox',
@@ -30,18 +30,37 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types'
     }
   ]
 })
-export class NzxCheckboxComponent<T> extends BaseControl<T[]> implements ControlValueAccessor, OnInit, OnChanges {
+export class NzxCheckboxComponent<T = NzSafeAny>
+  extends BaseControl<T[]>
+  implements ControlValueAccessor, OnInit, OnChanges
+{
+  /**
+   * checkbox数据源, 根据数据生成 checkbox
+   */
   @Input() nzxOptions: NzxCheckboxOption<T>[] = [];
+  /**
+   * 禁用所有复选框
+   */
   @Input() override nzxDisabled = false;
+  /**
+   * 获取焦点事件
+   */
   @Output() nzxFocus = new EventEmitter<NzxCheckboxOption<T>>();
+  /**
+   * 失去焦点事件
+   */
   @Output() nzxBlur = new EventEmitter<NzxCheckboxOption<T>>();
+  /**
+   * 点击事件
+   */
+  @Output() nzxClick = new EventEmitter<NzxCheckboxOption<T>>();
   nzxValue: T[] = [];
   constructor(protected cdr: ChangeDetectorRef) {
     super();
   }
 
   ngOnInit(): void {
-    this.nzxValue = this.nzxOptions.filter(v => v.checked).map(v => v.value);
+    this.nzxValue = (this.nzxOptions || []).filter(v => v.checked).map(v => v.value);
   }
 
   ngOnChanges(changes: { [K in keyof this]?: SimpleChange } & SimpleChanges): void {
@@ -68,7 +87,7 @@ export class NzxCheckboxComponent<T> extends BaseControl<T[]> implements Control
 /**
  * 数据配置项
  */
-export interface NzxCheckboxOption<T =  NzSafeAny> {
+export interface NzxCheckboxOption<T = NzSafeAny> {
   /**
    *
    */
@@ -93,8 +112,11 @@ export interface NzxCheckboxOption<T =  NzSafeAny> {
    * 值变化的回调函数
    * @param checked
    */
-  ngModelChange?: (checked: boolean) => void;
+  ngModelChange?: (checked: boolean, item: NzxCheckboxOption) => void;
 
+  /**
+   * 额外附加数据
+   */
   [key: string]: NzSafeAny;
 }
 

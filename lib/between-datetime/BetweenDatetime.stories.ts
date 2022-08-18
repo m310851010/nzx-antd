@@ -5,7 +5,6 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzxBetweenModule } from '@xmagic/nzx-antd/between';
 import { EXCLUDE_PARAMS, hideControlArgType, SIZE_ARG_TYPE, storyFactory } from '@stories';
 import { action } from '@storybook/addon-actions';
-import DocPage from './BetweenDatetime.stories.mdx';
 
 export default {
   title: '组件/BetweenDatetime 日期区间',

@@ -3,7 +3,6 @@ import { Story } from '@storybook/angular';
 // 控件类型
 // https://storybook.js.org/docs/angular/essentials/controls
 export const EXCLUDE_PARAMS = [
-  'nzxValue',
   'setDisabledState',
   'registerOnChange',
   'registerOnTouched',
@@ -24,10 +23,16 @@ export const HIDE_CONTROL = {
   control: false
 };
 
-export function storyFactory<T>(props?: Partial<T> ): Story<T> {
+/**
+ * storybook 模板工程
+ * @param props 传递的参数
+ * @param template 模板
+ */
+export function storyFactory<T>(props?: Partial<T>, template?: string): Story<T> {
   const fn: Story<T> = args => {
     return {
-      props: args
+      props: args,
+      template
     };
   };
   if (props) {
@@ -46,3 +51,8 @@ export function hideControlArgType<T>(...props: (keyof T)[]): Record<string, Inp
     return prev;
   }, {} as Record<keyof T, InputType>);
 }
+
+/**
+ * 隐藏属性
+ */
+export const HIDE_CONTROL_COMMONS = hideControlArgType('nzxValue');

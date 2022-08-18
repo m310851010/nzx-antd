@@ -16,7 +16,7 @@ export default {
     })
   ],
   argTypes: {
-    nzxSize: SIZE_ARG_TYPE
+    nzxSize: SIZE_ARG_TYPE,
   },
   parameters: {
     docs: {
