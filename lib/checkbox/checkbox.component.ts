@@ -9,7 +9,7 @@ import {
   OnInit,
   Output,
   SimpleChange,
-  SimpleChanges,
+  SimpleChanges, TemplateRef,
   ViewEncapsulation
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -50,10 +50,6 @@ export class NzxCheckboxComponent<T = NzSafeAny>
    * 失去焦点事件
    */
   @Output() nzxBlur = new EventEmitter<NzxCheckboxOption<T>>();
-  /**
-   * 点击事件
-   */
-  @Output() nzxClick = new EventEmitter<NzxCheckboxOption<T>>();
   nzxValue: T[] = [];
   constructor(protected cdr: ChangeDetectorRef) {
     super();
@@ -91,7 +87,7 @@ export interface NzxCheckboxOption<T = NzSafeAny> {
   /**
    *
    */
-  label: string;
+  label: string | TemplateRef<NzxCheckboxOption>;
   /**
    * 值
    */

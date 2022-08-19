@@ -20,7 +20,7 @@ import { Meta } from '@storybook/addon-docs';
 import { NzxHttpInterceptorModule } from '@xmagic/nzx-antd/http-interceptor';
 ```
 
-## url处理
+## url 处理
 
 > 建议使用`/`开头的`url`发起请求
 
@@ -28,28 +28,25 @@ import { NzxHttpInterceptorModule } from '@xmagic/nzx-antd/http-interceptor';
 
 配置 `basePath: '/ctxt'`, 代码中请求地址 `/api/test`, 实际发起请求地址为 `/ctx/api/test`
 
-
 ## 请求参数为复杂对象
 
 ```ts
 import { Injectable } from '@angular/core';
-import {NzSafeAny} from 'ng-zorro-antd/core/types';
+import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class TestService {
-   constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
   /**
    * 请求参数为复杂对象
    */
-    getInfo(): Observable<string> {
-      const data = {id: 1, details: [ {name: 'test', info: {level: 1, code: 'test code'}}]};
-      return this.http.get<string>('/api/test', {params: data as NzSafeAny})
-    }
+  getInfo(): Observable<string> {
+    const data = { id: 1, details: [{ name: 'test', info: { level: 1, code: 'test code' } }] };
+    return this.http.get<string>('/api/test', { params: data as NzSafeAny });
+  }
 }
 ```
-
-
 
 ## 请求 `loading` 配置
 
@@ -133,7 +130,7 @@ import { synced } from '@xmagic/nzx-antd/service';
 @Component({...})
 export class TestComponent  {
   profileForm = this.fb.group({
-    id: ['', this.uniqueValidator]
+    id: ['', this.uniqueValidator('TEST')]
   });
 
   constructor(private fb: FormBuilder, private http: HttpClient) {}

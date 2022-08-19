@@ -649,8 +649,16 @@ class UtilsClass {
 }
 
 export const NzxUtils = new UtilsClass();
+
+/**
+ * 树节点
+ */
 export interface TreeNode {
   [key: string]: NzSafeAny;
+
+  /**
+   * 子节点
+   */
   children?: TreeNode[];
 }
 

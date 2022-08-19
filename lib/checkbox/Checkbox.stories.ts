@@ -1,10 +1,10 @@
-import { moduleMetadata, Story, Meta } from '@storybook/angular';
+import { moduleMetadata, Story, Meta, componentWrapperDecorator } from '@storybook/angular';
 import { NzxCheckboxComponent, NzxCheckboxOption } from './checkbox.component';
 import { EXCLUDE_PARAMS, hideControlArgType, storyFactory } from '@stories';
 import { action } from '@storybook/addon-actions';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzOutletModule } from 'ng-zorro-antd/core/outlet';
-import { NzxBetweenDatetimeComponent } from '@xmagic/nzx-antd/between-datetime';
+import { Component, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 
 export default {
   title: '组件/Checkbox 复选框',
@@ -16,12 +16,11 @@ export default {
     })
   ],
   argTypes: {
-    ...hideControlArgType<NzxCheckboxComponent>('nzxBlur', 'nzxFocus', 'nzxClick')
+    ...hideControlArgType<NzxCheckboxComponent>('nzxBlur', 'nzxFocus')
   },
   args: {
     nzxBlur: action('nzxBlur'),
     nzxFocus: action('nzxFocus'),
-    nzxClick: action('nzxClick'),
     nzxValue: []
   },
   parameters: {
@@ -34,7 +33,14 @@ export default {
 const Template = (props: Partial<NzxCheckboxComponent>): Story<NzxCheckboxComponent> => {
   return storyFactory(
     props,
-    `<nzx-checkbox [(ngModel)]="nzxValue" [nzxDisabled]="nzxDisabled" [nzxOptions]="nzxOptions" ></nzx-checkbox>`
+    `
+    <nzx-checkbox
+        [(ngModel)]="nzxValue"
+        (nzxBlur)="nzxBlur($event)"
+        (nzxFocus)="nzxFocus($event)"
+        [nzxDisabled]="nzxDisabled"
+        [nzxOptions]="nzxOptions" >
+    </nzx-checkbox>`
   );
 };
 
@@ -70,7 +76,7 @@ export const DisabledOption = Template({
 
 export const IndeterminateOption = Template({
   nzxOptions: getNzxOptions().map((v, i) => {
-    if (i == 1) {
+    if (i < 3) {
       v.indeterminate = true;
     }
     return v;
@@ -83,3 +89,38 @@ export const NgModelChangeOption = Template({
     return v;
   })
 });
+
+@Component({
+  selector: 'test',
+  template: `
+    <ng-template #hello>Hello</ng-template>
+  `
+})
+export class FakeComponent implements OnInit {
+  @ViewChild('hello', { static: true }) hello!: TemplateRef<any>;
+  @Input() nzxValue: any;
+  @Input() nzxBlur: (evt: NzxCheckboxOption) => void = () => void 0;
+  @Input() nzxFocus: (evt: NzxCheckboxOption) => void = () => void 0;
+  @Input() nzxDisabled!: boolean;
+  @Input() nzxOptions: NzxCheckboxOption[] = [];
+
+  ngOnInit(): void {
+    this.nzxOptions.forEach((v, i) => {
+      if (i === 1) {
+        v.label = this.hello;
+      }
+    });
+  }
+}
+
+export const LabelOption = Template({
+  nzxOptions: getNzxOptions()
+});
+
+LabelOption.decorators = [
+  moduleMetadata({
+    declarations: [FakeComponent],
+    imports: [NzCheckboxModule, NzOutletModule]
+  }),
+  componentWrapperDecorator(FakeComponent)
+];

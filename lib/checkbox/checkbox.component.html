@@ -5,7 +5,6 @@
       nz-checkbox
       (focus)="nzxFocus.emit(item)"
       (blur)="nzxBlur.emit(item)"
-      (click)="nzxClick.emit(item)"
       [nzValue]="item.value"
       [ngModel]="item.checked"
       [nzDisabled]="nzxDisabled || item.disabled"
