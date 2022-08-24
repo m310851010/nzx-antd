@@ -2,10 +2,12 @@
   "$schema": "../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../dist/nzx-antd",
   "lib": {
-    "entryFile": "./public-api.ts"
+    "entryFile": "./public-api.ts",
+    "styleIncludePaths": ["node_modules"]
   },
   "assets": [
-    "./nzx-antd.less",
+    "./index.less",
+    "./nzx-antd*.less",
     "./lib/**/*.less"
   ]
 }

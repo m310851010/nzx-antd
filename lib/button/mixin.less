@@ -1,0 +1,70 @@
+
+.active-btn-color(@color) {
+  &:focus,
+  &.focus {
+    box-shadow: 0 0 0 2px fade(@color, 20%);
+  }
+}
+
+.btn-color(@color) {
+  .button-variant(@btn-primary-color; @color; @color);
+
+  &:hover,
+  &:active,
+  &.active,
+  &:focus,
+  &.focus {
+    color: @btn-primary-color;
+  }
+
+  .active-btn-color(@color);
+}
+
+.button-variant(@color; @background; @border) {
+  .button-color(@color; @background; @border);
+
+  &:hover
+  {
+    .button-color(tint(@color, 20%); tint(@background, 20%); tint(@border, 20%));
+  }
+  &:active,
+  &.active ,
+  &:focus,
+  &.focus{
+    .button-color(shade(@color, 5%); shade(@background, 5%); shade(@background, 5%));
+  }
+
+  .button-disabled();
+}
+
+
+.button-variant-text(@color;) {
+  .button-variant-other(@color, transparent, transparent);
+  box-shadow: none;
+
+  &:hover,
+  &:focus {
+    .button-color(~`colorPalette('@{color}', 5) `; @btn-text-hover-bg; transparent);
+  }
+
+  &:active {
+    .button-color(~`colorPalette('@{color}', 7) `; fadein(@btn-text-hover-bg, 1%); transparent);
+  }
+  .button-disabled(@disabled-color; transparent; transparent);
+}
+
+
+.button-variant-link(@color) {
+  .button-variant-other(@color, transparent, transparent);
+  box-shadow: none;
+
+  &:hover,
+  &:focus {
+    .button-color(~`colorPalette('@{color}', 5) `; transparent; transparent);
+  }
+
+  &:active {
+    .button-color(~`colorPalette('@{color}', 7) `; transparent; transparent);
+  }
+  .button-disabled(@disabled-color; transparent; transparent);
+}

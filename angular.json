@@ -52,7 +52,10 @@
                 "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
                 "output": "/assets/"
               }
-            ]
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": ["node_modules"]
+            }
           }
         },
         "storybook": {

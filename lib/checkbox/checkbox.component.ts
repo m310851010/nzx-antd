@@ -9,13 +9,17 @@ import {
   OnInit,
   Output,
   SimpleChange,
-  SimpleChanges, TemplateRef,
+  SimpleChanges,
+  TemplateRef,
   ViewEncapsulation
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { BaseControl } from '@xmagic/nzx-antd/util';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 
+/**
+ * 增强`nz-checkbox`组件, 把数据和值分离
+ */
 @Component({
   selector: 'nzx-checkbox',
   templateUrl: './checkbox.component.html',
