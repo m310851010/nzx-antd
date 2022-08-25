@@ -1,7 +1,7 @@
 import { Directive, ElementRef, Input, OnChanges, OnInit, Renderer2, SimpleChange, SimpleChanges } from '@angular/core';
 
 /**
- * 按钮指令，增强nz-button颜色, 和nz-button组件配合使用, 只增加`nzxColor`属性
+ * 按钮指令，增强ng-zorro-antd按钮颜色, 和nz-button组件配合使用, 只增加`nzxColor`属性
  */
 @Directive({
   selector: '[nz-button]',
