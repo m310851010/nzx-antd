@@ -1,17 +1,15 @@
 import { moduleMetadata, Story, Meta } from '@storybook/angular';
-import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
-import { NzFormModule } from 'ng-zorro-antd/form';
 import { SIZE_ARG_TYPE } from '@stories';
 import { NzButtonComponent, NzButtonModule } from 'ng-zorro-antd/button';
 import { NzxButtonDirective, NzxColorType } from './button.directive';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
 
 export default {
   title: '组件/Button 按钮',
   component: NzxButtonDirective,
   decorators: [
     moduleMetadata({
-      imports: [NzButtonModule, NzSelectModule, NzDatePickerModule, NzFormModule]
+      imports: [NzButtonModule, NzSpaceModule]
     })
   ],
   argTypes: {
@@ -42,7 +40,93 @@ export default {
   }
 } as Meta;
 
-const Template: Story<{ nzxColor?: NzxColorType } & Omit<NzButtonComponent, 'nzType'>> = args => {
+export const Default: Story<{ nzxColor?: NzxColorType } & NzButtonComponent> = args => {
+  return {
+    props: args,
+    template: `
+    <div style="margin-bottom: 10px">
+        <label class="doc-label">nzxColor</label>
+        <button
+          nz-button
+          *ngFor="let color of ['success', 'warning', 'info', 'error', 'gray', 'teal']"
+          [nzxColor]="color" style="margin-right: 10px;">
+          {{color}}
+        </button>
+      </div>
+
+      <div style="margin-bottom: 10px">
+        <label class="doc-label">nzGhost</label>
+        <button
+          nz-button
+          *ngFor="let color of ['success', 'warning', 'info', 'error', 'gray', 'teal']"
+          nzGhost
+          [nzxColor]="color" style="margin-right: 10px; ">
+          {{color}}
+        </button>
+      </div>
+
+      <div style="margin-bottom: 10px">
+        <label class="doc-label">dashed</label>
+        <button
+          nz-button
+          *ngFor="let color of ['success', 'warning', 'info', 'error', 'gray', 'teal']"
+          nzType="dashed"
+          nzGhost
+          [nzxColor]="color" style="margin-right: 10px;">
+          {{color}}
+        </button>
+      </div>
+
+       <div style="margin-bottom: 10px">
+        <label class="doc-label">text</label>
+        <button
+          nz-button
+          *ngFor="let color of ['success', 'warning', 'info', 'error', 'gray', 'teal']"
+          nzType="text"
+          [nzxColor]="color" style="margin-right: 10px;">
+          {{color}}
+        </button>
+      </div>
+
+      <div style="margin-bottom: 10px">
+        <label class="doc-label">link</label>
+        <button
+          nz-button
+          *ngFor="let color of ['success', 'warning', 'info', 'error', 'gray', 'teal']"
+          nzType="link"
+          [nzxColor]="color" style="margin-right: 10px;">
+          {{color}}
+        </button>
+      </div>
+
+      <div style="margin-bottom: 10px">
+        <label class="doc-label">disabled</label>
+        <button
+          nz-button
+          *ngFor="let color of ['success', 'warning', 'info', 'error', 'gray', 'teal']"
+          disabled
+          [nzxColor]="color" style="margin-right: 10px;">
+          {{color}}
+        </button>
+      </div>
+
+      <div style="margin-bottom: 10px">
+        <label class="doc-label">disabled</label>
+        <button
+          nz-button
+          *ngFor="let color of ['success', 'warning', 'info', 'error', 'gray', 'teal']"
+          nzType="dashed"
+          nzGhost
+          disabled
+          [nzxColor]="color" style="margin-right: 10px;">
+          {{color}}
+        </button>
+      </div>
+    `
+  };
+};
+
+const Template: Story<{ nzxColor?: NzxColorType } & NzButtonComponent> = args => {
   return {
     props: args,
     template: `
@@ -52,8 +136,6 @@ const Template: Story<{ nzxColor?: NzxColorType } & Omit<NzButtonComponent, 'nzT
     `
   };
 };
-
-export const Default = Template.bind({});
 
 export const NzSize = Template.bind({});
 NzSize.args = {
@@ -65,7 +147,7 @@ NzType.args = {
   nzxColor: 'success'
 };
 
-export const NzGhost: Story<{ nzxColor?: NzxColorType } & Omit<NzButtonComponent, 'nzType'>> = args => {
+export const NzGhost: Story<{ nzxColor?: NzxColorType } & NzButtonComponent> = args => {
   return {
     props: args,
     template: `
@@ -78,5 +160,6 @@ export const NzGhost: Story<{ nzxColor?: NzxColorType } & Omit<NzButtonComponent
   };
 };
 NzGhost.args = {
-  nzGhost: true
+  nzGhost: true,
+  nzxColor: 'success'
 };

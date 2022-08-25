@@ -1,16 +1,16 @@
 import { Directive, ElementRef, Input, OnChanges, OnInit, Renderer2, SimpleChange, SimpleChanges } from '@angular/core';
 
 /**
- * 按钮指令，增强nz-button颜色
- * @example
- *
- * <button nz-button nzxColor="success">
+ * 按钮指令，增强nz-button颜色, 和nz-button组件配合使用, 只增加`nzxColor`属性
  */
 @Directive({
   selector: '[nz-button]',
   exportAs: 'nzxButton'
 })
 export class NzxButtonDirective implements OnInit, OnChanges {
+  /**
+   * 按钮颜色名称
+   */
   @Input() nzxColor?: NzxColorType;
   constructor(protected renderer: Renderer2, protected elementRef: ElementRef<HTMLElement>) {}
 
