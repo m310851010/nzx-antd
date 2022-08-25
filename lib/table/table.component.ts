@@ -51,6 +51,18 @@ import { NzxAntdService } from '@xmagic/nzx-antd';
 import { FetcherService, FetchParams } from '@xmagic/nzx-antd/service';
 import { NamedTemplate } from '@xmagic/nzx-antd/directive';
 
+/**
+ * 基于nz-table二次封装的表格组件
+ * ## 特性
+ * - 配置加载数据: `api: string | Promise<T[]> | Observable<T[]>`
+ * - 支持列的配置: `nzxColumns: NzxColumn<T>[]`
+ * - 列支持排序配置
+ * - 默认支持显示拖动列, 调整列顺序
+ * - 支持配置显示序号、复选框
+ * - 自定义渲染内容， template使用名称即可引用成功
+ * - 支持请求/响应信息配置, `fetchSetting?: FetchSetting`
+ * - 支持异步格式化列数据
+ */
 @Component({
   selector: 'nzx-table',
   templateUrl: './table.component.html',
@@ -59,7 +71,9 @@ import { NamedTemplate } from '@xmagic/nzx-antd/directive';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { '[class.nzx-table]': 'true' }
 })
-export class NzxTableComponent<T extends Record<string, NzSafeAny>> implements OnInit, AfterContentInit, OnChanges {
+export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
+  implements OnInit, AfterContentInit, OnChanges
+{
   /**
    * 当前页数据
    */
@@ -78,7 +92,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny>> implements O
   /**
    * 请求参数
    */
-  @Input() params?: FetchParams<NzSafeAny>;
+  @Input() params?: FetchParams;
   /**
    * 请求之前处理函数
    */
@@ -108,7 +122,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny>> implements O
   /**
    * 默认渲染表头
    */
-  @Input() nzxDefaultRenderHeader = false;
+  @Input() nzxDefaultRenderHeader = true;
   /**
    * 标题
    */
@@ -232,7 +246,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny>> implements O
   /**
    * 表格大小, 正常或迷你类型
    */
-  @Input() nzSize: NzTableSize = 'small';
+  @Input() nzSize: NzTableSize = 'middle';
   /**
    * 是否可以改变 nzPageSize
    */
@@ -761,7 +775,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny>> implements O
     if (col.thText == null && col.isIndex) {
       col.thText = '序号';
     }
-    if (col.nzWidth == null && col.isIndex) {
+    if (col.nzWidth == null && (col.isIndex || col.nzShowCheckbox)) {
       col.nzWidth = '60px';
     }
   }

@@ -18,6 +18,7 @@
   </ng-container>
 
   <nzx-column-setting
+    #nzxColumnSetting
     *ngIf="nzxSettingVisible"
     setting
     [nzxColumns]="_bodyColumns"
@@ -66,7 +67,7 @@
   (nzQueryParams)="nzQueryParams.emit($event)"
 >
   <thead>
-    <ng-container *ngIf="!nzxDefaultRenderHeader">
+    <ng-container *ngIf="nzxDefaultRenderHeader !== false">
       <tr *ngFor="let row of _headerColumns">
         <ng-container *ngFor="let col of row">
           <th
@@ -125,7 +126,7 @@
             (nzCheckedChange)="thCheckedChange($event, col)"
             [nzShowRowSelection]="col.nzShowRowSelection"
             [nzSelections]="col.nzSelections"
-            [nzWidth]="col.nzWidth == null && col.isIndex ? '60px' : col.nzWidth"
+            [nzWidth]="col.nzWidth"
             [nzLeft]="col.fixed === 'left'"
             [nzRight]="col.fixed === 'right'"
             [nzAlign]="col.nzAlign"
@@ -334,7 +335,7 @@
       </ng-container>
 
       <ng-template #simpleValue>
-        {{ data.row[data.col.name] | async | defaultify }}
+        {{ data.row[data.col.name] | defaultify }}
       </ng-template>
     </ng-container>
   </ng-template>

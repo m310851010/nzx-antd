@@ -39,13 +39,7 @@ export class NzxTableHeaderComponent implements OnInit, OnChanges {
   constructor() {}
 
   ngOnInit(): void {
-    this.tableSizeOptions.forEach(v => {
-      if (v.value === this.tableSize) {
-        v.selected = true;
-      } else {
-        v.selected = false;
-      }
-    });
+    this.tableSizeOptions.forEach(v => (v.selected = v.value === this.tableSize));
   }
 
   ngOnChanges(changes: { [K in keyof this]?: SimpleChange } & SimpleChanges): void {
