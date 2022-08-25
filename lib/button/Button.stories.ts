@@ -22,7 +22,7 @@ export default {
     },
     nzxColor: {
       control: 'select',
-      options: ['success', 'warning', 'info', 'error', 'gray', 'teal', ''],
+      options: ['success', 'warning', 'info', 'error', 'gray', 'teal', 'cyan', ''],
       defaultValue: 'default'
     },
     nzType: {
@@ -48,7 +48,7 @@ export const Default: Story<{ nzxColor?: NzxColorType } & NzButtonComponent> = a
         <label class="doc-label">nzxColor</label>
         <button
           nz-button
-          *ngFor="let color of ['success', 'warning', 'info', 'error', 'gray', 'teal']"
+          *ngFor="let color of ['success', 'warning', 'info', 'error', 'gray', 'teal', 'cyan']"
           [nzxColor]="color" style="margin-right: 10px;">
           {{color}}
         </button>
@@ -58,7 +58,7 @@ export const Default: Story<{ nzxColor?: NzxColorType } & NzButtonComponent> = a
         <label class="doc-label">nzGhost</label>
         <button
           nz-button
-          *ngFor="let color of ['success', 'warning', 'info', 'error', 'gray', 'teal']"
+          *ngFor="let color of ['success', 'warning', 'info', 'error', 'gray', 'teal', 'cyan']"
           nzGhost
           [nzxColor]="color" style="margin-right: 10px; ">
           {{color}}
@@ -69,7 +69,7 @@ export const Default: Story<{ nzxColor?: NzxColorType } & NzButtonComponent> = a
         <label class="doc-label">dashed</label>
         <button
           nz-button
-          *ngFor="let color of ['success', 'warning', 'info', 'error', 'gray', 'teal']"
+          *ngFor="let color of ['success', 'warning', 'info', 'error', 'gray', 'teal', 'cyan']"
           nzType="dashed"
           nzGhost
           [nzxColor]="color" style="margin-right: 10px;">
@@ -81,7 +81,7 @@ export const Default: Story<{ nzxColor?: NzxColorType } & NzButtonComponent> = a
         <label class="doc-label">text</label>
         <button
           nz-button
-          *ngFor="let color of ['success', 'warning', 'info', 'error', 'gray', 'teal']"
+          *ngFor="let color of ['success', 'warning', 'info', 'error', 'gray', 'teal', 'cyan']"
           nzType="text"
           [nzxColor]="color" style="margin-right: 10px;">
           {{color}}
@@ -92,7 +92,7 @@ export const Default: Story<{ nzxColor?: NzxColorType } & NzButtonComponent> = a
         <label class="doc-label">link</label>
         <button
           nz-button
-          *ngFor="let color of ['success', 'warning', 'info', 'error', 'gray', 'teal']"
+          *ngFor="let color of ['success', 'warning', 'info', 'error', 'gray', 'teal', 'cyan']"
           nzType="link"
           [nzxColor]="color" style="margin-right: 10px;">
           {{color}}
@@ -103,7 +103,7 @@ export const Default: Story<{ nzxColor?: NzxColorType } & NzButtonComponent> = a
         <label class="doc-label">disabled</label>
         <button
           nz-button
-          *ngFor="let color of ['success', 'warning', 'info', 'error', 'gray', 'teal']"
+          *ngFor="let color of ['success', 'warning', 'info', 'error', 'gray', 'teal', 'cyan']"
           disabled
           [nzxColor]="color" style="margin-right: 10px;">
           {{color}}
@@ -114,7 +114,7 @@ export const Default: Story<{ nzxColor?: NzxColorType } & NzButtonComponent> = a
         <label class="doc-label">disabled</label>
         <button
           nz-button
-          *ngFor="let color of ['success', 'warning', 'info', 'error', 'gray', 'teal']"
+          *ngFor="let color of ['success', 'warning', 'info', 'error', 'gray', 'teal', 'cyan']"
           nzType="dashed"
           nzGhost
           disabled
@@ -131,7 +131,7 @@ const Template: Story<{ nzxColor?: NzxColorType } & NzButtonComponent> = args =>
     props: args,
     template: `
     <button nz-button [nzSize]="nzSize" [disabled]="disabled" [nzType]="nzType" [nzGhost]="nzGhost" [nzxColor]="nzxColor">
-      {{ '默认值'}}
+      测试按钮
     </button>
     `
   };
@@ -153,7 +153,7 @@ export const NzGhost: Story<{ nzxColor?: NzxColorType } & NzButtonComponent> = a
     template: `
     <div style="padding: 8px; background: #bec8c8;">
       <button nz-button [nzSize]="nzSize" [disabled]="disabled" [nzType]="nzType" [nzGhost]="nzGhost" [nzxColor]="nzxColor">
-        {{ '默认值'}}
+        测试按钮
       </button>
     </div>
     `

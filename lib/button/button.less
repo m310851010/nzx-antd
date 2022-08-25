@@ -3,6 +3,8 @@
 @import '../base.less';
 @import './mixin.less';
 
+// 颜色值取自 https://ant.design/docs/spec/colors-cn
+
 @nzx-button-prefix-cls: ~'@{nzx-prefix}-button';
 @btn-prefix-cls: ~'@{ant-prefix}-btn';
 @btn-ghost-prefix-cls: ~'@{btn-prefix-cls}-background-ghost';
@@ -11,25 +13,17 @@
 @info-color-hover: color(~`colorPalette('@{info-color}', 5) `);
 @info-color-active: color(~`colorPalette('@{info-color}', 7) `);
 
-@success-color: #198754;
-@success-color-hover: color(~`colorPalette('@{success-color}', 5) `);
-@success-color-active: color(~`colorPalette('@{success-color}', 7) `);
-
-@warning-color: #ffc107;
-@warning-color-hover: color(~`colorPalette('@{warning-color}', 5) `);
-@warning-color-active: color(~`colorPalette('@{warning-color}', 7) `);
-
-@error-color: #ed4014;
-@error-color-hover: color(~`colorPalette('@{error-color}', 5) `);
-@error-color-active: color(~`colorPalette('@{error-color}', 7) `);
-
-@gray-color: #adb5bd;
+@gray-color: #bfbfbf;
 @gray-color-hover: color(~`colorPalette('@{gray-color}', 5) `);
 @gray-color-active: color(~`colorPalette('@{gray-color}', 7) `);
 
 @teal-color: #20c997;
 @teal-color-hover: color(~`colorPalette('@{teal-color}', 5) `);
 @teal-color-active: color(~`colorPalette('@{teal-color}', 7) `);
+
+@cyan-color: #13c2c2;
+@cyan-color-hover: color(~`colorPalette('@{cyan-color}', 5) `);
+@cyan-color-active: color(~`colorPalette('@{cyan-color}', 7) `);
 
 .@{nzx-button-prefix-cls} {
   &-success {
@@ -108,5 +102,18 @@
   }
   .@{btn-ghost-prefix-cls}&-teal {
     .button-variant-ghost(@teal-color; @teal-color; @teal-color-hover; @teal-color-active);
+  }
+
+  &-cyan {
+    .btn-color(@cyan-color);
+  }
+  &-cyan.@{btn-prefix-cls}-text {
+    .button-variant-text(@cyan-color);
+  }
+  &-cyan.@{btn-prefix-cls}-link {
+    .button-variant-link(@cyan-color);
+  }
+  .@{btn-ghost-prefix-cls}&-cyan {
+    .button-variant-ghost(@cyan-color; @cyan-color; @cyan-color-hover; @cyan-color-active);
   }
 }

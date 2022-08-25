@@ -2,6 +2,8 @@ import { Directive, ElementRef, Input, OnChanges, OnInit, Renderer2, SimpleChang
 
 /**
  * 按钮指令，增强ng-zorro-antd按钮颜色, 和nz-button组件配合使用, 只增加`nzxColor`属性
+ *
+ * 颜色值取自 https://ant.design/docs/spec/colors-cn
  */
 @Directive({
   selector: '[nz-button]',
@@ -44,4 +46,4 @@ export class NzxButtonDirective implements OnInit, OnChanges {
   }
 }
 
-export type NzxColorType = 'success' | 'warning' | 'info' | 'error' | 'gray' | 'teal' | string;
+export type NzxColorType = 'success' | 'warning' | 'info' | 'error' | 'gray' | 'teal' | 'cyan' | string;
