@@ -17,6 +17,7 @@ import { NzxDirectiveModule } from '@xmagic/nzx-antd/directive';
 import { NzxPipeModule } from '@xmagic/nzx-antd/pipe';
 import { NzxServiceModule } from '@xmagic/nzx-antd/service';
 import { NzOutletModule } from 'ng-zorro-antd/core/outlet';
+import { NzxUtils } from '../util';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 
 export default {
@@ -112,7 +113,7 @@ export const Default = Template({
     { name: 'name', thText: '姓名' },
     { name: 'org', thText: '部门' }
   ],
-  nzData
+  nzData: NzxUtils.clone(nzData)
 });
 
 export const IsLoading = Template({
@@ -125,7 +126,7 @@ export const IsLoading = Template({
 
 export const IsIndex = Template({
   nzxColumns: [{ isIndex: true }, { name: 'name', thText: '姓名' }, { name: 'org', thText: '部门' }],
-  nzData
+  nzData: NzxUtils.clone(nzData)
 });
 
 export const IsIndexName = Template({
@@ -134,7 +135,7 @@ export const IsIndexName = Template({
     { name: 'name', thText: '姓名' },
     { name: 'org', thText: '部门' }
   ],
-  nzData
+  nzData: NzxUtils.clone(nzData)
 });
 
 export const NzShowCheckbox = Template({
@@ -143,7 +144,7 @@ export const NzShowCheckbox = Template({
     { name: 'name', thText: '姓名' },
     { name: 'org', thText: '部门' }
   ],
-  nzData
+  nzData: NzxUtils.clone(nzData)
 });
 
 export const ColspanHead = Template({
@@ -159,5 +160,5 @@ export const ColspanHead = Template({
     },
     { name: 'org', thText: '部门' }
   ],
-  nzData
+  nzData: NzxUtils.clone(nzData)
 });
