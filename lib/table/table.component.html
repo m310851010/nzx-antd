@@ -91,7 +91,7 @@
             [nzFilterFn]="col.nzFilterFn"
             [nzFilters]="col.nzFilters"
             [nzFilterMultiple]="col.nzFilterMultiple !== false"
-            [nzWidth]="col.nzWidth"
+            [nzWidth]="col.nzWidth == null && col.isIndex ? '60px' : col.nzWidth"
             [nzLeft]="col.fixed === 'left'"
             [nzRight]="col.fixed === 'right'"
             [nzAlign]="col.nzAlign"
@@ -126,7 +126,7 @@
             (nzCheckedChange)="thCheckedChange($event, col)"
             [nzShowRowSelection]="col.nzShowRowSelection"
             [nzSelections]="col.nzSelections"
-            [nzWidth]="col.nzWidth"
+            [nzWidth]="col.nzWidth == null && col.nzShowCheckbox ? '60px' : col.nzWidth"
             [nzLeft]="col.fixed === 'left'"
             [nzRight]="col.fixed === 'right'"
             [nzAlign]="col.nzAlign"
@@ -156,7 +156,7 @@
     >
       <tr
         *ngIf="row.parent?.expand || !row.parent"
-        (click.once)="
+        (click)="
           rowClick.emit({
             row: row,
             rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
@@ -164,7 +164,7 @@
           })
         "
         (dblclick)="
-          rowDblclick.emit({
+          onClickOnce({
             row: row,
             rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
             event: $event
@@ -179,6 +179,7 @@
         "
         [ngClass]="row.className"
         [ngStyle]="row.style"
+        [class.ant-table-row-selected]="row.checked || _selectRow === row"
       >
         <ng-container
           *ngFor="let col of _bodyColumns; index as _index; first as _first; last as _last; even as _even; odd as _odd"
@@ -276,7 +277,7 @@
   </ng-container>
 
   <ng-template #textThTemplate>
-    {{ data.col.thText }}
+    {{ data.col.thText == null && data.col.isIndex ? '序号' : data.col.thText }}
   </ng-template>
 </ng-template>
 

@@ -1,5 +1,5 @@
 import { moduleMetadata, Story, Meta } from '@storybook/angular';
-import { SIZE_ARG_TYPE, storyFactory } from '@stories';
+import { storyFactory } from '@stories';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzxTableComponent } from './table.component';
 import { NzxTableHeaderComponent } from './header/table-header/table-header.component';
@@ -68,7 +68,8 @@ export default {
     toolbarVisible: true,
     nzPageSize: 10,
     nzData: [],
-    nzWidthConfig: []
+    nzWidthConfig: [],
+    nzxClickSelectedRow: true
   },
   parameters: {
     controls: {
@@ -85,7 +86,8 @@ export default {
         'children',
         '_columnNameChecked',
         '_indeterminate',
-        '_nzxColumns'
+        '_nzxColumns',
+        '_selectRow'
       ]
     },
     docs: {
@@ -101,7 +103,7 @@ const Template: (props?: Partial<NzxTableComponent>) => Story<NzxTableComponent>
 const xing = '赵钱孙李周吴郑王冯陈褚卫蒋沈韩杨'.split('');
 const nzData = Array(10)
   .fill(0)
-  .map((m, i) => ({
+  .map<Record<string, NzSafeAny>>((m, i) => ({
     name: xing[i % xing.length] + '三',
     org: '测试部门',
     firstName: xing[i % xing.length],
@@ -139,18 +141,17 @@ export const IsIndexName = Template({
 });
 
 export const NzShowCheckbox = Template({
-  nzxColumns: [
-    { nzShowCheckbox: true, nzWidth: '60px' },
-    { name: 'name', thText: '姓名' },
-    { name: 'org', thText: '部门' }
-  ],
-  nzData: NzxUtils.clone(nzData)
+  nzxColumns: [{ nzShowCheckbox: true }, { name: 'name', thText: '姓名' }, { name: 'org', thText: '部门' }],
+  nzData: NzxUtils.clone(nzData).map((v, i) => {
+    v.checked = i % 2 == 0;
+    return v;
+  })
 });
 
 export const ColspanHead = Template({
   nzBordered: true,
   nzxColumns: [
-    { nzShowCheckbox: true, nzWidth: '60px' },
+    { nzShowCheckbox: true, nzText: '测试' },
     {
       thText: '姓名',
       children: [

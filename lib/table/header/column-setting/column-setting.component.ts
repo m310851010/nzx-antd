@@ -125,7 +125,7 @@ export class NzxColumnSettingComponent<T> implements OnInit /*, OnChanges*/ {
     if (this._nzxColumns && this._nzxColumns.length) {
       this._columnNameChecked = checked;
       this._indeterminate = false;
-      this._nzxColumns.filter(v => v.settingVisible && v.settingDisabled !== true).forEach(v => (v.visible = checked));
+      this._nzxColumns.filter(v => v.settingVisible != false && v.settingDisabled !== true).forEach(v => (v.visible = checked));
       this.columnNameCheckedChange.emit(checked);
     }
   }
@@ -135,7 +135,7 @@ export class NzxColumnSettingComponent<T> implements OnInit /*, OnChanges*/ {
    */
   refreshNameCheckedStatus(): void {
     if (this._nzxColumns && this._nzxColumns.length) {
-      const list = this._nzxColumns.filter(v => v.settingVisible && v.settingDisabled !== true);
+      const list = this._nzxColumns.filter(v => v.settingVisible != false && v.settingDisabled !== true);
       this._columnNameChecked = list.every(item => item.visible);
       this._indeterminate = !this._columnNameChecked && list.some(item => item.visible);
     } else {

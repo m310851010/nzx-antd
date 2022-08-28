@@ -75,12 +75,17 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
   implements OnInit, AfterContentInit, OnChanges
 {
   /**
+   * 当前选中的行
+   */
+  _selectRow?: NzxColumn<T>;
+  /**
    * 当前页数据
    */
   _currentPageData: readonly T[] = [];
   _headerColumns: NzxColumn<T>[][] = [];
   _bodyColumns: NzxColumn<T>[] = [];
   _allColumns: NzxColumn<T>[] = [];
+
   sortInfo?: SorterResult;
   defaultPageSizeOptions = [10, 15, 20, 30, 40, 50, 100];
 
@@ -272,6 +277,10 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * 是否显示顶部标题
    */
   @Input() toolbarVisible?: boolean;
+  /**
+   * 点击行是否选中
+   */
+  @Input() nzxClickSelectedRow?: boolean;
 
   /**
    * 由外部传入模板列表
@@ -461,6 +470,14 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     return;
   }
 
+  onClickOnce(info: RowEventArg<T>) {
+    this.rowDblclick.emit(info);
+    if (this.nzxClickSelectedRow !== false) {
+      this._selectRow = info.row;
+      console.log(info);
+    }
+  }
+
   protected doFetch(url: string, method?: string, params?: NzSafeAny, data?: NzSafeAny): Observable<PageInfo<T>> {
     const option: { params?: NzSafeAny; body?: NzSafeAny } = {};
     method ||= 'post';
@@ -498,7 +515,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
   }
 
   private setPageInfo(pageInfo: PageInfo<T>): void {
-    this.nzData = pageInfo.list || [];
+    this.nzData = pageInfo.list || ([] as T[]);
     this.nzTotal = pageInfo.total || 0;
     if (pageInfo.pageIndex != null) {
       this.nzPageIndex = pageInfo.pageIndex;
@@ -769,14 +786,8 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     if (col.visible == null) {
       col.visible = true;
     }
-    if (col.settingVisible == null) {
-      col.settingVisible = true;
-    }
     if (col.thText == null && col.isIndex) {
       col.thText = '序号';
-    }
-    if (col.nzWidth == null && (col.isIndex || col.nzShowCheckbox)) {
-      col.nzWidth = '60px';
     }
   }
 }

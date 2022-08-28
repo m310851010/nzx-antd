@@ -5,7 +5,6 @@ import { NzxTableComponent } from './table.component';
 import { NzxTableHeaderComponent } from './header/table-header/table-header.component';
 import { NzxColumnSettingComponent } from './header/column-setting/column-setting.component';
 import { NzResizableModule } from 'ng-zorro-antd/resizable';
-import { NzxDirectiveModule } from '@xmagic/nzx-antd/directive';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
@@ -35,7 +34,6 @@ const COMPONENT = [NzxTableComponent, NzxTableHeaderComponent, NzxColumnSettingC
     NzDividerModule,
     NzDropDownModule,
     NzToolTipModule,
-    NzxDirectiveModule,
     NzxPipeModule,
     NzxServiceModule,
     NzOutletModule,
