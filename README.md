@@ -3,7 +3,7 @@
 
 `NzxAntd`是一个`angular`组件库，基于`ng-zorro-antd`进行二次扩展，并加入开发常用功能。全部代码开源并遵循 `MIT` 协议，任何企业、组织及个人均可免费使用。
 
-[![npm version](https://img.shields.io/npm/v/ngx-fluent-form/latest.svg)](https://npmjs.com/package/@xmagic/nzx-antd)
+[![npm version](https://img.shields.io/npm/v/@xmagic/nzx-antd/latest.svg)](https://npmjs.com/package/@xmagic/nzx-antd)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 [![Angular](https://img.shields.io/badge/Build%20with-Angular%20CLI-red?logo=angular)](https://www.github.com/angular/angular)
 [![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@main/badge/badge-storybook.svg)](https://m310851010.github.io/nzx-antd)
