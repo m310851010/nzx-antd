@@ -6,8 +6,6 @@
     "styleIncludePaths": ["node_modules"]
   },
   "assets": [
-    "./index.less",
-    "./nzx-antd*.less",
-    "./lib/**/*.less"
+    "./**/*.less",
   ]
 }

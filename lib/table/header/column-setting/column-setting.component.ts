@@ -9,8 +9,7 @@ import {
   Renderer2,
   ViewEncapsulation
 } from '@angular/core';
-import { moveItemInArray } from '@angular/cdk/drag-drop';
-import { CdkDragDrop, CdkDragRelease, CdkDragStart } from '@angular/cdk/drag-drop/drag-events';
+import { CdkDragDrop, CdkDragRelease, CdkDragStart, moveItemInArray } from '@angular/cdk/drag-drop';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzxColumn } from '../../table.type';
 

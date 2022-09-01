@@ -29,8 +29,7 @@ import {
 } from 'ng-zorro-antd/table';
 import { PaginationItemRenderContext } from 'ng-zorro-antd/pagination';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
-import { CdkDragDrop } from '@angular/cdk/drag-drop/drag-events';
-import { moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { NzxUtils } from '@xmagic/nzx-antd/util';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import {
