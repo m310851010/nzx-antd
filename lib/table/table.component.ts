@@ -1,5 +1,6 @@
 import {
   AfterContentInit,
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -38,6 +39,7 @@ import {
   HeaderEventArg,
   IndexAttr,
   NzxColumn,
+  NzxTableSize,
   PageInfo,
   RowEventArg,
   SorterResult
@@ -71,7 +73,7 @@ import { NamedTemplate } from '@xmagic/nzx-antd/directive';
   host: { '[class.nzx-table]': 'true' }
 })
 export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
-  implements OnInit, AfterContentInit, OnChanges
+  implements OnInit, AfterContentInit, AfterViewInit, OnChanges
 {
   /**
    * 当前选中的行
@@ -259,7 +261,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
   /**
    * 表格大小, 正常或迷你类型
    */
-  @Input() nzSize: NzTableSize = 'middle';
+  @Input() nzSize: NzxTableSize = 'small';
   /**
    * 是否可以改变 nzPageSize
    */
@@ -389,6 +391,25 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
 
   onResize({ width }: NzResizeEvent, col: NzxColumn) {
     col.nzWidth = width + 'px';
+  }
+
+  /**
+   * 切换表格大小, 增加mini 类型
+   * @param size 表格大小
+   * @param table nz表格组件
+   */
+  tableSizeChange(size: NzxTableSize, table: NzTableComponent<NzSafeAny>) {
+    this.nzSize = size;
+    // @ts-ignore
+    const tableMainElement = table.elementRef.nativeElement.querySelector('.ant-table');
+    if (!tableMainElement) {
+      return;
+    }
+    if (size === 'mini') {
+      this.render.addClass(tableMainElement, 'ant-table-mini');
+    } else {
+      this.render.removeClass(tableMainElement, 'ant-table-mini');
+    }
   }
 
   /**
@@ -706,6 +727,12 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
   ngAfterContentInit(): void {
     this.children.changes.subscribe(() => this.resolveTemplateColumn());
     this.resolveTemplateColumn();
+  }
+
+  ngAfterViewInit(): void {
+    if (this.nzSize === 'mini') {
+      this.tableSizeChange(this.nzSize, this.nzTable);
+    }
   }
 
   ngOnChanges(changes: { [P in keyof this]?: SimpleChange } & SimpleChanges): void {

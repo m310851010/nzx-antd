@@ -4,7 +4,7 @@
   [tableSize]="nzSize"
   [refreshVisible]="nzxRefreshVisible"
   [resizeVisible]="nzxResizeVisible"
-  (tableSizeChange)="nzSize = $event"
+  (tableSizeChange)="tableSizeChange($event, basicTable)"
   (refreshClick)="onRefreshClick()"
 >
   <ng-container *nzStringTemplateOutlet="title; context: { $implicit: { context: this } }">
@@ -43,7 +43,7 @@
   [nzBordered]="nzBordered"
   [nzOuterBordered]="nzOuterBordered"
   [nzWidthConfig]="nzWidthConfig"
-  [nzSize]="nzSize"
+  [nzSize]="$any(nzSize)"
   [nzLoading]="nzLoading"
   [nzLoadingIndicator]="nzLoadingIndicator"
   [nzLoadingDelay]="nzLoadingDelay"
@@ -89,7 +89,7 @@
             (nzSortOrderChange)="sortOrderChange($event, col)"
             [nzColumnKey]="col.nzColumnKey || col.name"
             [nzShowFilter]="col.nzShowFilter"
-            [nzSortPriority]="col.nzSortPriority"
+            [nzSortPriority]="col.nzSortPriority === true"
             [nzFilterFn]="col.nzFilterFn"
             [nzFilters]="col.nzFilters"
             [nzFilterMultiple]="col.nzFilterMultiple !== false"

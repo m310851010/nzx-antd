@@ -1,4 +1,20 @@
-@import '../base.less';
+@import '../base';
+@table-padding-vertical-mini: 4px;
+@table-padding-horizontal-mini: 4px;
+@table-font-size-mini: 14px;
+
+.table-size(~'mini', @table-padding-vertical-mini, @table-padding-horizontal-mini, @table-font-size-mini);
+
+.@{table-prefix-cls}-mini {
+  .@{table-prefix-cls}-thead > tr > th {
+    background-color: @table-header-bg-sm;
+  }
+  .@{table-prefix-cls}-selection-column {
+    width: 46px;
+    min-width: 46px;
+  }
+}
+
 @nzx-table-prefix-cls: ~'@{nzx-prefix}-table';
 
 .@{nzx-table-prefix-cls} {
