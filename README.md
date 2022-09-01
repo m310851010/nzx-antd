@@ -52,7 +52,7 @@ npm i @xmagic/nzx-antd --save
 - 在 `style.less` 中引入 `less` 样式文件
 
 ```css
-@import "~@xmagic/nzx-antd/nzx-antd.less";
+@import "node_modules/@xmagic/nzx-antd/nzx-antd.less";
 ```
 
 ## 🍎引入模块
