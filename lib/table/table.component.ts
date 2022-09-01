@@ -98,6 +98,18 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    */
   @Input() params?: FetchParams;
   /**
+   * 是否显示刷新按钮
+   */
+  @Input() nzxRefreshVisible = true;
+  /**
+   * 是否显示调整表格大小按钮
+   */
+  @Input() nzxResizeVisible = true;
+  /**
+   * 显示配置列, 只在非合并表头时可用
+   */
+  @Input() nzxSettingVisible = true;
+  /**
    * 请求之前处理函数
    */
   @Input() beforeFetch?: (params: Record<string, NzSafeAny>) => Record<string, NzSafeAny> | Promise<NzSafeAny>;
@@ -119,10 +131,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * 配置列
    */
   @Input() nzxColumns: NzxColumn<T>[] = [];
-  /**
-   * 显示配置列, 只在非合并表头时可用
-   */
-  @Input() nzxSettingVisible = true;
+
   /**
    * 默认渲染表头
    */
@@ -385,7 +394,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
   /**
    * 点击刷新按钮
    */
-  reloadClick() {
+  onRefreshClick() {
     this.fetch(false);
   }
 
@@ -473,7 +482,6 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     this.rowDblclick.emit(info);
     if (this.nzxClickSelectedRow !== false) {
       this._selectRow = info.row;
-      console.log(info);
     }
   }
 

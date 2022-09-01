@@ -7,7 +7,7 @@
     <ng-content select="[toolbar]"></ng-content>
     <ng-container *ngIf="actionVisible !== false">
       <i
-        (click.once)="reloadClick.emit()"
+        (click)="refreshClick.emit()"
         nz-icon
         nzType="reload"
         nzTheme="outline"

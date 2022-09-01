@@ -2,8 +2,10 @@
   *ngIf="toolbarVisible !== false"
   [actionVisible]="actionVisible"
   [tableSize]="nzSize"
+  [refreshVisible]="nzxRefreshVisible"
+  [resizeVisible]="nzxResizeVisible"
   (tableSizeChange)="nzSize = $event"
-  (reloadClick)="reloadClick()"
+  (refreshClick)="onRefreshClick()"
 >
   <ng-container *nzStringTemplateOutlet="title; context: { $implicit: { context: this } }">
     <div [innerHTML]="title"></div>
@@ -76,7 +78,7 @@
             [nzDisabled]="nzxResizable === false"
             nzBounds="window"
             (nzResize)="onResize($event, col)"
-            (click.once)="headerClick.emit({ column: col, event: $event })"
+            (click)="headerClick.emit({ column: col, event: $event })"
             (dblclick)="headerDblclick.emit({ column: col, event: $event })"
             (contextmenu)="headerContextmenu.emit({ column: col, event: $event })"
             [nzShowSort]="col.nzShowSort"
@@ -117,7 +119,7 @@
             [nzDisabled]="nzxResizable === false"
             nzBounds="window"
             (nzResize)="onResize($event, col)"
-            (click.once)="headerClick.emit({ column: col, event: $event })"
+            (click)="headerClick.emit({ column: col, event: $event })"
             (dblclick)="headerDblclick.emit({ column: col, event: $event })"
             (contextmenu)="headerContextmenu.emit({ column: col, event: $event })"
             [nzShowCheckbox]="col.nzShowCheckbox"
@@ -186,7 +188,7 @@
         >
           <td
             *ngIf="col.visible !== false"
-            (click.once)="
+            (click)="
               cellClick.emit({
                 row: row,
                 column: col,
@@ -309,7 +311,7 @@
           [nzShape]="btn.nzShape"
           [nzType]="btn.nzType || 'link'"
           [disabled]="row.buttons?.[index]?.disabled"
-          (click.once)="btn.click && btn.click(row, data, $event)"
+          (click)="btn.click && btn.click(row, data, $event)"
         >
           {{ row.buttons?.[index]?.text || btn.text }}
         </button>
@@ -317,7 +319,7 @@
           *ngIf="btn.link !== false && (btn.visible !== false || row.buttons?.[index]?.visible !== false)"
           [attr.href]="getLinkHref(btn, row, data)"
           [attr.target]="btn.target || row.buttons?.[index]?.target"
-          (click.once)="btn.click && row.buttons?.[index]?.disabled !== true && btn.click(row, data, $event)"
+          (click)="btn.click && row.buttons?.[index]?.disabled !== true && btn.click(row, data, $event)"
         >
           {{ btn.text || row.buttons?.[index]?.text }}
         </a>

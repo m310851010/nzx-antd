@@ -26,9 +26,11 @@ export class NzxTableHeaderComponent implements OnInit, OnChanges {
    * 是否显示操作按钮小图标
    */
   @Input() actionVisible?: boolean;
+  @Input() refreshVisible?: boolean;
+  @Input() resizeVisible?: boolean;
 
   @Output() tableSizeChange = new EventEmitter<NzTableSize>();
-  @Output() reloadClick = new EventEmitter<void>();
+  @Output() refreshClick = new EventEmitter<void>();
 
   readonly tableSizeOptions = [
     { sizeName: '大号', selected: false, value: 'default' },
