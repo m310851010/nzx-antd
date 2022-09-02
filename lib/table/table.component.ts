@@ -499,13 +499,25 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     return;
   }
 
-  onClickOnce(info: RowEventArg<T>) {
-    this.rowDblclick.emit(info);
+  /**
+   * 行点击事件
+   * @param info
+   */
+  onRowClick(info: RowEventArg<T>) {
+    this.rowClick.emit(info);
     if (this.nzxClickSelectedRow !== false) {
       this._selectRow = info.row;
     }
   }
 
+  /**
+   * 执行请求
+   * @param url
+   * @param method
+   * @param params
+   * @param data
+   * @protected
+   */
   protected doFetch(url: string, method?: string, params?: NzSafeAny, data?: NzSafeAny): Observable<PageInfo<T>> {
     const option: { params?: NzSafeAny; body?: NzSafeAny } = {};
     method ||= 'post';
@@ -518,6 +530,13 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     return this.http.request<PageInfo<T>>(method, url, option);
   }
 
+  /**
+   * 处理请求结果
+   * @param res
+   * @param fetchSetting
+   * @param reset
+   * @private
+   */
   private setFetchResult(res: Record<string, NzSafeAny> | T[], fetchSetting: FetchSetting, reset: boolean): void {
     let result: PageInfo<T> = { total: 0, list: [] };
     if (this.afterFetch && NzxUtils.isFunction(this.afterFetch)) {
@@ -542,6 +561,11 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     this.setPageInfo(result);
   }
 
+  /**
+   * 设置分页信息
+   * @param pageInfo
+   * @private
+   */
   private setPageInfo(pageInfo: PageInfo<T>): void {
     this.nzData = pageInfo.list || ([] as T[]);
     this.nzTotal = pageInfo.total || 0;
@@ -587,6 +611,12 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     });
   }
 
+  /**
+   * 合并请求参数
+   * @param reset
+   * @param fetchSetting
+   * @private
+   */
   private mergeParams(reset = true, fetchSetting: FetchSetting) {
     const params: Record<string, NzSafeAny> = {
       [fetchSetting.pageIndexField!]: reset ? 1 : this.nzPageIndex,
@@ -756,6 +786,10 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     }
   }
 
+  /**
+   * 拖拽排序
+   * @param event
+   */
   sortedColumn(event: CdkDragDrop<NzxColumn<T>, NzSafeAny>) {
     moveItemInArray(this._headerColumns[0], event.previousIndex, event.currentIndex);
   }

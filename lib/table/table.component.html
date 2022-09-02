@@ -159,14 +159,14 @@
       <tr
         *ngIf="row.parent?.expand || !row.parent"
         (click)="
-          rowClick.emit({
+          onRowClick({
             row: row,
             rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
             event: $event
           })
         "
         (dblclick)="
-          onClickOnce({
+          rowDblclick.emit({
             row: row,
             rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
             event: $event
