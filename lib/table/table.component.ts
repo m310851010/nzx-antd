@@ -5,9 +5,11 @@ import {
   ChangeDetectorRef,
   Component,
   ContentChildren,
+  ElementRef,
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   Output,
   QueryList,
@@ -45,7 +47,7 @@ import {
   SorterResult
 } from './table.type';
 import { FETCH_SETTING } from './const';
-import { Observable } from 'rxjs';
+import { debounceTime, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { NzxAntdService } from '@xmagic/nzx-antd';
@@ -73,7 +75,7 @@ import { NamedTemplate } from '@xmagic/nzx-antd/directive';
   host: { '[class.nzx-table]': 'true' }
 })
 export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
-  implements OnInit, AfterContentInit, AfterViewInit, OnChanges
+  implements OnInit, AfterContentInit, AfterViewInit, OnChanges, OnDestroy
 {
   /**
    * 当前选中的行
@@ -227,6 +229,22 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    */
   @Input() scrollY?: string;
   /**
+   * 最小滚动宽度
+   */
+  @Input() minScrollX?: number;
+  /**
+   * 最小滚动高度
+   */
+  @Input() minScrollY?: number;
+  /**
+   * 自动设置scrollX, 撑满父级容易
+   */
+  @Input() scrollXFillParent?: boolean;
+  /**
+   * 自动设置scrollY, 撑满父级容易
+   */
+  @Input() scrollYFillParent?: boolean;
+  /**
    * 指定分页显示的尺寸
    */
   @Input() nzPaginationType: NzTablePaginationType = 'default';
@@ -358,11 +376,13 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
 
   @ContentChildren(NamedTemplate) children!: QueryList<NamedTemplate<NzSafeAny>>;
   @ViewChild('basicTable') nzTable!: NzTableComponent<T>;
+  private resize$ = new Subject<void>();
 
   constructor(
     protected cdr: ChangeDetectorRef,
     protected render: Renderer2,
     protected http: HttpClient,
+    protected elementRef: ElementRef<HTMLDivElement>,
     private antdService: NzxAntdService
   ) {}
 
@@ -763,6 +783,23 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     if (this.nzSize === 'mini') {
       this.tableSizeChange(this.nzSize, this.nzTable);
     }
+
+    if (this.scrollXFillParent || this.scrollYFillParent) {
+      const element = this.elementRef.nativeElement;
+      const fixedAutoScroll = () => {
+        if (this.scrollXFillParent) {
+          this.fixXFillParent(element);
+        }
+
+        if (this.scrollYFillParent) {
+          this.fixYFillParent(element);
+        }
+      };
+      fromEvent(window, 'resize')
+        .pipe(takeUntil(this.resize$), debounceTime(80))
+        .subscribe(() => fixedAutoScroll());
+      fixedAutoScroll();
+    }
   }
 
   ngOnChanges(changes: { [P in keyof this]?: SimpleChange } & SimpleChanges): void {
@@ -792,6 +829,11 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    */
   sortedColumn(event: CdkDragDrop<NzxColumn<T>, NzSafeAny>) {
     moveItemInArray(this._headerColumns[0], event.previousIndex, event.currentIndex);
+  }
+
+  ngOnDestroy(): void {
+    this.resize$.next();
+    this.resize$.complete();
   }
 
   /**
@@ -856,6 +898,38 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     }
     if (col.thText == null && col.isIndex) {
       col.thText = '序号';
+    }
+  }
+
+  /**
+   * 计算x轴滚动大小
+   * @param element
+   * @private
+   */
+  private fixXFillParent(element: HTMLDivElement) {
+    if (!element.clientWidth) {
+      return;
+    }
+    if (this.minScrollX) {
+      this.scrollX = `${element.clientWidth >= this.minScrollX ? element.clientWidth : this.minScrollX}px`;
+    } else {
+      this.scrollX = `${element.clientWidth}px`;
+    }
+  }
+
+  /**
+   * 计算y轴滚动大小
+   * @param element
+   * @private
+   */
+  private fixYFillParent(element: HTMLDivElement) {
+    if (!element.clientHeight) {
+      return;
+    }
+    if (this.minScrollY) {
+      this.scrollY = `${element.clientHeight >= this.minScrollY ? element.clientHeight : this.minScrollY}px`;
+    } else {
+      this.scrollY = `${element.clientHeight}px`;
     }
   }
 }
