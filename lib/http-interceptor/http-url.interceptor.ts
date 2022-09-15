@@ -33,15 +33,11 @@ export class HttpUrlInterceptor implements HttpInterceptor {
         }
         const option = newReq as HttpRequestOptions;
         if (!option.url) {
-          option.url = this.wrapRandomUrl(url);
+          option.url = url;
         }
         return req.clone(option);
       }
     }
-    return req.clone({ url: this.wrapRandomUrl(url) });
-  }
-
-  private wrapRandomUrl(url: string) {
-    return url + (url.indexOf('?') >= 0 ? '&r=' : '?r=') + Math.random();
+    return req.clone({ url });
   }
 }

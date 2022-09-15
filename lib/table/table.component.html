@@ -152,7 +152,7 @@
     </ng-container>
   </thead>
 
-  <tbody>
+  <tbody class="nzx-table-striped-tbody" [class.nzx-table-striped-tbody]="nzxStripe">
     <ng-container
       *ngFor="let row of basicTable.data; index as index; first as first; last as last; even as even; odd as odd"
     >

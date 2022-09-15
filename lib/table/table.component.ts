@@ -114,6 +114,10 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    */
   @Input() nzxSettingVisible = true;
   /**
+   * 是否显示斑马线
+   */
+  @Input() nzxStripe = true;
+  /**
    * 请求之前处理函数
    */
   @Input() beforeFetch?: (params: Record<string, NzSafeAny>) => Record<string, NzSafeAny> | Promise<NzSafeAny>;
@@ -785,7 +789,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     }
 
     if (this.scrollXFillParent || this.scrollYFillParent) {
-      const element = this.elementRef.nativeElement;
+      const element = this.elementRef.nativeElement.parentElement!;
       const fixedAutoScroll = () => {
         if (this.scrollXFillParent) {
           this.fixXFillParent(element);
@@ -906,7 +910,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * @param element
    * @private
    */
-  private fixXFillParent(element: HTMLDivElement) {
+  private fixXFillParent(element: HTMLElement) {
     if (!element.clientWidth) {
       return;
     }
@@ -922,7 +926,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * @param element
    * @private
    */
-  private fixYFillParent(element: HTMLDivElement) {
+  private fixYFillParent(element: HTMLElement) {
     if (!element.clientHeight) {
       return;
     }

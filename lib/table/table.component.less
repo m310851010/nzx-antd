@@ -2,6 +2,7 @@
 @table-padding-vertical-mini: 4px;
 @table-padding-horizontal-mini: 4px;
 @table-font-size-mini: 14px;
+@table-striped-bgcolor: @table-row-hover-bg;
 
 .table-size(~'mini', @table-padding-vertical-mini, @table-padding-horizontal-mini, @table-font-size-mini);
 
@@ -18,6 +19,10 @@
 @nzx-table-prefix-cls: ~'@{nzx-prefix}-table';
 
 .@{nzx-table-prefix-cls} {
+  &-striped-tbody > tr:nth-of-type(even) > td {
+    background: @table-striped-bgcolor;
+  }
+
   .ant-table-column-title {
     position: initial;
   }
