@@ -333,9 +333,15 @@
   <ng-template #textValueTemplate>
     <ng-container *ngIf="data.col.name">
       <!--处理异步数据-->
-      <ng-container *ngIf="data.row['$async-' + data.col.name]; else simpleValue">
-        {{ data.row['$async-' + data.col.name] | async | defaultify }}
+      <ng-container *ngIf="data.row['$ASYNC-' + data.col.name] != null; else formatValue">
+        {{ data.row['$ASYNC-' + data.col.name] | async | defaultify }}
       </ng-container>
+
+      <ng-template #formatValue>
+        <ng-container *ngIf="data.row['$FORMAT-' + data.col.name] != null; else simpleValue">
+          {{ data.row['$FORMAT-' + data.col.name] }}
+        </ng-container>
+      </ng-template>
 
       <ng-template #simpleValue>
         {{ data.row[data.col.name] | defaultify }}

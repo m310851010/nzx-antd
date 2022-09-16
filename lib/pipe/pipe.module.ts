@@ -6,6 +6,7 @@ import { TrustHtmlPipe, TrustScriptPipe, TrustStylePipe, TrustUrlPipe } from './
 import { TimeUnitPipe } from './time-unit.pipe';
 import { ToAsyncPipe } from './to-async.pipe';
 import { FilterPipe } from './filter.pipe';
+import { DicPipe } from './dic.pipe';
 
 const PIPE = [
   MathPipe,
@@ -16,7 +17,8 @@ const PIPE = [
   TrustStylePipe,
   TimeUnitPipe,
   ToAsyncPipe,
-  FilterPipe
+  FilterPipe,
+  DicPipe
 ];
 @NgModule({
   declarations: [PIPE],

@@ -42,6 +42,11 @@ export class NzxAntdService {
    * 表格分页配置
    */
   table?: TableSetting;
+
+  /**
+   * 字典配置
+   */
+  dic?: DicSetting;
   constructor() {}
 }
 
@@ -168,4 +173,22 @@ export interface HttpErrorBean<T = NzSafeAny> {
   code: number;
   message: string;
   body: T;
+}
+
+/**
+ * 字典配置信息
+ */
+export interface DicSetting {
+  /**
+   * 字典的URL,如果是string 将会自动在URL后追加key,如 url 为 /api/dic 真正请求的地址为 /api/dic/{dicKey}
+   */
+  url: ((key: string) => string) | string;
+  /**
+   * 后台返回的字典label的属性名称, 默认'label'
+   */
+  labelName?: string;
+  /**
+   * 后台返回的字典value的属性名称, 默认'value'
+   */
+  valueName?: string;
 }

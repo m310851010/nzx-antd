@@ -624,10 +624,10 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
             if (this.isAsync(formatValue)) {
               // 异步数据
               // @ts-ignore
-              value['$async-' + key] = formatValue;
+              value['$ASYNC-' + key] = formatValue;
             } else {
               // @ts-ignore
-              value[key] = formatValue;
+              value['$FORMAT-' + key] = formatValue;
             }
           }
         });
