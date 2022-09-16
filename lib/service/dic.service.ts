@@ -4,7 +4,7 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { map, Observable, of, shareReplay, tap } from 'rxjs';
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { DicSetting, NzxAntdService } from '@xmagic/nzx-antd';
-import { LOADING_ENABLED, SYNCED_ENABLED } from '@xmagic/nzx-antd/service/fetcher.service';
+import { LOADING_ENABLED, SYNCED_ENABLED } from './fetcher.service';
 import { finalize } from 'rxjs/operators';
 import { NzxUtils } from '@xmagic/nzx-antd/util';
 
