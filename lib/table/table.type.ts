@@ -1,6 +1,6 @@
 import { TemplateRef } from '@angular/core';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
-import { NzTableFilterFn, NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
+import {NzTableFilterFn, NzTableSize, NzTableSortFn, NzTableSortOrder} from 'ng-zorro-antd/table';
 import { Observable } from 'rxjs';
 
 export interface NzxColumn<T = Record<string, NzSafeAny>> {
@@ -202,9 +202,17 @@ export type CellSpanArgType<T> = {
  */
 export interface PageInfo<T> {
   total: number;
+  /**
+   * 列表数据
+   */
   list: T[];
   /**
    * 修正后的当前页码
    */
   pageIndex?: number;
 }
+
+/**
+ * 表格大小
+ */
+export type NzxTableSize = NzTableSize | 'mini';

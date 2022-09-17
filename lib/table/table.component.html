@@ -4,7 +4,7 @@
   [tableSize]="nzSize"
   [refreshVisible]="nzxRefreshVisible"
   [resizeVisible]="nzxResizeVisible"
-  (tableSizeChange)="nzSize = $event"
+  (tableSizeChange)="tableSizeChange($event, basicTable)"
   (refreshClick)="onRefreshClick()"
 >
   <ng-container *nzStringTemplateOutlet="title; context: { $implicit: { context: this } }">
@@ -43,7 +43,7 @@
   [nzBordered]="nzBordered"
   [nzOuterBordered]="nzOuterBordered"
   [nzWidthConfig]="nzWidthConfig"
-  [nzSize]="nzSize"
+  [nzSize]="$any(nzSize)"
   [nzLoading]="nzLoading"
   [nzLoadingIndicator]="nzLoadingIndicator"
   [nzLoadingDelay]="nzLoadingDelay"
@@ -89,7 +89,7 @@
             (nzSortOrderChange)="sortOrderChange($event, col)"
             [nzColumnKey]="col.nzColumnKey || col.name"
             [nzShowFilter]="col.nzShowFilter"
-            [nzSortPriority]="col.nzSortPriority"
+            [nzSortPriority]="col.nzSortPriority === true"
             [nzFilterFn]="col.nzFilterFn"
             [nzFilters]="col.nzFilters"
             [nzFilterMultiple]="col.nzFilterMultiple !== false"
@@ -152,21 +152,21 @@
     </ng-container>
   </thead>
 
-  <tbody>
+  <tbody class="nzx-table-striped-tbody" [class.nzx-table-striped-tbody]="nzxStripe">
     <ng-container
       *ngFor="let row of basicTable.data; index as index; first as first; last as last; even as even; odd as odd"
     >
       <tr
         *ngIf="row.parent?.expand || !row.parent"
         (click)="
-          rowClick.emit({
+          onRowClick({
             row: row,
             rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
             event: $event
           })
         "
         (dblclick)="
-          onClickOnce({
+          rowDblclick.emit({
             row: row,
             rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
             event: $event
@@ -333,9 +333,15 @@
   <ng-template #textValueTemplate>
     <ng-container *ngIf="data.col.name">
       <!--处理异步数据-->
-      <ng-container *ngIf="data.row['$async-' + data.col.name]; else simpleValue">
-        {{ data.row['$async-' + data.col.name] | async | defaultify }}
+      <ng-container *ngIf="data.row['$ASYNC-' + data.col.name] != null; else formatValue">
+        {{ data.row['$ASYNC-' + data.col.name] | async | defaultify }}
       </ng-container>
+
+      <ng-template #formatValue>
+        <ng-container *ngIf="data.row['$FORMAT-' + data.col.name] != null; else simpleValue">
+          {{ data.row['$FORMAT-' + data.col.name] }}
+        </ng-container>
+      </ng-template>
 
       <ng-template #simpleValue>
         {{ data.row[data.col.name] | defaultify }}

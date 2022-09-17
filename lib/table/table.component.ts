@@ -1,12 +1,15 @@
 import {
   AfterContentInit,
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ContentChildren,
+  ElementRef,
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   Output,
   QueryList,
@@ -38,12 +41,13 @@ import {
   HeaderEventArg,
   IndexAttr,
   NzxColumn,
+  NzxTableSize,
   PageInfo,
   RowEventArg,
   SorterResult
 } from './table.type';
 import { FETCH_SETTING } from './const';
-import { Observable } from 'rxjs';
+import { debounceTime, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { NzxAntdService } from '@xmagic/nzx-antd';
@@ -71,7 +75,7 @@ import { NamedTemplate } from '@xmagic/nzx-antd/directive';
   host: { '[class.nzx-table]': 'true' }
 })
 export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
-  implements OnInit, AfterContentInit, OnChanges
+  implements OnInit, AfterContentInit, AfterViewInit, OnChanges, OnDestroy
 {
   /**
    * 当前选中的行
@@ -109,6 +113,10 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * 显示配置列, 只在非合并表头时可用
    */
   @Input() nzxSettingVisible = true;
+  /**
+   * 是否显示斑马线
+   */
+  @Input() nzxStripe = true;
   /**
    * 请求之前处理函数
    */
@@ -225,6 +233,22 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    */
   @Input() scrollY?: string;
   /**
+   * 最小滚动宽度
+   */
+  @Input() minScrollX?: number;
+  /**
+   * 最小滚动高度
+   */
+  @Input() minScrollY?: number;
+  /**
+   * 自动设置scrollX, 撑满父级容易
+   */
+  @Input() scrollXFillParent?: boolean;
+  /**
+   * 自动设置scrollY, 撑满父级容易
+   */
+  @Input() scrollYFillParent?: boolean;
+  /**
    * 指定分页显示的尺寸
    */
   @Input() nzPaginationType: NzTablePaginationType = 'default';
@@ -259,7 +283,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
   /**
    * 表格大小, 正常或迷你类型
    */
-  @Input() nzSize: NzTableSize = 'middle';
+  @Input() nzSize: NzxTableSize = 'small';
   /**
    * 是否可以改变 nzPageSize
    */
@@ -356,11 +380,13 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
 
   @ContentChildren(NamedTemplate) children!: QueryList<NamedTemplate<NzSafeAny>>;
   @ViewChild('basicTable') nzTable!: NzTableComponent<T>;
+  private resize$ = new Subject<void>();
 
   constructor(
     protected cdr: ChangeDetectorRef,
     protected render: Renderer2,
     protected http: HttpClient,
+    protected elementRef: ElementRef<HTMLDivElement>,
     private antdService: NzxAntdService
   ) {}
 
@@ -389,6 +415,25 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
 
   onResize({ width }: NzResizeEvent, col: NzxColumn) {
     col.nzWidth = width + 'px';
+  }
+
+  /**
+   * 切换表格大小, 增加mini 类型
+   * @param size 表格大小
+   * @param table nz表格组件
+   */
+  tableSizeChange(size: NzxTableSize, table: NzTableComponent<NzSafeAny>) {
+    this.nzSize = size;
+    // @ts-ignore
+    const tableMainElement = table.elementRef.nativeElement.querySelector('.ant-table');
+    if (!tableMainElement) {
+      return;
+    }
+    if (size === 'mini') {
+      this.render.addClass(tableMainElement, 'ant-table-mini');
+    } else {
+      this.render.removeClass(tableMainElement, 'ant-table-mini');
+    }
   }
 
   /**
@@ -478,13 +523,25 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     return;
   }
 
-  onClickOnce(info: RowEventArg<T>) {
-    this.rowDblclick.emit(info);
+  /**
+   * 行点击事件
+   * @param info
+   */
+  onRowClick(info: RowEventArg<T>) {
+    this.rowClick.emit(info);
     if (this.nzxClickSelectedRow !== false) {
       this._selectRow = info.row;
     }
   }
 
+  /**
+   * 执行请求
+   * @param url
+   * @param method
+   * @param params
+   * @param data
+   * @protected
+   */
   protected doFetch(url: string, method?: string, params?: NzSafeAny, data?: NzSafeAny): Observable<PageInfo<T>> {
     const option: { params?: NzSafeAny; body?: NzSafeAny } = {};
     method ||= 'post';
@@ -497,6 +554,13 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     return this.http.request<PageInfo<T>>(method, url, option);
   }
 
+  /**
+   * 处理请求结果
+   * @param res
+   * @param fetchSetting
+   * @param reset
+   * @private
+   */
   private setFetchResult(res: Record<string, NzSafeAny> | T[], fetchSetting: FetchSetting, reset: boolean): void {
     let result: PageInfo<T> = { total: 0, list: [] };
     if (this.afterFetch && NzxUtils.isFunction(this.afterFetch)) {
@@ -521,6 +585,11 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     this.setPageInfo(result);
   }
 
+  /**
+   * 设置分页信息
+   * @param pageInfo
+   * @private
+   */
   private setPageInfo(pageInfo: PageInfo<T>): void {
     this.nzData = pageInfo.list || ([] as T[]);
     this.nzTotal = pageInfo.total || 0;
@@ -555,10 +624,10 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
             if (this.isAsync(formatValue)) {
               // 异步数据
               // @ts-ignore
-              value['$async-' + key] = formatValue;
+              value['$ASYNC-' + key] = formatValue;
             } else {
               // @ts-ignore
-              value[key] = formatValue;
+              value['$FORMAT-' + key] = formatValue;
             }
           }
         });
@@ -566,6 +635,12 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     });
   }
 
+  /**
+   * 合并请求参数
+   * @param reset
+   * @param fetchSetting
+   * @private
+   */
   private mergeParams(reset = true, fetchSetting: FetchSetting) {
     const params: Record<string, NzSafeAny> = {
       [fetchSetting.pageIndexField!]: reset ? 1 : this.nzPageIndex,
@@ -708,6 +783,29 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     this.resolveTemplateColumn();
   }
 
+  ngAfterViewInit(): void {
+    if (this.nzSize === 'mini') {
+      this.tableSizeChange(this.nzSize, this.nzTable);
+    }
+
+    if (this.scrollXFillParent || this.scrollYFillParent) {
+      const element = this.elementRef.nativeElement.parentElement!;
+      const fixedAutoScroll = () => {
+        if (this.scrollXFillParent) {
+          this.fixXFillParent(element);
+        }
+
+        if (this.scrollYFillParent) {
+          this.fixYFillParent(element);
+        }
+      };
+      fromEvent(window, 'resize')
+        .pipe(takeUntil(this.resize$), debounceTime(80))
+        .subscribe(() => fixedAutoScroll());
+      fixedAutoScroll();
+    }
+  }
+
   ngOnChanges(changes: { [P in keyof this]?: SimpleChange } & SimpleChanges): void {
     if (
       (changes.nzxColumns && !changes.nzxColumns.isFirstChange()) ||
@@ -729,8 +827,17 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     }
   }
 
+  /**
+   * 拖拽排序
+   * @param event
+   */
   sortedColumn(event: CdkDragDrop<NzxColumn<T>, NzSafeAny>) {
     moveItemInArray(this._headerColumns[0], event.previousIndex, event.currentIndex);
+  }
+
+  ngOnDestroy(): void {
+    this.resize$.next();
+    this.resize$.complete();
   }
 
   /**
@@ -795,6 +902,38 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     }
     if (col.thText == null && col.isIndex) {
       col.thText = '序号';
+    }
+  }
+
+  /**
+   * 计算x轴滚动大小
+   * @param element
+   * @private
+   */
+  private fixXFillParent(element: HTMLElement) {
+    if (!element.clientWidth) {
+      return;
+    }
+    if (this.minScrollX) {
+      this.scrollX = `${element.clientWidth >= this.minScrollX ? element.clientWidth : this.minScrollX}px`;
+    } else {
+      this.scrollX = `${element.clientWidth}px`;
+    }
+  }
+
+  /**
+   * 计算y轴滚动大小
+   * @param element
+   * @private
+   */
+  private fixYFillParent(element: HTMLElement) {
+    if (!element.clientHeight) {
+      return;
+    }
+    if (this.minScrollY) {
+      this.scrollY = `${element.clientHeight >= this.minScrollY ? element.clientHeight : this.minScrollY}px`;
+    } else {
+      this.scrollY = `${element.clientHeight}px`;
     }
   }
 }

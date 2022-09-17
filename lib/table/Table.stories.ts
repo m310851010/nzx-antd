@@ -1,6 +1,6 @@
 import { moduleMetadata, Story, Meta } from '@storybook/angular';
 import { storyFactory } from '@stories';
-import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzButtonComponent, NzButtonModule } from 'ng-zorro-antd/button';
 import { NzxTableComponent } from './table.component';
 import { NzxTableHeaderComponent } from './header/table-header/table-header.component';
 import { NzxColumnSettingComponent } from './header/column-setting/column-setting.component';
@@ -19,6 +19,7 @@ import { NzxServiceModule } from '@xmagic/nzx-antd/service';
 import { NzOutletModule } from 'ng-zorro-antd/core/outlet';
 import { NzxUtils } from '../util';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { NzxColorType } from '@xmagic/nzx-antd/button';
 
 export default {
   title: '组件/Table 表格',
@@ -87,7 +88,8 @@ export default {
         '_columnNameChecked',
         '_indeterminate',
         '_nzxColumns',
-        '_selectRow'
+        '_selectRow',
+        'resize$'
       ]
     },
     docs: {
@@ -163,3 +165,29 @@ export const ColspanHead = Template({
   ],
   nzData: NzxUtils.clone(nzData)
 });
+
+export const ScrollTemplate: Story<NzxTableComponent> = args => {
+  return {
+    props: args,
+    template: `
+    <div style="height: 50%; overflow: hidden;">
+        <nzx-table [nzData]="nzData" [nzxColumns]="nzxColumns" [nzFrontPagination]="false" scrollY="100%"></nzx-table>
+    </div>
+    `
+  };
+};
+
+ScrollTemplate.args = {
+  nzxColumns: [
+    { name: 'name', thText: '姓名' },
+    { name: 'org', thText: '部门' }
+  ],
+  nzData: Array(100)
+    .fill(0)
+    .map<Record<string, NzSafeAny>>((m, i) => ({
+      name: xing[i % xing.length] + '三',
+      org: '测试部门',
+      firstName: xing[i % xing.length],
+      lastName: '六'
+    }))
+};

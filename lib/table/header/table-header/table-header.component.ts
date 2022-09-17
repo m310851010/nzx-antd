@@ -11,6 +11,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { NzTableSize } from 'ng-zorro-antd/table';
+import { NzxTableSize } from '../../table.type';
 
 @Component({
   selector: 'nzx-table-header',
@@ -21,7 +22,7 @@ import { NzTableSize } from 'ng-zorro-antd/table';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NzxTableHeaderComponent implements OnInit, OnChanges {
-  @Input() tableSize: NzTableSize = 'small';
+  @Input() tableSize: NzxTableSize = 'small';
   /**
    * 是否显示操作按钮小图标
    */
@@ -35,7 +36,8 @@ export class NzxTableHeaderComponent implements OnInit, OnChanges {
   readonly tableSizeOptions = [
     { sizeName: '大号', selected: false, value: 'default' },
     { sizeName: '中等', selected: false, value: 'middle' },
-    { sizeName: '紧凑', selected: true, value: 'small' }
+    { sizeName: '紧凑', selected: true, value: 'small' },
+    { sizeName: '迷你', selected: true, value: 'mini' }
   ];
 
   constructor() {}

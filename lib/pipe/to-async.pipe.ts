@@ -20,13 +20,13 @@ export class ToAsyncPipe implements PipeTransform {
    */
   transform<T = NzSafeAny, U = NzSafeAny>(
     value: string | Observable<T> | Promise<T> | T,
-    option?: AsyncOption<T, U>
+    option?: AsyncOption
   ): Observable<U> | null {
     if (value == null) {
       return of(option?.defaultValue as U);
     }
 
-    const opt = option || ({} as AsyncOption<T, U>);
+    const opt = option || ({} as AsyncOption);
     const mapFn = NzxUtils.isFunction(opt.map) ? opt.map : (data: T) => data as unknown as U;
     if (typeof value === 'string') {
       return this.fetcher.fetch<T>({ ...opt, url: value }).pipe(
@@ -49,15 +49,15 @@ export class ToAsyncPipe implements PipeTransform {
 /**
  * 异步请求信息
  */
-export type AsyncOption<T = NzSafeAny, U = NzSafeAny> = Omit<FetchOptions, 'url'> & {
+export type AsyncOption = Omit<FetchOptions, 'url'> & {
   /**
    * 映射数据
    * @param data
    * @param index
    */
-  map?: (data: T) => U;
+  map?: (data: NzSafeAny) => NzSafeAny;
   /**
    * 默认值
    */
-  defaultValue?: U;
+  defaultValue?: NzSafeAny;
 };
