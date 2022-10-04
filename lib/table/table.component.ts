@@ -27,7 +27,6 @@ import {
   NzTablePaginationPosition,
   NzTablePaginationType,
   NzTableQueryParams,
-  NzTableSize,
   NzTableSortOrder
 } from 'ng-zorro-antd/table';
 import { PaginationItemRenderContext } from 'ng-zorro-antd/pagination';
@@ -148,6 +147,14 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * 标题
    */
   @Input() title?: string | TemplateRef<void>;
+  /**
+   * 是否显示表头
+   */
+  @Input() nzxShowHeader?: boolean;
+  /**
+   * 工具栏-在工具栏之前
+   */
+  @Input() toolbarBefore?: string | TemplateRef<void>;
   /**
    * 工具栏
    */

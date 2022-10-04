@@ -12,7 +12,7 @@
       (ngModelChange)="item.ngModelChange?.($event, item)"
     >
       <ng-container *nzStringTemplateOutlet="item.label; context: { $implicit: item, options: nzxOptions }">
-        <div [innerHTML]="item.label"></div>
+        {{ item.label }}
       </ng-container>
     </label>
   </ng-container>

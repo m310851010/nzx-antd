@@ -8,25 +8,30 @@
   (refreshClick)="onRefreshClick()"
 >
   <ng-container *nzStringTemplateOutlet="title; context: { $implicit: { context: this } }">
-    <div [innerHTML]="title"></div>
+    {{ title }}
   </ng-container>
   <ng-content select="[title]"></ng-content>
 
-  <ng-container *nzStringTemplateOutlet="toolbar; context: { $implicit: { context: this } }">
-    <div [innerHTML]="toolbar"></div>
-  </ng-container>
-  <ng-container toolbar>
-    <ng-content select="[toolbar]"></ng-content>
+  <ng-container setting>
+    <ng-container *nzStringTemplateOutlet="toolbarBefore; context: { $implicit: { context: this } }">
+      {{ toolbarBefore }}
+    </ng-container>
+    <ng-content select="[toolbarBefore]"></ng-content>
+
+    <nzx-column-setting
+      *ngIf="nzxSettingVisible"
+      [nzxColumns]="_bodyColumns"
+      (sortedColumn)="sortedColumn($event)"
+      (fixedClick)="fixedClick($event)"
+    ></nzx-column-setting>
   </ng-container>
 
-  <nzx-column-setting
-    #nzxColumnSetting
-    *ngIf="nzxSettingVisible"
-    setting
-    [nzxColumns]="_bodyColumns"
-    (sortedColumn)="sortedColumn($event)"
-    (fixedClick)="fixedClick($event)"
-  ></nzx-column-setting>
+  <ng-container toolbar>
+    <ng-container *nzStringTemplateOutlet="toolbar; context: { $implicit: { context: this } }">
+      {{ toolbar }}
+    </ng-container>
+    <ng-content select="[toolbar]"></ng-content>
+  </ng-container>
 </nzx-table-header>
 
 <nz-table
@@ -68,7 +73,7 @@
   (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
   (nzQueryParams)="nzQueryParams.emit($event)"
 >
-  <thead>
+  <thead *ngIf="nzxShowHeader !== false">
     <ng-container *ngIf="nzxDefaultRenderHeader !== false">
       <tr *ngFor="let row of _headerColumns">
         <ng-container *ngFor="let col of row">
