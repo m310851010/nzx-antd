@@ -1,4 +1,13 @@
 {
   "name": "@xmagic/nzx-antd",
-  "version": "13.3.9"
+  "version": "13.3.9",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/m310851010/nzx-antd.git"
+  },
+  "author": "m310851010",
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT"
 }
