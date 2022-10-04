@@ -72,7 +72,7 @@ export interface NzxColumn<T = Record<string, NzSafeAny>> {
   nzFilterChange?: Array<T | T[]>;
 
   nzWidth?: string | null;
-  nzAlign?: 'left' | 'right' | 'center';
+  thAlign?: 'left' | 'right' | 'center';
   tdAlign?: 'left' | 'right' | 'center';
   nzBreakWord?: boolean;
   nzEllipsis?: boolean;
