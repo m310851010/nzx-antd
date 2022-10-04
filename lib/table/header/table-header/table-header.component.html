@@ -4,7 +4,7 @@
   </div>
 
   <div class="nzx-table__toolbar">
-    <ng-content select="[toolbar]"></ng-content>
+    <ng-content select="[setting-before]"></ng-content>
     <ng-container *ngIf="actionVisible !== false">
       <i
         *ngIf="refreshVisible"
@@ -31,6 +31,8 @@
 
       <ng-content select="[setting]"></ng-content>
     </ng-container>
+
+    <ng-content select="[toolbar]"></ng-content>
   </div>
 </div>
 

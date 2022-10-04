@@ -12,19 +12,20 @@
   </ng-container>
   <ng-content select="[title]"></ng-content>
 
-  <ng-container setting>
+  <ng-container setting-before>
     <ng-container *nzStringTemplateOutlet="toolbarBefore; context: { $implicit: { context: this } }">
       {{ toolbarBefore }}
     </ng-container>
     <ng-content select="[toolbarBefore]"></ng-content>
-
-    <nzx-column-setting
-      *ngIf="nzxSettingVisible"
-      [nzxColumns]="_bodyColumns"
-      (sortedColumn)="sortedColumn($event)"
-      (fixedClick)="fixedClick($event)"
-    ></nzx-column-setting>
   </ng-container>
+
+  <nzx-column-setting
+    setting
+    *ngIf="nzxSettingVisible"
+    [nzxColumns]="_bodyColumns"
+    (sortedColumn)="sortedColumn($event)"
+    (fixedClick)="fixedClick($event)"
+  ></nzx-column-setting>
 
   <ng-container toolbar>
     <ng-container *nzStringTemplateOutlet="toolbar; context: { $implicit: { context: this } }">
