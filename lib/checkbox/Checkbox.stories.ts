@@ -39,6 +39,7 @@ const Template = (props: Partial<NzxCheckboxComponent>): Story<NzxCheckboxCompon
         (nzxBlur)="nzxBlur($event)"
         (nzxFocus)="nzxFocus($event)"
         [nzxDisabled]="nzxDisabled"
+        [nzxLayout]="nzxLayout"
         [nzxOptions]="nzxOptions" >
     </nzx-checkbox>`
   );
