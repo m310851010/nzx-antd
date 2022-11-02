@@ -157,37 +157,25 @@ class UtilsClass {
     const getChildren =
       typeof childrenName === 'string' ? (node: T) => node[childrenName] : (childrenName as TreeChildren<T>);
 
-    let stack: T[] = [];
-    const parents: T[] = [];
-    let level = 0;
-    let count = 0;
+    let stack: T[] = [...treeNodes];
+    const parents: { count: number; parent?: T; level: number }[] = [{ count: treeNodes.length, level: 0 }];
+    let counter = 0;
 
-    for (const t of treeNodes) {
-      stack = [t];
-      parents.length = 0;
-      level = 0;
-      count = 0;
+    while (stack.length) {
+      const item = stack.shift()!;
+      const parent = parents[0];
+      if (++counter ===  parent.count) {
+        parents.shift();
+        counter = 0;
+      }
+      if (accept(item, parent.parent, parent.level) === false) {
+        return;
+      }
 
-      while (stack.length) {
-        const item = stack.shift()!;
-        if (item == null) {
-          continue;
-        }
-
-        const parent = parents[level - 1];
-        if (accept(item, parent, level) === false) {
-          return;
-        }
-
-        const children = getChildren(item, parent, level);
-        if (children && children.length) {
-          stack = stack.concat(children);
-          parents.push(item);
-          count = children.length;
-          level++;
-        } else if (!--count) {
-          level--;
-        }
+      const children = getChildren(item, parent.parent, parent.level);
+      if (children && children.length) {
+        stack = stack.concat(children);
+        parents.push({count: children.length, parent: item, level: parent.level + 1});
       }
     }
   }
@@ -662,4 +650,4 @@ export interface TreeNode {
   children?: TreeNode[];
 }
 
-export type TreeChildren<T = NzSafeAny> = (node: T, parentNode: T | null, level: number) => T[] | null;
+export type TreeChildren<T = NzSafeAny> = (node: T, parentNode: T | undefined, level: number) => T[] | null;

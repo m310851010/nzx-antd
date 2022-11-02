@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { BaseControl } from '@xmagic/nzx-antd/util';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { NgStyleInterface, NzSafeAny, NgClassType } from 'ng-zorro-antd/core/types';
 
 /**
  * 增强`nz-checkbox`组件, 把数据和值分离
@@ -46,6 +46,10 @@ export class NzxCheckboxComponent<T = NzSafeAny>
    * 禁用所有复选框
    */
   @Input() override nzxDisabled = false;
+  /**
+   * 布局方式, 水平/垂直
+   */
+  @Input() nzxLayout: 'horizontal' | 'vertical' = 'horizontal';
   /**
    * 获取焦点事件
    */
@@ -113,6 +117,23 @@ export interface NzxCheckboxOption<T = NzSafeAny> {
    * @param checked
    */
   ngModelChange?: (checked: boolean, item: NzxCheckboxOption) => void;
+  /**
+   * 样式
+   */
+  ngStyle?: NgStyleInterface;
+  /**
+   * class 样式
+   */
+  ngClass?: NgClassType;
+
+  /**
+   * 包裹CheckBox样式, 垂直布局有效
+   */
+  wrapperNStyle?: NgStyleInterface;
+  /**
+   * class 包裹CheckBox样式, 垂直布局有效
+   */
+  wrapperNgClass?: NgClassType;
 
   /**
    * 额外附加数据
