@@ -158,125 +158,160 @@
     </ng-container>
   </thead>
 
-  <tbody class="nzx-table-striped-tbody" [class.nzx-table-striped-tbody]="nzxStripe">
+  <tbody
+    *ngIf="nzVirtualForTrackBy || nzVirtualItemSize"
+    class="nzx-table-striped-tbody"
+    [class.nzx-table-striped-tbody]="nzxStripe"
+  >
+    <ng-template nz-virtual-scroll let-row let-index="index">
+      <ng-container
+        *ngTemplateOutlet="
+          trTemplate;
+          context: {
+            $implicit: row,
+            index: index,
+            first: index === 0,
+            last: nzData.length === index + 1,
+            even: index % 2 === 0,
+            odd: index % 2 !== 0
+          }
+        "
+      ></ng-container>
+    </ng-template>
+  </tbody>
+
+  <tbody
+    *ngIf="!nzVirtualForTrackBy && !nzVirtualItemSize"
+    class="nzx-table-striped-tbody"
+    [class.nzx-table-striped-tbody]="nzxStripe"
+  >
     <ng-container
       *ngFor="let row of basicTable.data; index as index; first as first; last as last; even as even; odd as odd"
     >
-      <tr
-        *ngIf="row.parent?.expand || !row.parent"
-        (click)="
-          onRowClick({
-            row: row,
-            rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
-            event: $event
-          })
+      <ng-container
+        *ngTemplateOutlet="
+          trTemplate;
+          context: { $implicit: row, index: index, first: first, last: last, even: even, odd: odd }
         "
-        (dblclick)="
-          rowDblclick.emit({
-            row: row,
-            rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
-            event: $event
-          })
-        "
-        (contextmenu)="
-          rowContextmenu.emit({
-            row: row,
-            rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
-            event: $event
-          })
-        "
-        [ngClass]="row.className"
-        [ngStyle]="row.style"
-        [class.ant-table-row-selected]="row.checked || _selectRow === row"
-      >
-        <ng-container
-          *ngFor="let col of _bodyColumns; index as _index; first as _first; last as _last; even as _even; odd as _odd"
-        >
-          <td
-            *ngIf="col.visible !== false"
-            (click)="
-              cellClick.emit({
-                row: row,
-                column: col,
-                rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
-                columnIndex: {
-                  index: _index,
-                  first: _first,
-                  last: _last,
-                  even: _even,
-                  odd: _odd
-                },
-                event: $event
-              })
-            "
-            (dblclick)="
-              cellDblclick.emit({
-                row: row,
-                column: col,
-                rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
-                columnIndex: {
-                  index: _index,
-                  first: _first,
-                  last: _last,
-                  even: _even,
-                  odd: _odd
-                },
-                event: $event
-              })
-            "
-            (contextmenu)="
-              cellContextmenu.emit({
-                row: row,
-                column: col,
-                rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
-                columnIndex: {
-                  index: _index,
-                  first: _first,
-                  last: _last,
-                  even: _even,
-                  odd: _odd
-                },
-                event: $event
-              })
-            "
-            [nzShowCheckbox]="col.nzShowCheckbox || row.showCheckbox"
-            [nzDisabled]="row.disabled"
-            [nzIndeterminate]="row.indeterminate"
-            [(nzChecked)]="row.checked"
-            (nzCheckedChange)="tdCheckedChange($event, col, row, {index, first, last, even, odd})"
-            [nzShowExpand]="col.showExpand && row.showExpand"
-            [(nzExpand)]="row.expand"
-            (nzExpandChange)="col.nzExpandChange && col.nzExpandChange($event, col, row, {index, first, last, even, odd})"
-            [nzIndentSize]="col.showExpand && row.nzIndentSize ? row.nzIndentSize : null"
-            [nzLeft]="col.fixed === 'left'"
-            [nzRight]="col.fixed === 'right'"
-            [nzAlign]="col.tdAlign || col.nzAlign"
-            [nzBreakWord]="col.nzBreakWord"
-            [nzEllipsis]="col.nzEllipsis"
-            [attr.colspan]="row.colspan"
-            [attr.rowspan]="row.rowspan"
-            [ngClass]="col.tdNgClass"
-            [ngStyle]="col.tdNgStyle"
-          >
-            <ng-container
-              *ngTemplateOutlet="
-                tdDataRender;
-                context: {
-                  $implicit: {
-                    col: col,
-                    row: row,
-                    context: this,
-                    indexAttr: { index: index, first: first, last: last, even: even, odd: odd }
-                  },
-                  row: row
-                }
-              "
-            ></ng-container>
-          </td>
-        </ng-container>
-      </tr>
+      ></ng-container>
     </ng-container>
   </tbody>
+
+  <ng-template #trTemplate let-row let-index="index" let-first="first" let-last="last" let-even="even" let-odd="odd">
+    <tr
+      *ngIf="row.parent?.expand || !row.parent"
+      (click)="
+        onRowClick({
+          row: row,
+          rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
+          event: $event
+        })
+      "
+      (dblclick)="
+        rowDblclick.emit({
+          row: row,
+          rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
+          event: $event
+        })
+      "
+      (contextmenu)="
+        rowContextmenu.emit({
+          row: row,
+          rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
+          event: $event
+        })
+      "
+      [ngClass]="row.className"
+      [ngStyle]="row.style"
+      [class.ant-table-row-selected]="row.checked || _selectRow === row"
+    >
+      <ng-container
+        *ngFor="let col of _bodyColumns; index as _index; first as _first; last as _last; even as _even; odd as _odd"
+      >
+        <td
+          *ngIf="col.visible !== false"
+          (click)="
+            cellClick.emit({
+              row: row,
+              column: col,
+              rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
+              columnIndex: {
+                index: _index,
+                first: _first,
+                last: _last,
+                even: _even,
+                odd: _odd
+              },
+              event: $event
+            })
+          "
+          (dblclick)="
+            cellDblclick.emit({
+              row: row,
+              column: col,
+              rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
+              columnIndex: {
+                index: _index,
+                first: _first,
+                last: _last,
+                even: _even,
+                odd: _odd
+              },
+              event: $event
+            })
+          "
+          (contextmenu)="
+            cellContextmenu.emit({
+              row: row,
+              column: col,
+              rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
+              columnIndex: {
+                index: _index,
+                first: _first,
+                last: _last,
+                even: _even,
+                odd: _odd
+              },
+              event: $event
+            })
+          "
+          [nzShowCheckbox]="col.nzShowCheckbox || row.showCheckbox"
+          [nzDisabled]="row.disabled"
+          [nzIndeterminate]="row.indeterminate"
+          [(nzChecked)]="row.checked"
+          (nzCheckedChange)="tdCheckedChange($event, col, row, {index, first, last, even, odd})"
+          [nzShowExpand]="col.showExpand && row.showExpand"
+          [(nzExpand)]="row.expand"
+          (nzExpandChange)="col.nzExpandChange && col.nzExpandChange($event, col, row, {index, first, last, even, odd})"
+          [nzIndentSize]="col.showExpand && row.nzIndentSize ? row.nzIndentSize : null"
+          [nzLeft]="col.fixed === 'left'"
+          [nzRight]="col.fixed === 'right'"
+          [nzAlign]="col.tdAlign || col.nzAlign"
+          [nzBreakWord]="col.nzBreakWord"
+          [nzEllipsis]="col.nzEllipsis"
+          [attr.colspan]="row.colspan"
+          [attr.rowspan]="row.rowspan"
+          [ngClass]="col.tdNgClass"
+          [ngStyle]="col.tdNgStyle"
+        >
+          <ng-container
+            *ngTemplateOutlet="
+              tdDataRender;
+              context: {
+                $implicit: {
+                  col: col,
+                  row: row,
+                  context: this,
+                  indexAttr: { index: index, first: first, last: last, even: even, odd: odd }
+                },
+                row: row
+              }
+            "
+          ></ng-container>
+        </td>
+      </ng-container>
+    </tr>
+  </ng-template>
 </nz-table>
 
 <ng-template #thRenderTemplate let-data>
