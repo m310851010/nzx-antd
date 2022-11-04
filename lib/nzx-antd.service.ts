@@ -90,11 +90,11 @@ export interface ResponseSetting {
   /**
    * message字段名称, 支持路径属性
    */
-  message?: string;
+  message?: string | ((response: HttpResponse<NzSafeAny>) => NzSafeAny);
   /**
    * data字段名称, 支持路径属性
    */
-  data?: string;
+  data?: string | ((response: HttpResponse<NzSafeAny>) => NzSafeAny);
   /**
    * http错误码和错误信息映射,比如 `{404: '请求的地址不存在，请检查地址是否正确', 500: '服务器错误'}`
    * other 表示不匹配任何错误时显示other信息
