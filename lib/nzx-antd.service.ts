@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpContext, HttpRequest, HttpResponse } from '@angular/common/http';
+import { HttpContext, HttpErrorResponse, HttpRequest, HttpResponse } from '@angular/common/http';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { Observable } from 'rxjs';
 
@@ -23,6 +23,10 @@ export class NzxAntdService {
    * 自定义处理原始请求, 返回null,void则使用默认处理器
    */
   handleRequest?: (req: HttpRequest<NzSafeAny>, url: string) => HttpRequest<NzSafeAny> | null | HttpRequestOptions;
+  /**
+   * 当发生http异常时(http code 非200), 映射成HttpErrorBean
+   */
+  handleHttpError?: (errorResponse: HttpErrorResponse) => HttpErrorBean;
 
   /**
    * 是否有权限
