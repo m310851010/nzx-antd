@@ -26,7 +26,7 @@ export class NzxAntdService {
   /**
    * 当发生http异常时(http code 非200), 映射成HttpErrorBean
    */
-  handleHttpError?: (errorResponse: HttpErrorResponse) => HttpErrorBean;
+  handleHttpError?: (req: HttpRequest<NzSafeAny>, errorResponse: HttpErrorResponse) => Observable<HttpErrorBean>;
 
   /**
    * 是否有权限

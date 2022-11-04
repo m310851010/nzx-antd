@@ -14,16 +14,17 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   constructor(protected antdService: NzxAntdService) {}
 
   intercept(req: HttpRequest<NzSafeAny>, next: HttpHandler): Observable<HttpEvent<NzSafeAny>> {
-    return next.handle(req).pipe(catchError(error => this.handleError(error)));
+    return next.handle(req).pipe(catchError(error => this.handleError(req, error)));
   }
 
   /**
    * 将错误响应包装为统一格式
+   * @param req
+   * @param errorResponse
    */
-  handleError(errorResponse: HttpErrorResponse) {
+  handleError(req: HttpRequest<NzSafeAny>, errorResponse: HttpErrorResponse) {
     if (this.antdService.handleHttpError) {
-      const httError = this.antdService.handleHttpError(errorResponse);
-      return throwError(() => httError);
+      return this.antdService.handleHttpError(req, errorResponse) as Observable<never>;
     }
 
     const { status: code, error, message } = errorResponse;
