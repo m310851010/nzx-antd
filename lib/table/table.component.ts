@@ -496,8 +496,10 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     }
 
     const fetchSetting = Object.assign({}, FETCH_SETTING, this.antdService.table, this.fetchSetting);
-    const setResult: (value: Record<string, NzSafeAny> | T[]) => void = res =>
+    const setResult: (res: Record<string, NzSafeAny> | T) => void = res => {
       this.setFetchResult(res, fetchSetting, reset);
+    };
+
     if (NzxUtils.isString(this.api)) {
       FetcherService.resolveParams(this.params)
         .pipe(
@@ -513,7 +515,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
             );
           })
         )
-        .subscribe(setResult);
+        .subscribe(res => this.setFetchResult(res, fetchSetting, reset));
       return;
     }
 
@@ -568,7 +570,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * @param reset
    * @private
    */
-  private setFetchResult(res: Record<string, NzSafeAny> | T[], fetchSetting: FetchSetting, reset: boolean): void {
+  private setFetchResult<K>(res: K, fetchSetting: FetchSetting, reset: boolean): void {
     let result: PageInfo<T> = { total: 0, list: [] };
     if (this.afterFetch && NzxUtils.isFunction(this.afterFetch)) {
       const data = this.afterFetch(res, this.nzPageIndex);
