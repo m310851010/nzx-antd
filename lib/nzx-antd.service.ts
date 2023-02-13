@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpContext, HttpRequest, HttpResponse } from '@angular/common/http';
+import { HttpContext, HttpErrorResponse, HttpRequest, HttpResponse } from '@angular/common/http';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { Observable } from 'rxjs';
 
@@ -23,6 +23,10 @@ export class NzxAntdService {
    * 自定义处理原始请求, 返回null,void则使用默认处理器
    */
   handleRequest?: (req: HttpRequest<NzSafeAny>, url: string) => HttpRequest<NzSafeAny> | null | HttpRequestOptions;
+  /**
+   * 当发生http异常时(http code 非200), 映射成HttpErrorBean
+   */
+  handleHttpError?: (req: HttpRequest<NzSafeAny>, errorResponse: HttpErrorResponse) => Observable<HttpErrorBean>;
 
   /**
    * 是否有权限
@@ -86,11 +90,11 @@ export interface ResponseSetting {
   /**
    * message字段名称, 支持路径属性
    */
-  message?: string;
+  message?: string | ((response: HttpResponse<NzSafeAny>) => NzSafeAny);
   /**
    * data字段名称, 支持路径属性
    */
-  data?: string;
+  data?: string | ((response: HttpResponse<NzSafeAny>) => NzSafeAny);
   /**
    * http错误码和错误信息映射,比如 `{404: '请求的地址不存在，请检查地址是否正确', 500: '服务器错误'}`
    * other 表示不匹配任何错误时显示other信息
@@ -151,6 +155,14 @@ export interface TableSetting {
    * 分页大小
    */
   nzPageSize?: number;
+  /**
+   * 请求之前处理函数
+   */
+  beforeFetch?: (params: Record<string, NzSafeAny>) => Record<string, NzSafeAny> | Promise<NzSafeAny>;
+  /**
+   * 请求之后处理函数
+   */
+  afterFetch?: <T>(res: NzSafeAny, pageIndex: number) => PageInfo<T> | Promise<PageInfo<T>>;
 }
 
 /**
@@ -191,4 +203,19 @@ export interface DicSetting {
    * 后台返回的字典value的属性名称, 默认'value'
    */
   valueName?: string;
+}
+
+/**
+ * 分页信息
+ */
+export interface PageInfo<T> {
+  total: number;
+  /**
+   * 列表数据
+   */
+  list: T[];
+  /**
+   * 修正后的当前页码
+   */
+  pageIndex?: number;
 }

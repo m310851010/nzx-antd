@@ -506,11 +506,12 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
           switchMap(_params => {
             const commonParams = this.mergeParams(reset, fetchSetting);
             const data = Object.assign({}, _params, commonParams);
-            if (!this.beforeFetch) {
+            const beforeFetch = this.beforeFetch || this.antdService.table?.beforeFetch;
+            if (!beforeFetch) {
               return this.doFetch(this.api as string, fetchSetting.method, commonParams, data);
             }
 
-            return FetcherService.resolveParams(this.beforeFetch(data)).pipe(_data =>
+            return FetcherService.resolveParams(beforeFetch(data)).pipe(_data =>
               this.doFetch(this.api as string, fetchSetting.method, commonParams, _data)
             );
           })
@@ -572,8 +573,9 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    */
   private setFetchResult<K>(res: K, fetchSetting: FetchSetting, reset: boolean): void {
     let result: PageInfo<T> = { total: 0, list: [] };
-    if (this.afterFetch && NzxUtils.isFunction(this.afterFetch)) {
-      const data = this.afterFetch(res, this.nzPageIndex);
+    const afterFetch = this.afterFetch || this.antdService.table?.afterFetch;
+    if (afterFetch && NzxUtils.isFunction(afterFetch)) {
+      const data = afterFetch(res, this.nzPageIndex);
       if (NzxUtils.isPromise(data)) {
         data.then(v => this.setPageInfo(v));
         return;
