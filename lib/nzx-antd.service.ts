@@ -155,6 +155,14 @@ export interface TableSetting {
    * 分页大小
    */
   nzPageSize?: number;
+  /**
+   * 请求之前处理函数
+   */
+  beforeFetch?: (params: Record<string, NzSafeAny>) => Record<string, NzSafeAny> | Promise<NzSafeAny>;
+  /**
+   * 请求之后处理函数
+   */
+  afterFetch?: <T>(res: NzSafeAny, pageIndex: number) => PageInfo<T> | Promise<PageInfo<T>>;
 }
 
 /**
@@ -195,4 +203,19 @@ export interface DicSetting {
    * 后台返回的字典value的属性名称, 默认'value'
    */
   valueName?: string;
+}
+
+/**
+ * 分页信息
+ */
+export interface PageInfo<T> {
+  total: number;
+  /**
+   * 列表数据
+   */
+  list: T[];
+  /**
+   * 修正后的当前页码
+   */
+  pageIndex?: number;
 }
