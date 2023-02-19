@@ -401,6 +401,9 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     this.nzPageSize = this.nzPageSize || this.antdService.table?.nzPageSize || 10;
     this.resolveColumns();
     this.fetch();
+    if (this.nzData?.length) {
+      this.formatColumnData(this.nzData);
+    }
   }
 
   /**
@@ -615,7 +618,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * @param list
    * @private
    */
-  private formatColumnData(list: T[]) {
+  private formatColumnData(list: readonly T[]) {
     if (!list) {
       return;
     }
@@ -824,6 +827,10 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     ) {
       this.resolveColumns();
       this.resolveTemplateColumn();
+    }
+
+    if (changes.nzData && !changes.nzData.isFirstChange()) {
+      this.formatColumnData(changes.nzData.currentValue);
     }
 
     if (changes.api && !changes.api.isFirstChange()) {
