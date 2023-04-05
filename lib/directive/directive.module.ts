@@ -9,6 +9,7 @@ import { DownFileDirective } from './down-file.directive';
 import { AuthDirective } from './auth.directive';
 import { AuthNotDirective } from './auth.not.directive';
 import { NzxServiceModule } from '@xmagic/nzx-antd/service';
+import { NgxFor } from './ngx-for.directive';
 
 const DIRECTIVE = [
   NamedTemplate,
@@ -18,7 +19,8 @@ const DIRECTIVE = [
   LetDirective,
   DownFileDirective,
   AuthDirective,
-  AuthNotDirective
+  AuthNotDirective,
+  NgxFor
 ];
 @NgModule({
   declarations: [DIRECTIVE],
