@@ -45,7 +45,14 @@ export interface NzxColumn<T = Record<string, NzSafeAny>> {
    * nzShowCheckbox为true, 默认启用enableCheckAll
    */
   enableCheckAll?: boolean;
+  /**
+   * 是否显示复选框
+   */
   nzShowCheckbox?: boolean;
+  /**
+   * 是否显示全选
+   */
+  nzShowCheckAll?: boolean;
   nzDisabled?: boolean;
   nzIndeterminate?: boolean;
   checked?: boolean;
