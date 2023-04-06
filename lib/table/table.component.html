@@ -79,7 +79,7 @@
       <tr *ngFor="let row of _headerColumns">
         <ng-container *ngFor="let col of row">
           <th
-            *ngIf="!col.nzShowCheckbox && col.visible !== false"
+            *ngIf="(!col.nzShowCheckbox || col.nzShowCheckAll === false) && col.visible !== false"
             nz-resizable
             [nzDisabled]="nzxResizable === false"
             nzBounds="window"
@@ -96,7 +96,7 @@
             [nzColumnKey]="col.nzColumnKey || col.name"
             [nzShowFilter]="col.nzShowFilter"
             [nzSortPriority]="col.nzSortPriority === true"
-            [nzFilterFn]="col.nzFilterFn"
+            [nzFilterFn]="col.nzShowFilter && col.nzFilterFn == null ? true : col.nzFilterFn"
             [nzFilters]="col.nzFilters"
             [nzFilterMultiple]="col.nzFilterMultiple !== false"
             [nzWidth]="col.nzWidth == null && col.isIndex ? '60px' : col.nzWidth"
@@ -120,7 +120,7 @@
           </th>
 
           <th
-            *ngIf="col.nzShowCheckbox && col.visible !== false"
+            *ngIf="col.nzShowCheckbox && col.nzShowCheckAll !== false && col.visible !== false"
             nz-resizable
             [nzDisabled]="nzxResizable === false"
             nzBounds="window"

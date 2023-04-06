@@ -52,7 +52,6 @@ import { HttpClient } from '@angular/common/http';
 import { NzxAntdService } from '@xmagic/nzx-antd';
 import { FetcherService, FetchParams } from '@xmagic/nzx-antd/service';
 import { NamedTemplate } from '@xmagic/nzx-antd/directive';
-import { NzTableFilterFn } from 'ng-zorro-antd/table/src/table.types';
 
 /**
  * 基于nz-table二次封装的表格组件
@@ -88,10 +87,6 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
   _headerColumns: NzxColumn<T>[][] = [];
   _bodyColumns: NzxColumn<T>[] = [];
   _allColumns: NzxColumn<T>[] = [];
-  /**
-   * 内置筛选,如果有自定义的筛选不会走这里
-   */
-  _filterInfo: Record<string, any> = {};
 
   sortInfo?: SorterResult;
   defaultPageSizeOptions = [10, 15, 20, 30, 40, 50, 100];
@@ -672,10 +667,6 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
       Object.assign(params, sortInfo);
     }
 
-    if (this._filterInfo) {
-      Object.assign(params, this._filterInfo);
-    }
-
     return params;
   }
 
@@ -964,28 +955,5 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     } else {
       this.scrollY = `${element.clientHeight}px`;
     }
-  }
-
-  protected mergeNzFilterFn(headerRows: NzxColumn<T>[][]) {
-    headerRows.forEach(c => {
-      c.forEach(v => {
-        if (v.nzShowFilter && !v.nzFilterFn && v.name) {
-          v.nzFilterFn = this.getNzFilterFn(v);
-        }
-      });
-    });
-  }
-
-  /**
-   * 获取默认过滤函数
-   * @param column 当前列
-   * @private
-   */
-  protected getNzFilterFn(column: NzxColumn<T>): NzTableFilterFn {
-    return (value, data) => {
-      this._filterInfo[column.name!] = value;
-      this.refresh();
-      return true;
-    };
   }
 }
