@@ -223,7 +223,7 @@ class IterDiffer<T> implements Differ<T> {
           }
         });
 
-        resolveContext(viewContainer, _ngxFor);
+        resolveContext(viewContainer, _ngxFor, context => (context.key = context.index + ''));
 
         changes.forEachIdentityChange(record => {
           const viewRef = <EmbeddedViewRef<NgxForContext<T, NgxIterable<T>>>>viewContainer.get(record.currentIndex!);
@@ -269,10 +269,12 @@ class KvDiffer<T> implements Differ<T> {
           applyViewChange(view as EmbeddedViewRef<NgxForContext<T, NgxKv<T>>>, item.currentValue);
         });
 
+        const keys = value instanceof Map ? Array.from(value.keys()) : Object.keys(value as {});
         changes.forEachAddedItem(item => {
           viewContainer.createEmbeddedView(
             this._template,
-            new NgxForContext(item.currentValue, _ngxFor!, -1, item.key, -1)
+            new NgxForContext(item.currentValue, _ngxFor!, -1, item.key, -1),
+            keys.indexOf(item.key)
           );
         });
 
