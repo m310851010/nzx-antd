@@ -107,13 +107,13 @@ export class NzxCheckboxComponent<T = NzSafeAny>
   writeValue(value: T[] | null): void {
     this.nzxValue = value == null ? [] : Array.isArray(value) ? value : [value];
     if (this.nzxOptions && this.nzxOptions.length) {
-      if (this.nzxMultiple && this.nzxValue.length > 1) {
+      if (!this.nzxMultiple && this.nzxValue.length > 1) {
         this.nzxValue.splice(1, this.nzxValue.length - 1);
       }
 
       this.nzxOptions.forEach(v => {
         v.checked = this.nzxValue.indexOf(v.value) !== -1;
-        if (this.nzxMultiple && v.checked) {
+        if (!this.nzxMultiple && v.checked) {
           this.lastCheckbox = v;
         }
       });
