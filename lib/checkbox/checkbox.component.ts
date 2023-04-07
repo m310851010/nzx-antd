@@ -38,6 +38,7 @@ export class NzxCheckboxComponent<T = NzSafeAny>
   extends BaseControl<T[]>
   implements ControlValueAccessor, OnInit, OnChanges
 {
+  private lastCheckbox?: NzxCheckboxOption<T>;
   /**
    * checkbox数据源, 根据数据生成 checkbox
    */
@@ -51,6 +52,10 @@ export class NzxCheckboxComponent<T = NzSafeAny>
    */
   @Input() nzxLayout: 'horizontal' | 'vertical' = 'horizontal';
   /**
+   * 是否可以多选
+   */
+  @Input() nzxMultiple = true;
+  /**
    * 获取焦点事件
    */
   @Output() nzxFocus = new EventEmitter<NzxCheckboxOption<T>>();
@@ -58,6 +63,10 @@ export class NzxCheckboxComponent<T = NzSafeAny>
    * 失去焦点事件
    */
   @Output() nzxBlur = new EventEmitter<NzxCheckboxOption<T>>();
+  /**
+   * 单个点击事件
+   */
+  @Output() nzxItemChange = new EventEmitter<NzxCheckboxOption<T>>();
   nzxValue: T[] = [];
   constructor(protected cdr: ChangeDetectorRef) {
     super();
@@ -74,15 +83,40 @@ export class NzxCheckboxComponent<T = NzSafeAny>
   }
 
   ngModelChange(values: T[]) {
+    if (!this.nzxMultiple && this.lastCheckbox && values.length > 1) {
+      values = values.filter(v => v !== this.lastCheckbox!.value);
+    }
     this.nzxValue = values;
     this.onTouched();
     this.onChange(this.nzxValue);
   }
 
+  onItemChange(checked: boolean, item: NzxCheckboxOption<T>) {
+    if (!this.nzxMultiple) {
+      if (checked && this.lastCheckbox && this.lastCheckbox !== item) {
+        this.lastCheckbox.checked = false;
+      }
+      this.lastCheckbox = item;
+    }
+    if (item?.ngModelChange) {
+      item.ngModelChange(checked, item);
+    }
+    this.nzxItemChange.emit(item);
+  }
+
   writeValue(value: T[] | null): void {
     this.nzxValue = value == null ? [] : Array.isArray(value) ? value : [value];
     if (this.nzxOptions && this.nzxOptions.length) {
-      this.nzxOptions.forEach(v => (v.checked = this.nzxValue.indexOf(v.value) !== -1));
+      if (this.nzxMultiple && this.nzxValue.length > 1) {
+        this.nzxValue.splice(1, this.nzxValue.length - 1);
+      }
+
+      this.nzxOptions.forEach(v => {
+        v.checked = this.nzxValue.indexOf(v.value) !== -1;
+        if (this.nzxMultiple && v.checked) {
+          this.lastCheckbox = v;
+        }
+      });
     }
     this.cdr.markForCheck();
   }

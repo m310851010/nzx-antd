@@ -10,24 +10,24 @@
       <ng-container *ngTemplateOutlet="labelTpl; context: { $implicit: item }"></ng-container>
     </ng-container>
   </ng-template>
-</nz-checkbox-wrapper>
 
-<ng-template #labelTpl let-item>
-  <label
-    *ngIf="item.hide !== true"
-    nz-checkbox
-    [ngStyle]="item.ngStyle"
-    [ngClass]="item.ngClass"
-    (focus)="nzxFocus.emit(item)"
-    (blur)="nzxBlur.emit(item)"
-    [nzValue]="item.value"
-    [ngModel]="item.checked"
-    [nzDisabled]="nzxDisabled || item.disabled"
-    [nzIndeterminate]="item.indeterminate"
-    (ngModelChange)="item.ngModelChange && item.ngModelChange($event, item)"
-  >
-    <ng-container *nzStringTemplateOutlet="item.label; context: { $implicit: item, options: nzxOptions }">
-      {{ item.label }}
-    </ng-container>
-  </label>
-</ng-template>
+  <ng-template #labelTpl let-item>
+    <label
+      *ngIf="item.hide !== true"
+      nz-checkbox
+      [ngStyle]="item.ngStyle"
+      [ngClass]="item.ngClass"
+      (focus)="nzxFocus.emit(item)"
+      (blur)="nzxBlur.emit(item)"
+      [nzValue]="item.value"
+      [(ngModel)]="item.checked"
+      [nzDisabled]="$any(nzxDisabled || item.disabled)"
+      [nzIndeterminate]="item.indeterminate"
+      (ngModelChange)="onItemChange($event, item)"
+    >
+      <ng-container *nzStringTemplateOutlet="item.label; context: { $implicit: item, options: nzxOptions }">
+        {{ item.label }}
+      </ng-container>
+    </label>
+  </ng-template>
+</nz-checkbox-wrapper>
