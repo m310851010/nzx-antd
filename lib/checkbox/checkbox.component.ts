@@ -92,6 +92,7 @@ export class NzxCheckboxComponent<T = NzSafeAny>
   }
 
   onItemChange(checked: boolean, item: NzxCheckboxOption<T>) {
+    item.indeterminate = false;
     if (!this.nzxMultiple) {
       if (checked && this.lastCheckbox && this.lastCheckbox !== item) {
         this.lastCheckbox.checked = false;
