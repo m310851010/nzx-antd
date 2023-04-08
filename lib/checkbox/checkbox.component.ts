@@ -56,6 +56,10 @@ export class NzxCheckboxComponent<T = NzSafeAny>
    */
   @Input() nzxMultiple = true;
   /**
+   * 所有label的模板
+   */
+  @Input() nzxLabelTemplate?: TemplateRef<{ $implicit: NzxCheckboxOption<T>; options: NzxCheckboxOption<T>[] }>;
+  /**
    * 获取焦点事件
    */
   @Output() nzxFocus = new EventEmitter<NzxCheckboxOption<T>>();

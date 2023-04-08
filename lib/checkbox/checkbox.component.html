@@ -25,8 +25,10 @@
       [nzIndeterminate]="item.indeterminate"
       (ngModelChange)="onItemChange($event, item)"
     >
-      <ng-container *nzStringTemplateOutlet="item.label; context: { $implicit: item, options: nzxOptions }">
-        {{ item.label }}
+      <ng-container
+        *nzStringTemplateOutlet="nzxLabelTemplate || item.label; context: { $implicit: item, options: nzxOptions }"
+      >
+        {{ nzxLabelTemplate || item.label }}
       </ng-container>
     </label>
   </ng-template>
