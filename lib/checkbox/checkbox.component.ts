@@ -88,7 +88,7 @@ export class NzxCheckboxComponent<T = NzSafeAny>
 
   ngModelChange(values: T[]) {
     if (!this.nzxMultiple && this.lastCheckbox && values.length > 1) {
-      values = values.filter(v => v !== this.lastCheckbox!.value);
+      values = values.filter(v => v === this.lastCheckbox!.value);
     }
     this.nzxValue = values;
     this.onTouched();
