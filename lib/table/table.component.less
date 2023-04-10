@@ -19,7 +19,7 @@
 @nzx-table-prefix-cls: ~'@{nzx-prefix}-table';
 
 .@{nzx-table-prefix-cls} {
-  &-striped-tbody > tr:nth-of-type(even) > td {
+  &-striped-tbody > tr:nth-of-type(even):not(.ant-table-placeholder) > td {
     background: @table-striped-bgcolor;
   }
 
