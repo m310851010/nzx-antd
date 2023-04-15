@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpContext, HttpErrorResponse, HttpRequest, HttpResponse } from '@angular/common/http';
+import { HttpContext, HttpErrorResponse, HttpEvent, HttpRequest, HttpResponse } from '@angular/common/http';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { Observable } from 'rxjs';
 
@@ -66,7 +66,7 @@ export const DEFAULT_RESPONSE_SETTING: ResponseSetting = {
   // tslint:disable-next-line:triple-equals
   timeout: error => error.code == 401,
   forceLogout: () => false,
-  defaultError: error => error.code < 1024
+  handleError: (error, caught) => caught
 };
 
 /**
@@ -95,11 +95,6 @@ export interface ResponseSetting {
    * data字段名称, 支持路径属性
    */
   data?: string | ((response: HttpResponse<NzSafeAny>) => NzSafeAny);
-  /**
-   * http错误码和错误信息映射,比如 `{404: '请求的地址不存在，请检查地址是否正确', 500: '服务器错误'}`
-   * other 表示不匹配任何错误时显示other信息
-   */
-  statusMessageMap?: { [status: string]: string; other: string };
 
   /**
    * 是否请求成功
@@ -107,17 +102,20 @@ export interface ResponseSetting {
    */
   success?: (response: HttpResponse<NzSafeAny>) => boolean;
   /**
-   * 是否需要默认错误的错误
+   * 错误处理器
    * @param error 错误信息
    */
-  defaultError?: (error: HttpErrorBean) => boolean;
+  handleError?: (
+    error: HttpErrorBean,
+    caught: Observable<HttpEvent<HttpErrorBean>>
+  ) => Observable<HttpEvent<HttpErrorBean>>;
   /**
-   * 是否登录超时
+   * 是否登录超时, 返回false, 会进入handleError处理器, 不会触发退出登录
    * @param error 错误信息
    */
   timeout?: (error: HttpErrorBean) => boolean;
   /**
-   * 是否强制退出登录, 比如强制下线
+   * 是否强制退出登录, 比如强制下线, 返回false, 会进入handleError处理器, 不会触发退出登录
    * @param error 错误信息
    */
   forceLogout?: (error: HttpErrorBean) => boolean;

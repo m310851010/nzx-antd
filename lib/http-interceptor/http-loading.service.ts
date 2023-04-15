@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { NzSafeAny } from 'ng-zorro-antd/core/types'
+import { NzSafeAny } from 'ng-zorro-antd/core/types';
 
 @Injectable({ providedIn: 'root' })
 export class HttpLoadingService {
@@ -18,7 +18,6 @@ export class HttpLoadingService {
 
   /**
    * You have to subscribe the httpLoadingStatus$ in application to set custom loading behaviors through the method.
-   * @param observer customer callbacks when http loading status change.
    *
    * @example
    * `app.component.ts`
@@ -34,8 +33,11 @@ export class HttpLoadingService {
    *   })
    * }
    * ```
+   * @param next
+   * @param error
+   * @param complete
    */
   subscribe(next?: (value: boolean) => void, error?: (error: NzSafeAny) => void, complete?: () => void): Subscription {
-    return this.httpLoadingStatus.subscribe(next, error, complete);
+    return this.httpLoadingStatus.subscribe({ next, error, complete });
   }
 }

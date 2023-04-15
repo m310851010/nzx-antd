@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { NzxAntdService } from '@xmagic/nzx-antd';
-import { NzSafeAny } from 'ng-zorro-antd/core/types'
+import { NzSafeAny } from 'ng-zorro-antd/core/types';
 
 /**
  * 对请求头进行处理

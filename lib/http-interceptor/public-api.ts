@@ -3,7 +3,6 @@ export * from './http-error.interceptor';
 export * from './http.model';
 export * from './http-loading.interceptor';
 export * from './http-loading.service';
-export * from './http-notify.service';
 export * from './logout.service';
 export * from './http-params.interceptor';
 export * from './http-response-parse.interceptor';

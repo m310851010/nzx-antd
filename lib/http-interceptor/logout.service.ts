@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpError, ResponseModel } from './http.model';
 import { Subject, Subscription } from 'rxjs';
-import { NzxModalWrapService } from '@xmagic/nzx-antd/modal';
 import { throttleTime } from 'rxjs/operators';
 import { NzxUtils } from '@xmagic/nzx-antd/util';
 import { DEFAULT_RESPONSE_SETTING, NzxAntdService, ResponseSetting } from '@xmagic/nzx-antd'
@@ -14,7 +13,7 @@ export class LogoutService {
   protected readonly timeoutFn: (error: HttpError) => boolean;
   private loginNotify$ = new Subject<LogoutType>();
 
-  constructor(protected modal: NzxModalWrapService, protected antdService: NzxAntdService) {
+  constructor(protected antdService: NzxAntdService) {
     this.timeoutFn = NzxUtils.extend<ResponseSetting>({}, DEFAULT_RESPONSE_SETTING, this.antdService.response).timeout!;
   }
 
