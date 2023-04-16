@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpContext, HttpErrorResponse, HttpEvent, HttpRequest, HttpResponse } from '@angular/common/http';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -66,7 +66,7 @@ export const DEFAULT_RESPONSE_SETTING: ResponseSetting = {
   // tslint:disable-next-line:triple-equals
   timeout: error => error.code == 401,
   forceLogout: () => false,
-  handleError: (error, caught) => caught
+  handleError: error => throwError(error)
 };
 
 /**
@@ -105,10 +105,7 @@ export interface ResponseSetting {
    * 错误处理器
    * @param error 错误信息
    */
-  handleError?: (
-    error: HttpErrorBean,
-    caught: Observable<HttpEvent<HttpErrorBean>>
-  ) => Observable<HttpEvent<HttpErrorBean>>;
+  handleError?: (error: HttpErrorBean) => Observable<HttpEvent<HttpErrorBean>>;
   /**
    * 是否登录超时, 返回false, 会进入handleError处理器, 不会触发退出登录
    * @param error 错误信息

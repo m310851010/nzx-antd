@@ -32,11 +32,11 @@ export class HttpCustomServerErrorInterceptor implements HttpInterceptor {
    */
   handleError(error: HttpError, caught: Observable<HttpEvent<HttpError>>) {
     if (error.httpError) {
-      return this.settings.handleError(error, caught);
+      return this.settings.handleError(error);
       // 登录超时  强制下线
     } else if (this.settings.timeout(error) || this.settings.forceLogout(error)) {
       this.logoutNotify.notifyLogin(error);
     }
-    return this.settings.handleError(error, caught);
+    return this.settings.handleError(error);
   }
 }
