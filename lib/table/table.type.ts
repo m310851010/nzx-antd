@@ -1,6 +1,6 @@
 import { TemplateRef } from '@angular/core';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
-import {NzTableFilterFn, NzTableSize, NzTableSortFn, NzTableSortOrder} from 'ng-zorro-antd/table';
+import { NzTableFilterFn, NzTableSize, NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
 import { Observable } from 'rxjs';
 
 export interface NzxColumn<T = Record<string, NzSafeAny>> {
@@ -76,7 +76,7 @@ export interface NzxColumn<T = Record<string, NzSafeAny>> {
   nzFilterFn?: NzTableFilterFn<T> | boolean;
   nzFilterMultiple?: boolean;
   nzFilters?: Array<{ text: string; value: NzSafeAny; byDefault?: boolean }>;
-  nzFilterChange?: Array<T | T[]>;
+  nzFilterChange?: (value: NzSafeAny[] | NzSafeAny, nzData: T[]) => void;
 
   nzWidth?: string | null;
   thAlign?: 'left' | 'right' | 'center';

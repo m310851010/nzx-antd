@@ -97,6 +97,7 @@
             [nzShowFilter]="col.nzShowFilter"
             [nzSortPriority]="col.nzSortPriority === true"
             [nzFilterFn]="col.nzShowFilter && col.nzFilterFn == null ? true : col.nzFilterFn"
+            (nzFilterChange)="col.nzFilterChange?.($event, nzData)"
             [nzFilters]="col.nzFilters"
             [nzFilterMultiple]="col.nzFilterMultiple !== false"
             [nzWidth]="col.nzWidth == null && col.isIndex ? '60px' : col.nzWidth"
