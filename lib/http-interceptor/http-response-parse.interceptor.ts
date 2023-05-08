@@ -66,7 +66,7 @@ export class HttpResponseParseInterceptor implements HttpInterceptor {
         const httpError = new HttpError(
           false,
           NzxUtils.get(err, codeProp, 0),
-          this.getBodyAttr(response, err, messageProp),
+          this.getBodyAttr(req, response, err, messageProp),
           err
         );
         subscriber.error(httpError);
@@ -76,15 +76,15 @@ export class HttpResponseParseInterceptor implements HttpInterceptor {
     }
 
     const body = response.body || {};
-    if (successProp(response)) {
-      const resp = response.clone({ body: this.getBodyAttr(response, body, dataProp) });
+    if (successProp(req, response)) {
+      const resp = response.clone({ body: this.getBodyAttr(req, response, body, dataProp) });
       subscriber.next(resp);
       subscriber.complete();
     } else {
       const httpError = new HttpError(
         false,
         NzxUtils.get(body, codeProp, 0),
-        this.getBodyAttr(response, body, messageProp),
+        this.getBodyAttr(req, response, body, messageProp),
         body
       );
       subscriber.error(httpError);
@@ -92,10 +92,11 @@ export class HttpResponseParseInterceptor implements HttpInterceptor {
   }
 
   private getBodyAttr(
+    req: HttpRequest<NzSafeAny>,
     response: HttpResponse<NzSafeAny>,
     body: NzSafeAny,
-    attrOrFn: string | ((response: HttpResponse<NzSafeAny>) => NzSafeAny)
+    attrOrFn: string | ((req: HttpRequest<NzSafeAny>, response: HttpResponse<NzSafeAny>) => NzSafeAny)
   ) {
-    return attrOrFn ? (NzxUtils.isFunction(attrOrFn) ? attrOrFn(response) : NzxUtils.get(body, attrOrFn)) : body;
+    return attrOrFn ? (NzxUtils.isFunction(attrOrFn) ? attrOrFn(req, response) : NzxUtils.get(body, attrOrFn)) : body;
   }
 }

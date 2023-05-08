@@ -90,22 +90,22 @@ export interface ResponseSetting {
   /**
    * message字段名称, 支持路径属性
    */
-  message?: string | ((response: HttpResponse<NzSafeAny>) => NzSafeAny);
+  message?: string | ((req: HttpRequest<NzSafeAny>, response: HttpResponse<NzSafeAny>) => NzSafeAny);
   /**
    * data字段名称, 支持路径属性
    */
-  data?: string | ((response: HttpResponse<NzSafeAny>) => NzSafeAny);
+  data?: string | ((req: HttpRequest<NzSafeAny>, response: HttpResponse<NzSafeAny>) => NzSafeAny);
 
   /**
    * 是否请求成功
    * @param body 响应对象
    */
-  success?: (response: HttpResponse<NzSafeAny>) => boolean;
+  success?: (req: HttpRequest<NzSafeAny>, response: HttpResponse<NzSafeAny>) => boolean;
   /**
    * 错误处理器
    * @param error 错误信息
    */
-  handleError?: (error: HttpErrorBean) => Observable<HttpEvent<HttpErrorBean>>;
+  handleError?: (req: HttpRequest<NzSafeAny>, error: HttpErrorBean) => Observable<HttpEvent<HttpErrorBean>>;
   /**
    * 是否登录超时, 返回false, 会进入handleError处理器, 不会触发退出登录
    * @param error 错误信息

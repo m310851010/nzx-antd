@@ -22,7 +22,7 @@ export class HttpCustomServerErrorInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<HttpError>, next: HttpHandler): Observable<HttpEvent<HttpError>> {
-    return next.handle(req).pipe(catchError(this.handleError.bind(this)));
+    return next.handle(req).pipe(catchError((error, caught) => this.handleError(req, error, caught)));
   }
 
   /**
@@ -30,13 +30,13 @@ export class HttpCustomServerErrorInterceptor implements HttpInterceptor {
    * @param error
    * @param caught 原始异常
    */
-  handleError(error: HttpError, caught: Observable<HttpEvent<HttpError>>) {
+  handleError(req: HttpRequest<HttpError>, error: HttpError, caught: Observable<HttpEvent<HttpError>>) {
     if (error.httpError) {
-      return this.settings.handleError(error);
+      return this.settings.handleError(req, error);
       // 登录超时  强制下线
     } else if (this.settings.timeout(error) || this.settings.forceLogout(error)) {
       this.logoutNotify.notifyLogin(error);
     }
-    return this.settings.handleError(error);
+    return this.settings.handleError(req, error);
   }
 }
