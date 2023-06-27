@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import { FetcherService, FetchOptions } from './fetcher.service';
-import { NzSafeAny } from 'ng-zorro-antd/core/types'
+import { NzSafeAny } from 'ng-zorro-antd/core/types';
 
 @Injectable()
 export class NzxDownloadService {
@@ -15,8 +15,8 @@ export class NzxDownloadService {
     this.fetcher
       .fetch<HttpResponse<Blob>>({ ...options, responseType: 'blob', observe: 'response' })
       .subscribe(resp => {
-        const url = options.url;
-        const filename = this.getFilename(resp.headers, url);
+        const fn = options.getFileName || this.getFilename.bind(this);
+        const filename = fn(resp, options.url);
         if (options.afterDownload && options.afterDownload(resp, filename) === false) {
           return;
         }
@@ -36,6 +36,7 @@ export class NzxDownloadService {
   saveAs(body: Blob, filename: string) {
     if (typeof (window.navigator as NzSafeAny).msSaveBlob !== 'undefined') {
       (window.navigator as NzSafeAny).msSaveBlob(body, filename);
+      return;
     }
 
     const blobURL = window.URL.createObjectURL(body as Blob);
@@ -54,17 +55,23 @@ export class NzxDownloadService {
 
   /**
    * 获取文件名称
-   * @param headers
+   * @param resp
    * @param url
    * @protected
    */
-  protected getFilename(headers: HttpHeaders, url: string): string {
+  protected getFilename(resp: HttpResponse<Blob>, url: string): string {
+    const headers = resp.headers;
     const disposition = headers.get('content-disposition');
     const filename = headers.get('filename');
     if (filename) {
-      return decodeURIComponent(filename);
+      return decodeURIComponent(filename.trim());
     } else if (disposition) {
-      return disposition.split(';')[0].split('=')[1];
+      return disposition
+        .split(';')
+        .filter(v => v.indexOf('filename=') >= 0)[0]
+        .split('=')[1]
+        .replace(/(^")|("$)/g, '')
+        .trim();
     } else {
       const start = url.lastIndexOf('/') + 1;
       const endIndex = url.lastIndexOf('?');
@@ -91,4 +98,11 @@ export type DownloadOption = Omit<FetchOptions, 'observe'> & {
    * @param filename
    */
   downloadDone?: (resp: HttpResponse<Blob>, filename: string) => void;
+
+  /**
+   * 获取文件名
+   * @param resp 响应对象
+   * @param url 请求的url
+   */
+  getFileName?: (resp: HttpResponse<Blob>, url: string) => string;
 };

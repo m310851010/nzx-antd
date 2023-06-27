@@ -191,13 +191,10 @@ export interface DicSetting {
    */
   url: ((key: string) => string) | string;
   /**
-   * 后台返回的字典label的属性名称, 默认'label'
+   * 后台数据转换为label, value属性值, 符合select, checkbox的数据结构
+   * @param data
    */
-  labelName?: string;
-  /**
-   * 后台返回的字典value的属性名称, 默认'value'
-   */
-  valueName?: string;
+  map: <T>(data: T) => { label: string; value: NzSafeAny; [prop: string]: NzSafeAny }[];
 }
 
 /**

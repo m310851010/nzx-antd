@@ -28,7 +28,13 @@ export class DicService {
    */
   private dicSettings: DicSetting;
   constructor(protected http: HttpClient, protected antdService: NzxAntdService) {
-    this.dicSettings = Object.assign({ labelName: 'label', valueName: 'value' }, antdService.dic);
+    this.dicSettings = Object.assign(
+      {
+        map: (data: { children: { code: string; name: string }[] }) =>
+          (data.children || []).map(v => ({ label: v.code, value: v.name, ...v }))
+      },
+      antdService.dic
+    );
   }
 
   /**
@@ -113,19 +119,10 @@ export class DicService {
     }
     const url = typeof this.dicSettings.url === 'string' ? `${this.dicSettings.url}/${key}` : this.dicSettings.url(key);
     return this.http
-      .get<Record<string, NzSafeAny>[]>(url, {
+      .get<Record<string, NzSafeAny>>(url, {
         context: new HttpContext().set(SYNCED_ENABLED, synced).set(LOADING_ENABLED, false)
       })
-      .pipe(
-        map(list =>
-          (list || []).map(v => {
-            const value = v[this.dicSettings.valueName!];
-            v.label = v[this.dicSettings.labelName!];
-            v.value = isNumber ? +value : value;
-            return v as DicItem;
-          })
-        )
-      );
+      .pipe(map(this.dicSettings.map));
   }
 
   /**

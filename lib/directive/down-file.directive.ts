@@ -37,6 +37,10 @@ export class DownFileDirective {
    * 下载并保存完成的回调
    */
   @Input() downloadDone?: DownloadOption['downloadDone'];
+  /**
+   * 获取下载文件名函数
+   */
+  @Input() getFileName?: DownloadOption['getFileName'];
 
   constructor(private downloadService: NzxDownloadService) {}
 
@@ -54,7 +58,8 @@ export class DownFileDirective {
       data: this.data,
       beforeSend: this.beforeSend,
       afterDownload: this.afterDownload,
-      downloadDone: this.downloadDone
+      downloadDone: this.downloadDone,
+      getFileName: this.getFileName
     });
   }
 }
