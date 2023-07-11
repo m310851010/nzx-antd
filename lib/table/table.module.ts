@@ -17,10 +17,13 @@ import { NzxPipeModule } from '@xmagic/nzx-antd/pipe';
 import { NzxServiceModule } from '@xmagic/nzx-antd/service';
 import { NzOutletModule } from 'ng-zorro-antd/core/outlet';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { ColFormatPipe } from './transform/col-format.pipe';
+import { LinkHrefPipe } from './transform/link-href.pipe';
+import { NzxDirectiveModule } from '@xmagic/nzx-antd/directive';
 
 const COMPONENT = [NzxTableComponent, NzxTableHeaderComponent, NzxColumnSettingComponent];
 @NgModule({
-  declarations: [COMPONENT],
+  declarations: [COMPONENT, ColFormatPipe, LinkHrefPipe],
   imports: [
     CommonModule,
     FormsModule,
@@ -37,7 +40,8 @@ const COMPONENT = [NzxTableComponent, NzxTableHeaderComponent, NzxColumnSettingC
     NzxPipeModule,
     NzxServiceModule,
     NzOutletModule,
-    NzButtonModule
+    NzButtonModule,
+    NzxDirectiveModule
   ],
   exports: [COMPONENT]
 })

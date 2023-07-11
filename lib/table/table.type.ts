@@ -2,7 +2,11 @@ import { TemplateRef } from '@angular/core';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzTableFilterFn, NzTableSize, NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
 import { Observable } from 'rxjs';
+import { NzButtonShape, NzButtonSize, NzButtonType } from 'ng-zorro-antd/button';
 
+/**
+ * 列配置
+ */
 export interface NzxColumn<T = Record<string, NzSafeAny>> {
   thText?: string;
   /**
@@ -108,7 +112,90 @@ export interface NzxColumn<T = Record<string, NzSafeAny>> {
    * 是否禁用
    */
   settingDisabled?: boolean | null;
+  /**
+   * 列中按钮配置
+   */
+  buttons?: NzxColumnButton[];
+  /**
+   * 当数据为null显示的默认文本
+   */
+  defaultText?: string;
   [key: string]: NzSafeAny;
+}
+
+/**
+ * 列中配置按钮
+ */
+export interface NzxColumnButton<T = NzSafeAny> {
+  /**
+   * 是否显示按钮, 在数据中配置 { buttons: { 'name对应的列1': { visible: true, showDivider: true, text: '数据上更新按钮文本'}}}
+   */
+  visible?: boolean;
+  /**
+   * 是否显示分割线, 在数据中配置 { 行数据, buttons: {'name对应的列1': {按钮配置}, 'name对应的列3': {按钮配置}}
+   */
+  showDivider?: boolean;
+  /**
+   * 按钮文本, 在数据中配置 { 行数据, buttons: {'name对应的列1': {按钮配置}, 'name对应的列3': {按钮配置}}
+   */
+  text?: string;
+  /**
+   * 按钮图标, 在数据中配置 { 行数据, buttons: {'name对应的列1': {按钮配置}, 'name对应的列3': {按钮配置}}
+   */
+  icon?: string;
+  /**
+   * 按钮的type属性, button, submit reset, 在数据中配置 { 行数据, buttons: {'name对应的列1': {按钮配置}, 'name对应的列3': {按钮配置}}
+   */
+  type?: string;
+  /**
+   * 是否是a链接, 默认true
+   */
+  link?: boolean;
+  /**
+   * 允许数据中配置
+   */
+  nzBlock?: boolean;
+  /**
+   * 允许数据中配置
+   */
+  nzDanger?: boolean;
+  /**
+   * 允许数据中配置
+   */
+  nzGhost?: boolean;
+  /**
+   * 允许数据中配置
+   */
+  nzSize?: NzButtonSize;
+  /**
+   * 允许数据中配置
+   */
+  nzLoading?: boolean;
+  /**
+   * 允许数据中配置
+   */
+  nzSearch?: boolean;
+  /**
+   * 允许数据中配置
+   */
+  nzShape?: NzButtonShape;
+  /**
+   * 允许数据中配置
+   */
+  nzType?: NzButtonType;
+  /**
+   * 允许数据中配置
+   */
+  disabled?: boolean;
+  click: (row: T, data: T[], evt: MouseEvent) => void;
+  /**
+   * 如果是a标签 则设置属性target, 允许数据中配置
+   */
+  target?: '_blank' | '_parent' | '_self' | '_top';
+  /**
+   * 如果是a标签,设置href, 允许数据中配置
+   */
+  href: string | ((row: T, data: T[], index: number, col: NzxColumn<T>) => string);
 }
 
 export interface IndexAttr {

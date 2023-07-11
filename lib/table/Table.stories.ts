@@ -145,7 +145,7 @@ export const IsIndexName = Template({
 export const NzShowCheckbox = Template({
   nzxColumns: [{ nzShowCheckbox: true }, { name: 'name', thText: '姓名' }, { name: 'org', thText: '部门' }],
   nzData: NzxUtils.clone(nzData).map((v, i) => {
-    v.checked = i % 2 == 0;
+    v.checked = i % 2 === 0;
     return v;
   })
 });

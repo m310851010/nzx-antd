@@ -1,6 +1,5 @@
 import { Directive, HostListener, Input } from '@angular/core';
-import { DownloadOption, NzxDownloadService } from '@xmagic/nzx-antd/service';
-import { FetchOptions } from '@xmagic/nzx-antd/service';
+import { DownloadOption, NzxDownloadService, FetchOptions } from '@xmagic/nzx-antd/service';
 
 @Directive({
   selector: '[down-file]',
@@ -37,6 +36,12 @@ export class DownFileDirective {
    * 下载并保存完成的回调
    */
   @Input() downloadDone?: DownloadOption['downloadDone'];
+  /**
+   * 下载发生错误回调
+   * @param error
+   */
+  @Input() downloadError?: DownloadOption['downloadError'];
+
   /**
    * 获取下载文件名函数
    */

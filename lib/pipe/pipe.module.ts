@@ -7,6 +7,7 @@ import { TimeUnitPipe } from './time-unit.pipe';
 import { ToAsyncPipe } from './to-async.pipe';
 import { FilterPipe } from './filter.pipe';
 import { DicPipe } from './dic.pipe';
+import { PathValuePipe } from './path-value.pipe';
 
 const PIPE = [
   MathPipe,
@@ -18,7 +19,8 @@ const PIPE = [
   TimeUnitPipe,
   ToAsyncPipe,
   FilterPipe,
-  DicPipe
+  DicPipe,
+  PathValuePipe
 ];
 @NgModule({
   declarations: [PIPE],

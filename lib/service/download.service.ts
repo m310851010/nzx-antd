@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FetcherService, FetchOptions } from './fetcher.service';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { HttpErrorBean } from '@xmagic/nzx-antd';
 
 @Injectable()
 export class NzxDownloadService {
@@ -12,9 +13,8 @@ export class NzxDownloadService {
    * @param options 下载文件配置信息
    */
   download(options: DownloadOption) {
-    this.fetcher
-      .fetch<HttpResponse<Blob>>({ ...options, responseType: 'blob', observe: 'response' })
-      .subscribe(resp => {
+    this.fetcher.fetch<HttpResponse<Blob>>({ ...options, responseType: 'blob', observe: 'response' }).subscribe({
+      next: resp => {
         const fn = options.getFileName || this.getFilename.bind(this);
         const filename = fn(resp, options.url);
         if (options.afterDownload && options.afterDownload(resp, filename) === false) {
@@ -25,7 +25,10 @@ export class NzxDownloadService {
         if (options.downloadDone) {
           options.downloadDone(resp, filename);
         }
-      });
+      },
+      error: error => options.downloadError && options.downloadError(error),
+      complete: () => options.downloadComplete && options.downloadComplete()
+    });
   }
 
   /**
@@ -59,7 +62,7 @@ export class NzxDownloadService {
    * @param url
    * @protected
    */
-  protected getFilename(resp: HttpResponse<Blob>, url: string): string {
+  getFilename(resp: HttpResponse<Blob>, url: string): string {
     const headers = resp.headers;
     const disposition = headers.get('content-disposition');
     const filename = headers.get('filename');
@@ -98,6 +101,15 @@ export type DownloadOption = Omit<FetchOptions, 'observe'> & {
    * @param filename
    */
   downloadDone?: (resp: HttpResponse<Blob>, filename: string) => void;
+  /**
+   * 下载发生错误回调
+   * @param error
+   */
+  downloadError?: (error: HttpErrorBean) => void;
+  /**
+   * 下载结束回调, 不管成功还是失败
+   */
+  downloadComplete?: () => void;
 
   /**
    * 获取文件名

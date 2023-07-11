@@ -6,6 +6,6 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
 })
 export class DefaultifyPipe implements PipeTransform {
   transform<T = NzSafeAny>(value: T | undefined | null, defaultValue?: T | string): T | string {
-    return value == null ? defaultValue || '--' : value;
+    return value == null ? ((defaultValue == null ? '--' : defaultValue) as T) : value;
   }
 }

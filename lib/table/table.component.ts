@@ -123,7 +123,11 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
   /**
    * 请求之后处理函数
    */
-  @Input() afterFetch?: (res: NzSafeAny, pageIndex: number) => PageInfo<T> | Promise<PageInfo<T>>;
+  @Input() afterFetch?: (
+    res: NzSafeAny,
+    pageIndex: number,
+    reset: boolean
+  ) => Partial<PageInfo<T>> | Promise<Partial<PageInfo<T>>>;
 
   /**
    * 请求配置
@@ -320,6 +324,10 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * 点击行是否选中
    */
   @Input() nzxClickSelectedRow?: boolean;
+  /**
+   * 当数据为null显示的默认文本
+   */
+  @Input() defaultText?: string;
 
   /**
    * 由外部传入模板列表
@@ -401,26 +409,6 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     this.nzPageSize = this.nzPageSize || this.antdService.table?.nzPageSize || 10;
     this.resolveColumns();
     this.fetch();
-    if (this.nzData?.length) {
-      this.formatColumnData(this.nzData);
-    }
-  }
-
-  /**
-   * 获取链接地址
-   * @param btn btn配置
-   * @param row 当前行
-   * @param data 上下文信息
-   */
-  getLinkHref(btn: { href: string | ((row: T, data: T[]) => string) }, row: T, data: T[]): string | undefined {
-    if (!btn.href) {
-      return undefined;
-    }
-    if (typeof btn.href === 'string') {
-      return btn.href;
-    }
-
-    return btn.href(row, data);
   }
 
   onResize({ width }: NzResizeEvent, col: NzxColumn) {
@@ -575,78 +563,49 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * @private
    */
   private setFetchResult<K>(res: K, fetchSetting: FetchSetting, reset: boolean): void {
-    let result: PageInfo<T> = { total: 0, list: [] };
+    let result: Partial<PageInfo<T>> = {};
     const afterFetch = this.afterFetch || this.antdService.table?.afterFetch;
     if (afterFetch && NzxUtils.isFunction(afterFetch)) {
-      const data = afterFetch(res, this.nzPageIndex);
+      const data = afterFetch(res, this.nzPageIndex, reset);
       if (NzxUtils.isPromise(data)) {
-        data.then(v => this.setPageInfo(v));
+        data.then(v => this.setPageInfo(res, v, fetchSetting, reset));
         return;
       }
-      result = data as PageInfo<T>;
+      result = data || {};
     } else {
       if (Array.isArray(res)) {
         result.list = res;
         result.total = res.length;
-      } else {
-        result.list = NzxUtils.get(res, fetchSetting.listField);
-        result.total = NzxUtils.get(res, fetchSetting.totalField);
-        result.pageIndex = reset ? 1 : NzxUtils.get(res, fetchSetting.pageIndexField);
       }
     }
 
-    this.formatColumnData(result.list);
-    this.setPageInfo(result);
+    this.setPageInfo(res, result, fetchSetting, reset);
   }
 
   /**
    * 设置分页信息
-   * @param pageInfo
+   * @param res 响应对象
+   * @param pageInfo 原pageInfo
+   * @param fetchSetting 配置
+   * @param reset 是否重置
    * @private
    */
-  private setPageInfo(pageInfo: PageInfo<T>): void {
-    this.nzData = pageInfo.list || ([] as T[]);
-    this.nzTotal = pageInfo.total || 0;
-    if (pageInfo.pageIndex != null) {
-      this.nzPageIndex = pageInfo.pageIndex;
+  private setPageInfo<K>(res: K, pageInfo: Partial<PageInfo<T>>, fetchSetting: FetchSetting, reset: boolean): void {
+    const total = pageInfo.total != null ? pageInfo.total : NzxUtils.get(res, fetchSetting.totalField);
+    const pageIndex = reset
+      ? 1
+      : pageInfo.pageIndex != null
+      ? pageInfo.pageIndex
+      : NzxUtils.get(res, fetchSetting.pageIndexField);
+
+    this.nzData = pageInfo.list || NzxUtils.get(res, fetchSetting.listField);
+    this.nzTotal = total || 0;
+
+    if (pageIndex != null) {
+      this.nzPageIndex = pageIndex;
     }
+
     this.cdr.markForCheck();
-  }
-
-  /**
-   * 格式化数据
-   * @param list
-   * @private
-   */
-  private formatColumnData(list: readonly T[]) {
-    if (!list) {
-      return;
-    }
-
-    const formatMap = this.nzxColumns.reduce((prev, curr) => {
-      if (curr.name && curr.format) {
-        prev[curr.name] = curr.format;
-      }
-      return prev;
-    }, {});
-
-    list.forEach((value, index) => {
-      if (value) {
-        Object.keys(value).forEach(key => {
-          if (formatMap[key]) {
-            const formatValue = formatMap[key](value[key], value, index);
-            if (this.isAsync(formatValue)) {
-              // 异步数据
-              // @ts-ignore
-              value['$ASYNC-' + key] = formatValue;
-            } else {
-              // @ts-ignore
-              value['$FORMAT-' + key] = formatValue;
-            }
-          }
-        });
-      }
-    });
   }
 
   /**
@@ -827,10 +786,6 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     ) {
       this.resolveColumns();
       this.resolveTemplateColumn();
-    }
-
-    if (changes.nzData && !changes.nzData.isFirstChange()) {
-      this.formatColumnData(changes.nzData.currentValue);
     }
 
     if (changes.api && !changes.api.isFirstChange()) {

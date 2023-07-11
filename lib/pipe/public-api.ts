@@ -5,4 +5,5 @@ export * from './math.pipe';
 export * from './time-unit.pipe';
 export * from './to-async.pipe';
 export * from './dic.pipe';
+export * from './path-value.pipe';
 export * from './pipe.module';
