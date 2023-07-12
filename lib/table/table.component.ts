@@ -392,6 +392,10 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * 表头单元格右键菜单事件
    */
   @Output() readonly headerContextmenu = new EventEmitter<HeaderEventArg>();
+  /**
+   * 刷新按钮点击事件
+   */
+  @Output() readonly refreshClick = new EventEmitter<NzxTableComponent>();
 
   @ContentChildren(NamedTemplate) children!: QueryList<NamedTemplate<NzSafeAny>>;
   @ViewChild('basicTable') nzTable!: NzTableComponent<T>;
@@ -438,7 +442,11 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * 点击刷新按钮
    */
   onRefreshClick() {
-    this.fetch(false);
+    if (this.refreshClick.observed) {
+      this.refreshClick.emit(this);
+    } else {
+      this.fetch(false);
+    }
   }
 
   /**
