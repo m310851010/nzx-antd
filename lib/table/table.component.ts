@@ -454,7 +454,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * @param reset
    */
   refresh(reset = true) {
-    this.fetch(reset);
+    return this.fetch<T>(reset);
   }
 
   /**
@@ -489,47 +489,51 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * 发起请求
    * @param reset 是否重置
    */
-  fetch<T>(reset = true): void {
+  fetch<T>(reset = true): Promise<PageInfo<T>> | null {
     if (!this.api) {
-      return;
+      return null;
     }
 
-    const fetchSetting = Object.assign({}, FETCH_SETTING, this.antdService.table, this.fetchSetting);
-    const setResult: (res: Record<string, NzSafeAny> | T) => void = res => {
-      this.setFetchResult(res, fetchSetting, reset);
-    };
+    return new Promise<PageInfo<T>>((resolve, reject) => {
+      const fetchSetting = Object.assign({}, FETCH_SETTING, this.antdService.table, this.fetchSetting);
+      const setResult: (res: Record<string, NzSafeAny> | T) => void = res => {
+        this.setFetchResult(res, fetchSetting, reset).then(v => resolve(v as PageInfo<T>), reject);
+      };
 
-    if (NzxUtils.isString(this.api)) {
-      FetcherService.resolveParams(this.params)
-        .pipe(
-          switchMap(_params => {
-            const commonParams = this.mergeParams(reset, fetchSetting);
-            const data = Object.assign({}, _params, commonParams);
-            const beforeFetch = this.beforeFetch || this.antdService.table?.beforeFetch;
-            if (!beforeFetch) {
-              return this.doFetch(this.api as string, fetchSetting.method, commonParams, data);
-            }
+      if (NzxUtils.isString(this.api)) {
+        FetcherService.resolveParams(this.params)
+          .pipe(
+            switchMap(_params => {
+              const commonParams = this.mergeParams(reset, fetchSetting);
+              const data = Object.assign({}, _params, commonParams);
+              const beforeFetch = this.beforeFetch || this.antdService.table?.beforeFetch;
+              if (!beforeFetch) {
+                return this.doFetch(this.api as string, fetchSetting.method, commonParams, data);
+              }
 
-            return FetcherService.resolveParams(beforeFetch(data)).pipe(_data =>
-              this.doFetch(this.api as string, fetchSetting.method, commonParams, _data)
-            );
-          })
-        )
-        .subscribe(res => this.setFetchResult(res, fetchSetting, reset));
-      return;
-    }
+              return FetcherService.resolveParams(beforeFetch(data)).pipe(_data =>
+                this.doFetch(this.api as string, fetchSetting.method, commonParams, _data)
+              );
+            })
+          )
+          .subscribe({
+            next: res => this.setFetchResult(res, fetchSetting, reset).then(v => resolve(v as PageInfo<T>), reject),
+            error: err => reject(err)
+          });
+        return;
+      }
 
-    if (NzxUtils.isObservable(this.api)) {
-      (this.api as Observable<T[]>).subscribe(setResult);
-      return;
-    }
-    if (NzxUtils.isPromise(this.api)) {
-      (this.api as Promise<T[]>).then(setResult);
-      return;
-    }
+      if (NzxUtils.isObservable(this.api)) {
+        (this.api as Observable<T[]>).subscribe({ next: setResult, error: err => reject(err) });
+        return;
+      }
+      if (NzxUtils.isPromise(this.api)) {
+        (this.api as Promise<T[]>).then(setResult, reject);
+        return;
+      }
 
-    setResult([]);
-    return;
+      setResult([]);
+    });
   }
 
   /**
@@ -570,14 +574,13 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * @param reset
    * @private
    */
-  private setFetchResult<K>(res: K, fetchSetting: FetchSetting, reset: boolean): void {
+  private setFetchResult<K>(res: K, fetchSetting: FetchSetting, reset: boolean): Promise<PageInfo<T>> {
     let result: Partial<PageInfo<T>> = {};
     const afterFetch = this.afterFetch || this.antdService.table?.afterFetch;
     if (afterFetch && NzxUtils.isFunction(afterFetch)) {
       const data = afterFetch(res, this.nzPageIndex, reset);
       if (NzxUtils.isPromise(data)) {
-        data.then(v => this.setPageInfo(res, v, fetchSetting, reset));
-        return;
+        return data.then(v => this.setPageInfo(res, v, fetchSetting, reset));
       }
       result = data || {};
     } else {
@@ -587,7 +590,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
       }
     }
 
-    this.setPageInfo(res, result, fetchSetting, reset);
+    return Promise.resolve(this.setPageInfo(res, result, fetchSetting, reset));
   }
 
   /**
@@ -598,7 +601,12 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * @param reset 是否重置
    * @private
    */
-  private setPageInfo<K>(res: K, pageInfo: Partial<PageInfo<T>>, fetchSetting: FetchSetting, reset: boolean): void {
+  private setPageInfo<K>(
+    res: K,
+    pageInfo: Partial<PageInfo<T>>,
+    fetchSetting: FetchSetting,
+    reset: boolean
+  ): PageInfo<T> {
     const total = pageInfo.total != null ? pageInfo.total : NzxUtils.get(res, fetchSetting.totalField);
     const pageIndex = reset
       ? 1
@@ -614,6 +622,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     }
 
     this.cdr.markForCheck();
+    return pageInfo as PageInfo<T>;
   }
 
   /**

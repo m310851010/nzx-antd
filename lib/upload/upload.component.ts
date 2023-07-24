@@ -59,7 +59,7 @@ export enum ErrorType {
   ]
 })
 export class NzxUploadComponent extends BaseControl<NzUploadFile[]> implements ControlValueAccessor, OnInit, OnChanges {
-  nzFileList: NzUploadFile[] = [];
+  @Input() nzFileList: NzUploadFile[] = [];
   /**
    * 自定义按钮或显示内容
    */
@@ -69,7 +69,11 @@ export class NzxUploadComponent extends BaseControl<NzUploadFile[]> implements C
    */
   @Input() nzxHint?: string;
   /**
-   * 是否显示上传按钮, 如果是nzType="drag" 隐藏按钮
+   * 拖拽上传文件显示文本
+   */
+  @Input() nzxUploadText = '点击或拖拽上传文件';
+  /**
+   * 是否显示上传按钮
    */
   @Input() nzxShowUploadButtonIcon?: boolean;
   /**
@@ -142,7 +146,7 @@ export class NzxUploadComponent extends BaseControl<NzUploadFile[]> implements C
   readonly defaultValidateMessage: { [K: string]: string } = {
     FILE_SIZE: '文件 "{fileName}" 大小不能超过{fileSize}',
     FILE_TOTAL_SIZE: '总上传文件大小不能超过{totalSize}',
-    FILE_TYPE: '上传的文件格式只能是 "{fileType}',
+    FILE_TYPE: '上传的文件格式只能是 "{fileType}"',
     FILE_LIMIT: '最多允许上传{fileLimit}个文件',
     FILE_NAME_LENGTH: '文件 "{fileName}" 名称长度不能大于{fileNameLength}个字符',
     FILE_NAME_DUPLICATE: '已上传名称 "{fileName}" 相同的文件，不能重复上传'
@@ -200,9 +204,6 @@ export class NzxUploadComponent extends BaseControl<NzUploadFile[]> implements C
 
   onNzChange(evt: NzUploadChangeParam) {
     this.onTouched();
-    if (evt.type === 'error') {
-      this.nzFileList = this.nzFileList.filter(f => !f.error);
-    }
 
     if (evt.type === 'success' || evt.type === 'removed') {
       this.onChange(evt.fileList);
@@ -253,8 +254,14 @@ export class NzxUploadComponent extends BaseControl<NzUploadFile[]> implements C
     // 文件类型
     if (this.nzFileType != null) {
       const nzFileTypes = typeof this.nzFileType === 'string' ? [this.nzFileType] : this.nzFileType;
-      if (nzFileTypes.length > 0 && !nzFileTypes.includes(file.type!)) {
-        return this.getError(ErrorType.FILE_TYPE, file, messages, { fileType: this.nzFileType });
+
+      if (nzFileTypes.length > 0) {
+        const index = file.name.lastIndexOf('.');
+        const ext = index > 0 ? file.name.substring(index + 1).toLowerCase() : null;
+
+        if (!ext || (!nzFileTypes.includes(file.type!) && !nzFileTypes.includes(ext))) {
+          return this.getError(ErrorType.FILE_TYPE, file, messages, { fileType: this.nzFileType });
+        }
       }
     }
 

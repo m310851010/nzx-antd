@@ -20,6 +20,8 @@ import { NzOutletModule } from 'ng-zorro-antd/core/outlet';
 import { NzxUtils } from '../util';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzxColorType } from '@xmagic/nzx-antd/button';
+import { ColFormatPipe } from '@xmagic/nzx-antd/table/transform/col-format.pipe';
+import { LinkHrefPipe } from '@xmagic/nzx-antd/table/transform/link-href.pipe';
 
 export default {
   title: '组件/Table 表格',
@@ -27,7 +29,13 @@ export default {
   // subcomponents: { NzxTableHeaderComponent, NzxColumnSettingComponent },
   decorators: [
     moduleMetadata({
-      declarations: [NzxTableComponent, NzxTableHeaderComponent, NzxColumnSettingComponent],
+      declarations: [
+        NzxTableComponent,
+        NzxTableHeaderComponent,
+        NzxColumnSettingComponent,
+        ColFormatPipe,
+        LinkHrefPipe
+      ],
       imports: [
         NzTableModule,
         NzResizableModule,
