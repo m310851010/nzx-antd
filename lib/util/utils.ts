@@ -2,10 +2,9 @@ import { ElementRef } from '@angular/core';
 import { isNil } from 'ng-zorro-antd/core/util';
 import { Observable } from 'rxjs';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { assignValue, get as _get, isObject as _isObject, is as _is } from './utils-fn';
 
-const toStr = Object.prototype.toString;
 const hasOwn = Object.prototype.hasOwnProperty;
-const defineProperty = Object.defineProperty;
 const gOPD = Object.getOwnPropertyDescriptor;
 
 class UtilsClass {
@@ -21,19 +20,7 @@ class UtilsClass {
    * @param path 属性路径
    * @param defaultValue 当属性不存在或为undefined返回defaultValue
    */
-  get(obj: NzSafeAny, path?: string | string[], defaultValue?: NzSafeAny) {
-    if (!obj || path == null || path.length === 0) {
-      return defaultValue;
-    }
-    if (!Array.isArray(path)) {
-      path = path.indexOf('.') ? path.split('.') : [path];
-    }
-    if (path.length === 1) {
-      const checkObj = obj[path[0]];
-      return typeof checkObj === 'undefined' ? defaultValue : checkObj;
-    }
-    return path.reduce((o, k) => (o || {})[k], obj) || defaultValue;
-  }
+  get = _get;
 
   trim(string: string) {
     return (string || '').replace(/^[\s\uFEFF]+|[\s\uFEFF]+$/g, '');
@@ -56,22 +43,10 @@ class UtilsClass {
   }
 
   // If name is '__proto__', and Object.defineProperty is available, define __proto__ as an own property on target
-  private setProperty<T = NzSafeAny>(target: T, options: { name: string; newValue: NzSafeAny }) {
-    if (defineProperty && options.name === '__proto__') {
-      defineProperty(target, options.name, {
-        enumerable: true,
-        configurable: true,
-        value: options.newValue,
-        writable: true
-      });
-    } else {
-      // @ts-ignore
-      target[options.name] = options.newValue;
-    }
-  }
+  setProperty = assignValue;
 
   // Return undefined instead of __proto__ if '__proto__' is not an own property
-  private getProperty<T = NzSafeAny>(obj: T, name: string) {
+  getProperty<T = NzSafeAny>(obj: T, name: string) {
     if (name === '__proto__') {
       if (!hasOwn.call(obj, name)) {
         return void 0;
@@ -113,9 +88,9 @@ class UtilsClass {
             clone = src && NzxUtils.isPlainObject(src) ? src : {};
           }
 
-          this.setProperty(target, { name, newValue: this.extend(clone, copy) });
+          this.setProperty(target, name, this.extend(clone, copy));
         } else {
-          this.setProperty(target, { name, newValue: copy });
+          this.setProperty(target, name, copy);
         }
       }
     }
@@ -164,7 +139,7 @@ class UtilsClass {
     while (stack.length) {
       const item = stack.shift()!;
       const parent = parents[0];
-      if (++counter ===  parent.count) {
+      if (++counter === parent.count) {
         parents.shift();
         counter = 0;
       }
@@ -175,7 +150,7 @@ class UtilsClass {
       const children = getChildren(item, parent.parent, parent.level);
       if (children && children.length) {
         stack = stack.concat(children);
-        parents.push({count: children.length, parent: item, level: parent.level + 1});
+        parents.push({ count: children.length, parent: item, level: parent.level + 1 });
       }
     }
   }
@@ -358,21 +333,9 @@ class UtilsClass {
     return fmt;
   }
 
-  is(val: unknown, type: string) {
-    return toStr.call(val) === `[object ${type}]`;
-  }
+  is = _is;
 
-  isDef<T = unknown>(val?: T): val is T {
-    return typeof val !== 'undefined';
-  }
-
-  isUnDef<T = unknown>(val?: T): val is T {
-    return !this.isDef(val);
-  }
-
-  isObject(val: NzSafeAny): val is Record<NzSafeAny, NzSafeAny> {
-    return val !== null && this.is(val, 'Object');
-  }
+  isObject = _isObject;
 
   isEmpty<T = unknown>(val: T): val is T {
     // @ts-ignore
@@ -383,23 +346,11 @@ class UtilsClass {
     return this.is(val, 'Date');
   }
 
-  isNull(val: unknown): val is null {
-    return val === null;
-  }
-
-  isNil(val: unknown): val is null | undefined {
-    return this.isUnDef(val) && this.isNull(val);
-  }
-
-  isNotNil(val: unknown): val is null | undefined {
-    return !this.isNil(val);
-  }
-
   isNumber(val: unknown): val is number {
     return this.is(val, 'Number');
   }
 
-  isPromise<T = NzSafeAny>(val: unknown): val is Promise<T> {
+  isPromise<T = NzSafeAny>(val: NzSafeAny): val is Promise<T> {
     return this.is(val, 'Promise') || (this.isObject(val) && this.isFunction(val.then) && this.isFunction(val.catch));
   }
 
@@ -427,14 +378,14 @@ class UtilsClass {
     if (typeof Array.isArray === 'function') {
       return Array.isArray(val);
     }
-    return toStr.call(val) === '[object Array]';
+    return this.is(val, 'Array');
   }
 
   isWindow(val: NzSafeAny): val is Window {
     return typeof window !== 'undefined' && this.is(val, 'Window');
   }
 
-  isElement(val: unknown): val is Element {
+  isElement(val: NzSafeAny): val is Element {
     return this.isObject(val) && !!val.tagName;
   }
 
@@ -505,7 +456,7 @@ class UtilsClass {
    * @param obj
    */
   isPlainObject<T = NzSafeAny>(obj: T) {
-    if (!obj || toStr.call(obj) !== '[object Object]') {
+    if (!obj || !this.isObject(obj)) {
       return false;
     }
 

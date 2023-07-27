@@ -11,7 +11,7 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
   name: 'pathValue'
 })
 export class PathValuePipe implements PipeTransform {
-  transform<T>(value: NzSafeAny, path: string | string[], defaultValue?: NzSafeAny): T {
+  transform<T>(value: NzSafeAny, path: string, defaultValue?: NzSafeAny): T {
     return NzxUtils.get(value, path, defaultValue);
   }
 }

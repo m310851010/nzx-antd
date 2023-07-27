@@ -6,6 +6,6 @@
     "styleIncludePaths": ["node_modules"]
   },
   "assets": [
-    "./**/*.less",
+    "./**/*.less"
   ]
 }
