@@ -3,7 +3,8 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzxUtils } from '@xmagic/nzx-antd/util';
 
 @Pipe({
-  name: 'filter'
+  name: 'filter',
+  pure: true
 })
 export class FilterPipe implements PipeTransform {
   transform<T = NzSafeAny>(array: T[], matcher: string, searchText?: string): T[];

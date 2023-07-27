@@ -8,7 +8,8 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
  * 把请求信息转换为异步对象
  */
 @Pipe({
-  name: 'toAsync'
+  name: 'toAsync',
+  pure: true
 })
 export class ToAsyncPipe implements PipeTransform {
   constructor(private fetcher: FetcherService) {}

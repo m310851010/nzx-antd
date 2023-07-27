@@ -2,17 +2,13 @@ import { ElementRef } from '@angular/core';
 import { isNil } from 'ng-zorro-antd/core/util';
 import { Observable } from 'rxjs';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
-import { assignValue, get as _get, isObject as _isObject, is as _is } from './utils-fn';
+import { assignValue, get as _get, set as _set, isObject as _isObject, is as _is } from './utils-fn';
 
 const hasOwn = Object.prototype.hasOwnProperty;
 const gOPD = Object.getOwnPropertyDescriptor;
 
 class UtilsClass {
   assign = this.extend;
-
-  defaultIfy<T = NzSafeAny>(obj: T, defaultValue: NzSafeAny) {
-    return isNil(obj) ? defaultValue : obj;
-  }
 
   /**
    * 根据属性路径获取对象的属性值
@@ -21,6 +17,35 @@ class UtilsClass {
    * @param defaultValue 当属性不存在或为undefined返回defaultValue
    */
   get = _get;
+  /**
+   *
+   * 根据属性路径设置值
+   * @param object 待修改对象
+   * @param path 属性路径
+   * @param value 设置的值
+   * @example
+   *
+   * var object = { 'a': [{ 'b': { 'c': 3 } }] };
+   *
+   * NzxUtils.set(object, 'a[0].b.c', 4);
+   * console.log(object.a[0].b.c);
+   * // => 4
+   *
+   * NzxUtils.set(object, ['x', '0', 'y', 'z'], 5);
+   * console.log(object.x[0].y.z);
+   * // => 5
+   */
+  set = _set;
+
+  private setProperty = assignValue;
+
+  is = _is;
+
+  isObject = _isObject;
+
+  defaultIfy<T = NzSafeAny>(obj: T, defaultValue: NzSafeAny) {
+    return isNil(obj) ? defaultValue : obj;
+  }
 
   trim(string: string) {
     return (string || '').replace(/^[\s\uFEFF]+|[\s\uFEFF]+$/g, '');
@@ -42,11 +67,8 @@ class UtilsClass {
     return this.extend(_target as T, target);
   }
 
-  // If name is '__proto__', and Object.defineProperty is available, define __proto__ as an own property on target
-  setProperty = assignValue;
-
   // Return undefined instead of __proto__ if '__proto__' is not an own property
-  getProperty<T = NzSafeAny>(obj: T, name: string) {
+  private getProperty<T = NzSafeAny>(obj: T, name: string) {
     if (name === '__proto__') {
       if (!hasOwn.call(obj, name)) {
         return void 0;
@@ -332,10 +354,6 @@ class UtilsClass {
     }
     return fmt;
   }
-
-  is = _is;
-
-  isObject = _isObject;
 
   isEmpty<T = unknown>(val: T): val is T {
     // @ts-ignore

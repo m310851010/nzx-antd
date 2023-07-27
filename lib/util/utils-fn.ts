@@ -36,7 +36,7 @@ export function get(obj: NzSafeAny, path: string, defaultValue?: NzSafeAny) {
   while (obj != null && index < length) {
     obj = obj[toKey(segments[index++])];
   }
-  return index && index == length ? obj : defaultValue;
+  return index && index === length ? obj : defaultValue;
 }
 
 /**
@@ -67,7 +67,7 @@ export function is(val: NzSafeAny, type: string) {
 
 export function isObject(value: NzSafeAny) {
   const type = typeof value;
-  return value != null && (type == 'object' || type == 'function');
+  return value != null && (type === 'object' || type === 'function');
 }
 
 export function assignValue(object: NzSafeAny, key: string, value: NzSafeAny) {
@@ -77,11 +77,11 @@ export function assignValue(object: NzSafeAny, key: string, value: NzSafeAny) {
   }
 }
 function toKey(value: string | number) {
-  if (typeof value == 'string') {
+  if (typeof value === 'string') {
     return value;
   }
   const result = value + '';
-  return result == '0' && 1 / value == -INFINITY ? '-0' : result;
+  return result === '0' && 1 / value === -INFINITY ? '-0' : result;
 }
 
 function stringToPath(string: string) {
@@ -120,7 +120,7 @@ function baseSet(
       return object;
     }
 
-    if (index != lastIndex) {
+    if (index !== lastIndex) {
       const objValue = nested[key];
       newValue = customizer ? customizer(objValue, key, nested) : undefined;
       if (newValue === undefined) {
@@ -139,9 +139,9 @@ function isIndex(value: NzSafeAny | number, length?: number) {
 
   return (
     !!length &&
-    (type == 'number' || (type != 'symbol' && reIsUint.test(value))) &&
+    (type === 'number' || (type !== 'symbol' && reIsUint.test(value))) &&
     value > -1 &&
-    value % 1 == 0 &&
+    value % 1 === 0 &&
     value < length
   );
 }
@@ -150,7 +150,7 @@ function eq(value: NzSafeAny, other: NzSafeAny) {
   return value === other || (value !== value && other !== other);
 }
 
-const defineProperty = (function () {
+const defineProperty = (() => {
   try {
     const func = getNative(Object, 'defineProperty');
     func({}, '', {});
@@ -176,11 +176,11 @@ function baseIsNative(value: NzSafeAny) {
 }
 
 function baseAssignValue(object: NzSafeAny, key: string, value: NzSafeAny) {
-  if (key == '__proto__' && defineProperty) {
+  if (key === '__proto__' && defineProperty) {
     defineProperty(object, key, {
       configurable: true,
       enumerable: true,
-      value: value,
+      value,
       writable: true
     });
   } else {

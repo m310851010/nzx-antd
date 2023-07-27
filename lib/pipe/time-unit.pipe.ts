@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'timeUnit'
+  name: 'timeUnit',
+  pure: true
 })
 export class TimeUnitPipe implements PipeTransform {
   transform(value: number | undefined | null, unit: 's' | 'ms'): string | null {

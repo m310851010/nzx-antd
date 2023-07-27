@@ -17,7 +17,7 @@ export interface NzxColumn<T = Record<string, NzSafeAny>> {
   /**
    * 字段名称
    */
-  name?: string;
+  name?: keyof T | string;
   /**
    * td自定义渲染模版, string
    */
@@ -232,7 +232,7 @@ export interface RowEventArg<T> {
 
 export interface CellEventArg<T> extends RowEventArg<T> {
   column: NzxColumn;
-  columnIndex: IndexAttr;
+  colIndex: IndexAttr;
 }
 
 export interface HeaderEventArg {
@@ -280,18 +280,6 @@ export interface SorterResult {
 }
 
 /**
- * 合并单元格参数类型
- */
-export type CellSpanType<T> = (arg: CellSpanArgType<T>) => { rowspan: number; colspan: number } | null | void;
-
-export type CellSpanArgType<T> = {
-  row: T;
-  column: NzxColumn<T>;
-  rowIndex: number;
-  columnIndex: number;
-};
-
-/**
  * 分页信息
  */
 export interface PageInfo<T> {
@@ -310,3 +298,20 @@ export interface PageInfo<T> {
  * 表格大小
  */
 export type NzxTableSize = NzTableSize | 'mini';
+
+/**
+ * 合并单元格参数
+ */
+export type SpanFunc<T> = (params: CellSpanArgType<T>) => RowColspan;
+
+export type CellSpanArgType<T> = {
+  row: T;
+  column: NzxColumn<T>;
+  rowIndex: number;
+  colIndex: number;
+};
+
+export interface RowColspan {
+  colspan?: number | null | void;
+  rowspan?: number | null | void;
+}

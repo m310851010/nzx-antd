@@ -17,7 +17,8 @@ import { Observable } from 'rxjs';
  * ```
  */
 @Pipe({
-  name: 'dic'
+  name: 'dic',
+  pure: true
 })
 export class DicPipe implements PipeTransform {
   constructor(protected dicService: DicService) {}

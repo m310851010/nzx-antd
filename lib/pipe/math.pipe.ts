@@ -4,7 +4,8 @@ import { Pipe, PipeTransform } from '@angular/core';
  * 调用数学函数 如{{ 5.1 | math: 'ceil' }} => 6
  */
 @Pipe({
-  name: 'math'
+  name: 'math',
+  pure: true
 })
 export class MathPipe implements PipeTransform {
   transform(value: string | number, fnName: keyof Math, fixed?: number): string | null {

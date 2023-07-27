@@ -8,7 +8,8 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
  * {{ {a: {b: 1}} | pathValue: 'a.b'}} // 1
  */
 @Pipe({
-  name: 'pathValue'
+  name: 'pathValue',
+  pure: true
 })
 export class PathValuePipe implements PipeTransform {
   transform<T>(value: NzSafeAny, path: string, defaultValue?: NzSafeAny): T {

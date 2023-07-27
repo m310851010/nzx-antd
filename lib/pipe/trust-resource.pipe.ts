@@ -5,7 +5,8 @@ import { DomSanitizer, SafeHtml, SafeResourceUrl, SafeScript, SafeStyle } from '
  * 非安全加载URL,比如加载iframe url
  */
 @Pipe({
-  name: 'trustUrl'
+  name: 'trustUrl',
+  pure: true
 })
 export class TrustUrlPipe implements PipeTransform {
   constructor(private sanitizer: DomSanitizer) {}
@@ -18,7 +19,8 @@ export class TrustUrlPipe implements PipeTransform {
  * 非安全加载HTML
  */
 @Pipe({
-  name: 'trustHtml'
+  name: 'trustHtml',
+  pure: true
 })
 export class TrustHtmlPipe implements PipeTransform {
   constructor(private sanitizer: DomSanitizer) {}
@@ -31,7 +33,8 @@ export class TrustHtmlPipe implements PipeTransform {
  * 非安全调用Script
  */
 @Pipe({
-  name: 'trustScript'
+  name: 'trustScript',
+  pure: true
 })
 export class TrustScriptPipe implements PipeTransform {
   constructor(private sanitizer: DomSanitizer) {}
@@ -44,7 +47,8 @@ export class TrustScriptPipe implements PipeTransform {
  * 非安全调用Style
  */
 @Pipe({
-  name: 'trustStyle'
+  name: 'trustStyle',
+  pure: true
 })
 export class TrustStylePipe implements PipeTransform {
   constructor(private sanitizer: DomSanitizer) {}

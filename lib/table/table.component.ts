@@ -607,14 +607,14 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     fetchSetting: FetchSetting,
     reset: boolean
   ): PageInfo<T> {
-    const total = pageInfo.total != null ? pageInfo.total : NzxUtils.get(res, fetchSetting.totalField);
+    const total = pageInfo.total != null ? pageInfo.total : NzxUtils.get(res, fetchSetting.totalField!);
     const pageIndex = reset
       ? 1
       : pageInfo.pageIndex != null
       ? pageInfo.pageIndex
-      : NzxUtils.get(res, fetchSetting.pageIndexField);
+      : NzxUtils.get(res, fetchSetting.pageIndexField!);
 
-    this.nzData = pageInfo.list || NzxUtils.get(res, fetchSetting.listField);
+    this.nzData = pageInfo.list || NzxUtils.get(res, fetchSetting.listField!);
     this.nzTotal = total || 0;
 
     if (pageIndex != null) {
@@ -632,10 +632,10 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * @private
    */
   private mergeParams(reset = true, fetchSetting: FetchSetting) {
-    const params: Record<string, NzSafeAny> = {
-      [fetchSetting.pageIndexField!]: reset ? 1 : this.nzPageIndex,
-      [fetchSetting.pageSizeField!]: this.nzPageSize
-    };
+    const nzPageIndex = reset ? 1 : this.nzPageIndex;
+    const params: Record<string, NzSafeAny> = {};
+    NzxUtils.set(params, fetchSetting.pageIndexField!, nzPageIndex);
+    NzxUtils.set(params, fetchSetting.pageSizeField!, this.nzPageSize);
 
     if (this.sortInfo) {
       const sortInfo = NzxUtils.isFunction(this.sortFn) ? this.sortFn(this.sortInfo) : this.sortInfo;
