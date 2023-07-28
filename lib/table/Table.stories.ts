@@ -22,6 +22,7 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzxColorType } from '@xmagic/nzx-antd/button';
 import { ColFormatPipe } from '@xmagic/nzx-antd/table/transform/col-format.pipe';
 import { LinkHrefPipe } from '@xmagic/nzx-antd/table/transform/link-href.pipe';
+import { ColSpanPipe } from '@xmagic/nzx-antd/table/transform/col-span.pipe';
 
 export default {
   title: '组件/Table 表格',
@@ -34,7 +35,8 @@ export default {
         NzxTableHeaderComponent,
         NzxColumnSettingComponent,
         ColFormatPipe,
-        LinkHrefPipe
+        LinkHrefPipe,
+        ColSpanPipe
       ],
       imports: [
         NzTableModule,
@@ -77,6 +79,7 @@ export default {
     toolbarVisible: true,
     nzPageSize: 10,
     nzData: [],
+    nzxShowHeader: true,
     nzWidthConfig: [],
     nzxClickSelectedRow: true
   },
@@ -199,3 +202,27 @@ ScrollTemplate.args = {
       lastName: '六'
     }))
 };
+
+export const ColspanCol = Template({
+  nzBordered: true,
+  nzxColumns: [
+    { nzShowCheckbox: true, nzText: '测试' },
+    {
+      thText: '姓名'
+    },
+    { name: 'firstName', thText: 'FIRST_NAME' },
+    { name: 'lastName', thText: 'LAST_NAME' },
+    { name: 'org', thText: '部门' }
+  ],
+  nzData: NzxUtils.clone(nzData),
+  spanFunc: params => {
+    if (params.rowIndex % 2 === 0) {
+      if (params.colIndex === 0) {
+        return [1, 2];
+      } else if (params.colIndex === 1) {
+        return [0, 0];
+      }
+    }
+    return null;
+  }
+});

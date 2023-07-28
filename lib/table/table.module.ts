@@ -20,11 +20,11 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { ColFormatPipe } from './transform/col-format.pipe';
 import { LinkHrefPipe } from './transform/link-href.pipe';
 import { NzxDirectiveModule } from '@xmagic/nzx-antd/directive';
-import { SpanPipe } from './transform/span.pipe';
+import { ColSpanPipe } from './transform/col-span.pipe';
 
 const COMPONENT = [NzxTableComponent, NzxTableHeaderComponent, NzxColumnSettingComponent];
 @NgModule({
-  declarations: [COMPONENT, ColFormatPipe, LinkHrefPipe, SpanPipe],
+  declarations: [COMPONENT, ColFormatPipe, LinkHrefPipe, ColSpanPipe],
   imports: [
     CommonModule,
     FormsModule,

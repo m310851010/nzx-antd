@@ -43,7 +43,8 @@ import {
   NzxTableSize,
   PageInfo,
   RowEventArg,
-  SorterResult
+  SorterResult,
+  SpanFunc
 } from './table.type';
 import { FETCH_SETTING } from './const';
 import { debounceTime, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
@@ -337,6 +338,10 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * 虚拟滚动数据 TrackByFunction 函数
    */
   @Input() nzVirtualForTrackBy?: TrackByFunction<T>;
+  /**
+   * 合并单元格
+   */
+  @Input() spanFunc?: SpanFunc<T>;
   /**
    * 页数改变时的回调函数
    */
