@@ -81,7 +81,7 @@
           <th
             *ngIf="(!col.nzShowCheckbox || col.nzShowCheckAll === false) && col.visible !== false"
             nz-resizable
-            [nzDisabled]="nzxResizable === true"
+            [nzDisabled]="nzxResizable === false"
             nzBounds="window"
             (nzResize)="onResize($event, col)"
             (click)="headerClick.emit({ column: col, event: $event })"
@@ -159,17 +159,15 @@
     </ng-container>
   </thead>
 
-  <tbody
-    *ngIf="nzVirtualForTrackBy || nzVirtualItemSize"
-    class="nzx-table-striped-tbody"
-    [class.nzx-table-striped-tbody]="nzxStripe"
-  >
+  <tbody *ngIf="nzVirtualForTrackBy || nzVirtualItemSize" [class.nzx-table-striped-tbody]="nzxStripe">
     <ng-template nz-virtual-scroll let-row let-index="index">
       <ng-container
         *ngTemplateOutlet="
-          trTemplate;
+          nzxTrTemplate || trTemplate;
           context: {
             $implicit: row,
+            nzData: nzData,
+            nzPageData: basicTable.data,
             index: index,
             first: index === 0,
             last: nzData.length === index + 1,
@@ -181,18 +179,23 @@
     </ng-template>
   </tbody>
 
-  <tbody
-    *ngIf="!nzVirtualForTrackBy && !nzVirtualItemSize"
-    class="nzx-table-striped-tbody"
-    [class.nzx-table-striped-tbody]="nzxStripe"
-  >
+  <tbody *ngIf="!nzVirtualForTrackBy && !nzVirtualItemSize" [class.nzx-table-striped-tbody]="nzxStripe">
     <ng-container
       *ngFor="let row of basicTable.data; index as index; first as first; last as last; even as even; odd as odd"
     >
       <ng-container
         *ngTemplateOutlet="
-          trTemplate;
-          context: { $implicit: row, index: index, first: first, last: last, even: even, odd: odd }
+          nzxTrTemplate || trTemplate;
+          context: {
+            $implicit: row,
+            nzData: nzData,
+            nzPageData: basicTable.data,
+            index: index,
+            first: first,
+            last: last,
+            even: even,
+            odd: odd
+          }
         "
       ></ng-container>
     </ng-container>
@@ -229,8 +232,24 @@
       <ng-container
         *ngFor="let col of _bodyColumns; index as _index; first as _first; last as _last; even as _even; odd as _odd"
       >
-        <ng-container *let="row | colSpan: spanFunc:nzData:basicTable.data:col:index:_index as span">
-          {{ span.rowspan + '  ' + span.colspan }}
+        <ng-container
+          *let="
+            row
+              | colSpan
+                : nzxSpanFunc
+                : nzData
+                : basicTable.data
+                : col
+                : { index: index, first: first, last: last, even: even, odd: odd }
+                : {
+                    index: _index,
+                    first: _first,
+                    last: _last,
+                    even: _even,
+                    odd: _odd
+                  } as span
+          "
+        >
           <td
             *ngIf="col.visible !== false && span.rowspan && span.colspan"
             (click)="

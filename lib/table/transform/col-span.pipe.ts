@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { NzxColumn, SpanFunc } from '../table.type';
+import { IndexAttr, NzxColumn, SpanFunc } from '../table.type';
 
 @Pipe({
   name: 'colSpan',
@@ -12,8 +12,8 @@ export class ColSpanPipe implements PipeTransform {
     nzData: T[],
     nzPageData: T[],
     column: NzxColumn<T>,
-    rowIndex: number,
-    colIndex: number
+    rowIndex: IndexAttr,
+    colIndex: IndexAttr
   ): unknown {
     let rowspan: number | null | void = 1;
     let colspan: number | null | void = 1;

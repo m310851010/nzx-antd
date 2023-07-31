@@ -80,7 +80,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
   /**
    * 当前选中的行
    */
-  _selectRow?: NzxColumn<T>;
+  _selectRow?: T;
   /**
    * 当前页数据
    */
@@ -116,7 +116,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
   /**
    * 是否显示斑马线
    */
-  @Input() nzxStripe = true;
+  @Input() nzxStripe = false;
   /**
    * 请求之前处理函数
    */
@@ -341,7 +341,11 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
   /**
    * 合并单元格
    */
-  @Input() spanFunc?: SpanFunc<T>;
+  @Input() nzxSpanFunc?: SpanFunc<T>;
+  /**
+   * 自定义tr
+   */
+  @Input() nzxTrTemplate?: TemplateRef<{ $implicit: T; nzData: T[]; nzPageData: T[] } & IndexAttr>;
   /**
    * 页数改变时的回调函数
    */
@@ -930,5 +934,9 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
     } else {
       this.scrollY = `${element.clientHeight}px`;
     }
+  }
+
+  onCellClick(row: any) {
+    console.log(row);
   }
 }

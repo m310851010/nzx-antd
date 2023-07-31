@@ -80,8 +80,7 @@ export default {
     nzPageSize: 10,
     nzData: [],
     nzxShowHeader: true,
-    nzWidthConfig: [],
-    nzxClickSelectedRow: true
+    nzWidthConfig: []
   },
   parameters: {
     controls: {
@@ -100,7 +99,9 @@ export default {
         '_indeterminate',
         '_nzxColumns',
         '_selectRow',
-        'resize$'
+        'resize$',
+        'onRowClick',
+        'onResize'
       ]
     },
     docs: {
@@ -144,6 +145,30 @@ export const IsIndex = Template({
   nzData: NzxUtils.clone(nzData)
 });
 
+export const NzxStripe = Template({
+  nzxColumns: [{ isIndex: true }, { name: 'name', thText: '姓名' }, { name: 'org', thText: '部门' }],
+  nzxStripe: true,
+  nzData: NzxUtils.clone(nzData)
+});
+
+export const NzxResizable = Template({
+  nzxColumns: [
+    { name: 'name', thText: '姓名' },
+    { name: 'org', thText: '部门' }
+  ],
+  nzxResizable: true,
+  nzData: NzxUtils.clone(nzData)
+});
+
+export const NzxClickSelectedRow = Template({
+  nzxColumns: [
+    { name: 'name', thText: '姓名' },
+    { name: 'org', thText: '部门' }
+  ],
+  nzxClickSelectedRow: true,
+  nzData: NzxUtils.clone(nzData)
+});
+
 export const IsIndexName = Template({
   nzxColumns: [
     { isIndex: true, thText: '编号' },
@@ -182,7 +207,7 @@ export const ScrollTemplate: Story<NzxTableComponent> = args => {
     props: args,
     template: `
     <div style="height: 50%; overflow: hidden;">
-        <nzx-table [nzData]="nzData" [nzxColumns]="nzxColumns" [nzFrontPagination]="false" scrollY="100%"></nzx-table>
+        <nzx-table [nzData]="nzData" [nzxColumns]="nzxColumns" [nzFrontPagination]="false" scrollY="500px"></nzx-table>
     </div>
     `
   };
@@ -208,6 +233,7 @@ export const ColspanCol = Template({
   nzxColumns: [
     { nzShowCheckbox: true, nzText: '测试' },
     {
+      name: 'name',
       thText: '姓名'
     },
     { name: 'firstName', thText: 'FIRST_NAME' },
@@ -215,11 +241,11 @@ export const ColspanCol = Template({
     { name: 'org', thText: '部门' }
   ],
   nzData: NzxUtils.clone(nzData),
-  spanFunc: params => {
-    if (params.rowIndex % 2 === 0) {
-      if (params.colIndex === 0) {
+  nzxSpanFunc: params => {
+    if (params.rowIndex.index % 2 === 0) {
+      if (params.colIndex.index === 1) {
         return [1, 2];
-      } else if (params.colIndex === 1) {
+      } else if (params.colIndex.index === 2) {
         return [0, 0];
       }
     }

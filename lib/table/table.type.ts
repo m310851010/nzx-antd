@@ -302,15 +302,16 @@ export type NzxTableSize = NzTableSize | 'mini';
 /**
  * 合并单元格参数
  */
-export type SpanFunc<T> = (params: CellSpanArgType<T>) => RowColspan | [number, number] | null | undefined | void;
+export type SpanFunc<T> = (params: CellArgType<T>) => RowColspan | [number, number] | null | undefined | void;
 
-export type CellSpanArgType<T> = {
+
+export type CellArgType<T> = {
   nzData: T[];
   nzPageData: T[];
   row: T;
   column: NzxColumn<T>;
-  rowIndex: number;
-  colIndex: number;
+  rowIndex: IndexAttr;
+  colIndex: IndexAttr;
 };
 
 export interface RowColspan {
