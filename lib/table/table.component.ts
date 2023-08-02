@@ -44,7 +44,8 @@ import {
   PageInfo,
   RowEventArg,
   SorterResult,
-  SpanFunc
+  SpanFunc,
+  TrTemplateArgs
 } from './table.type';
 import { FETCH_SETTING } from './const';
 import { debounceTime, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
@@ -345,7 +346,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
   /**
    * 自定义tr
    */
-  @Input() nzxTrTemplate?: TemplateRef<{ $implicit: T; nzData: T[]; nzPageData: T[] } & IndexAttr>;
+  @Input() nzxTr?: TemplateRef<TrTemplateArgs<T>>;
   /**
    * 页数改变时的回调函数
    */
@@ -405,6 +406,10 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * 刷新按钮点击事件
    */
   @Output() readonly refreshClick = new EventEmitter<NzxTableComponent>();
+  /**
+   * 排序列触发
+   */
+  @Output() sortedColumn = new EventEmitter<CdkDragDrop<NzxColumn<T>, NzSafeAny>>();
 
   @ContentChildren(NamedTemplate) children!: QueryList<NamedTemplate<NzSafeAny>>;
   @ViewChild('basicTable') nzTable!: NzTableComponent<T>;
@@ -552,7 +557,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
   onRowClick(info: RowEventArg<T>) {
     this.rowClick.emit(info);
     if (this.nzxClickSelectedRow !== false) {
-      this._selectRow = info.row;
+      this._selectRow = this._selectRow === info.row ? undefined : info.row;
     }
   }
 
@@ -830,8 +835,9 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * 拖拽排序
    * @param event
    */
-  sortedColumn(event: CdkDragDrop<NzxColumn<T>, NzSafeAny>) {
+  onSortedColumn(event: CdkDragDrop<NzxColumn<T>, NzSafeAny>) {
     moveItemInArray(this._headerColumns[0], event.previousIndex, event.currentIndex);
+    this.sortedColumn.emit(event);
   }
 
   ngOnDestroy(): void {

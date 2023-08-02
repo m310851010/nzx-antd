@@ -23,7 +23,7 @@
     setting
     *ngIf="nzxSettingVisible"
     [nzxColumns]="_bodyColumns"
-    (sortedColumn)="sortedColumn($event)"
+    (sortedColumn)="onSortedColumn($event)"
     (fixedClick)="fixedClick($event)"
   ></nzx-column-setting>
 
@@ -163,11 +163,13 @@
     <ng-template nz-virtual-scroll let-row let-index="index">
       <ng-container
         *ngTemplateOutlet="
-          nzxTrTemplate || trTemplate;
+          nzxTr || trTemplate;
           context: {
             $implicit: row,
+            row: row,
             nzData: nzData,
             nzPageData: basicTable.data,
+            columns: _bodyColumns,
             index: index,
             first: index === 0,
             last: nzData.length === index + 1,
@@ -185,11 +187,13 @@
     >
       <ng-container
         *ngTemplateOutlet="
-          nzxTrTemplate || trTemplate;
+          nzxTr || trTemplate;
           context: {
             $implicit: row,
+            row: row,
             nzData: nzData,
             nzPageData: basicTable.data,
+            columns: _bodyColumns,
             index: index,
             first: first,
             last: last,
