@@ -24,10 +24,10 @@ export class NzxBetweenComponent {
   /**
    * 开始字段禁用
    */
-  @Input() nzxStartDisabled = false;
+  @Input() nzxStartDisabled?: boolean;
   /**
    * 结束字段禁用
    */
-  @Input() nzxEndDisabled = false;
+  @Input() nzxEndDisabled?: boolean;
   constructor() {}
 }

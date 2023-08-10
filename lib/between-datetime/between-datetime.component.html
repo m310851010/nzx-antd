@@ -11,7 +11,7 @@
       context: {
         $implicit: {
           dir: nzxStartReName,
-          disabled: nzxDisabled || nzxStartDisabled,
+          disabled: nzxStartDisabled != null ? nzxStartDisabled : nzxDisabled,
           placeholder: nzxStartPlaceholder,
           nzSuffixIcon: nzxStartSuffixIcon,
           nzAllowClear: nzxStartAllowClear,
@@ -45,7 +45,7 @@
       context: {
         $implicit: {
           dir: nzxEndReName,
-          disabled: nzxDisabled || nzxEndDisabled,
+          disabled: nzxEndDisabled != null ? nzxEndDisabled : nzxDisabled,
           placeholder: nzxEndPlaceholder,
           nzSuffixIcon: nzxEndSuffixIcon,
           nzAllowClear: nzxEndAllowClear,
