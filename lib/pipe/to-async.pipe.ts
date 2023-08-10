@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { from, map, Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { FetcherService, FetchOptions } from '@xmagic/nzx-antd/service';
 import { NzxUtils } from '@xmagic/nzx-antd/util';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';

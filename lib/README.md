@@ -21,8 +21,8 @@
 
 ## 🖥 使用环境
 
-- [Angular](https://angular.io) >= v13.0.0
-- [ng-zorro-antd](https://ng.ant.design) >= v13.0.0
+- [Angular](https://angular.io) > v12.0.0
+- [ng-zorro-antd](https://ng.ant.design) >= v12.0.0
 
 ## 📦 安装
 
@@ -65,8 +65,8 @@ import { environment } from '../environments/environment';
   providedIn: 'root'
 })
 export class NzxAntdConfigService extends NzxAntdService {
-  override basePath = environment.basePath;
-  override response = { data: 'data' };
+  basePath = environment.basePath;
+  response = { data: 'data' };
   constructor() {
     super();
   }

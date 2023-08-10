@@ -48,7 +48,8 @@ import {
   TrTemplateArgs
 } from './table.type';
 import { FETCH_SETTING } from './const';
-import { debounceTime, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
+import { fromEvent, Observable, Subject } from 'rxjs';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { switchMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { NzxAntdService } from '@xmagic/nzx-antd';
@@ -456,7 +457,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * 点击刷新按钮
    */
   onRefreshClick() {
-    if (this.refreshClick.observed) {
+    if (this.refreshClick.observers.length) {
       this.refreshClick.emit(this);
     } else {
       this.fetch(false);
@@ -473,9 +474,9 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
 
   /**
    * 固定列
-   * @param column
+   * @param _column
    */
-  fixedClick(column: NzxColumn<T>) {
+  fixedClick(_column: NzxColumn<T>) {
     const hasFixed = this._allColumns.filter(value => value.fixed).length;
     this.scrollX = hasFixed ? '100vw' : undefined;
   }

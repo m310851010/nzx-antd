@@ -55,10 +55,10 @@ import {
 export class NgxFor<T, U extends NgxIterable<T> = NgxIterable<T>> implements DoCheck {
   private _ngxForOf: U | undefined | null = null;
   private _ngxForDirty = true;
-  private _differ: Differ<T> | null = null;
+  private _differ: Differ | null = null;
   private _trackByFn!: TrackByFunction<T>;
 
-  static ngxTemplateContextGuard<T, U extends NgxIterable<T>>(dir: NgxFor<T, U>, ctx: any): ctx is NgxForContext<T, U> {
+  static ngxTemplateContextGuard<T, U extends NgxIterable<T>>(_dir: NgxFor<T, U>, _ctx: any): _ctx is NgxForContext<T, U> {
     return true;
   }
 
@@ -184,22 +184,22 @@ export class NgxForContext<T, U extends NgxIterable<T> = NgxIterable<T>> {
 export declare type NgxIterable<T> = NgIterable<T> | NgxKv<T>;
 export declare type NgxKv<T> = Record<string, T> | Map<string, T>;
 
-interface ApplyChanges<T> {
+interface ApplyChanges {
   applyChanges(_ngxFor?: any): void;
 }
 
-interface Differ<T> {
-  diff(value?: any): ApplyChanges<T> | null;
+interface Differ {
+  diff(value?: any): ApplyChanges | null;
 }
 
-class IterDiffer<T> implements Differ<T> {
+class IterDiffer<T> implements Differ {
   constructor(
     public differ: IterableDiffer<T>,
     public _viewContainer: ViewContainerRef,
     public _template: TemplateRef<NgxForContext<T, NgxIterable<T>>>
   ) {}
 
-  diff(value?: NgIterable<T> | null): ApplyChanges<T> | null {
+  diff(value?: NgIterable<T> | null): ApplyChanges | null {
     const changes = this.differ.diff(value);
     if (!changes) {
       return null;
@@ -234,7 +234,7 @@ class IterDiffer<T> implements Differ<T> {
   }
 }
 
-class KvDiffer<T> implements Differ<T> {
+class KvDiffer<T> implements Differ{
   private keyIndex: Record<string, number> = {};
   constructor(
     public differ: KeyValueDiffer<any, T>,
@@ -242,7 +242,7 @@ class KvDiffer<T> implements Differ<T> {
     public _template: TemplateRef<NgxForContext<T, NgxIterable<T>>>
   ) {}
 
-  diff(value?: Record<string, T> | Map<any, T> | null): ApplyChanges<T> | null {
+  diff(value?: Record<string, T> | Map<any, T> | null): ApplyChanges | null {
     const changes = this.differ.diff(value as Record<string, T>);
     if (!changes) {
       return null;

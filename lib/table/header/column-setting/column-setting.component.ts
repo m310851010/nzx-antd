@@ -70,7 +70,7 @@ export class NzxColumnSettingComponent<T> implements OnInit /*, OnChanges*/ {
 
   ngOnInit(): void {}
 
-  columnVisible(item: NzxColumn<T>, checked: boolean) {
+  columnVisible(item: NzxColumn<T>, _checked: boolean) {
     this.refreshNameCheckedStatus();
     this.columnCheckedChange.emit(item);
   }
@@ -100,18 +100,18 @@ export class NzxColumnSettingComponent<T> implements OnInit /*, OnChanges*/ {
 
   /**
    * 开始拖动
-   * @param event
+   * @param _event
    */
-  cdkDragStarted(event: CdkDragStart) {
+  cdkDragStarted(_event: CdkDragStart) {
     const preview = new ElementRef<HTMLElement>(document.querySelector('.cdk-drag.cdk-drag-preview')!);
     this.renderer.addClass(preview.nativeElement, this.dragPreviewClass);
   }
 
   /**
    * 结束拖动
-   * @param event
+   * @param _event
    */
-  cdkDragReleased(event: CdkDragRelease) {
+  cdkDragReleased(_event: CdkDragRelease) {
     const preview = new ElementRef<HTMLElement>(document.querySelector('.cdk-drag.cdk-drag-preview')!);
     this.renderer.removeClass(preview.nativeElement, this.dragPreviewClass);
   }
@@ -124,7 +124,9 @@ export class NzxColumnSettingComponent<T> implements OnInit /*, OnChanges*/ {
     if (this._nzxColumns && this._nzxColumns.length) {
       this._columnNameChecked = checked;
       this._indeterminate = false;
-      this._nzxColumns.filter(v => v.settingVisible != false && v.settingDisabled !== true).forEach(v => (v.visible = checked));
+      this._nzxColumns
+        .filter(v => v.settingVisible !== false && v.settingDisabled !== true)
+        .forEach(v => (v.visible = checked));
       this.columnNameCheckedChange.emit(checked);
     }
   }
@@ -134,7 +136,7 @@ export class NzxColumnSettingComponent<T> implements OnInit /*, OnChanges*/ {
    */
   refreshNameCheckedStatus(): void {
     if (this._nzxColumns && this._nzxColumns.length) {
-      const list = this._nzxColumns.filter(v => v.settingVisible != false && v.settingDisabled !== true);
+      const list = this._nzxColumns.filter(v => v.settingVisible !== false && v.settingDisabled !== true);
       this._columnNameChecked = list.every(item => item.visible);
       this._indeterminate = !this._columnNameChecked && list.some(item => item.visible);
     } else {

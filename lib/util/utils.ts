@@ -290,7 +290,7 @@ class UtilsClass {
     if (template == null || !data) {
       return template || '';
     }
-    return template.replace(/\{([\w\.]*)\}/g, (str, key) => {
+    return template.replace(/\{([\w\.]*)\}/g, (_str, key) => {
       const path = key.split('.');
       let v = data[path.shift()];
       for (let i = 0, size = path.length; i < size && v !== null; i++) {

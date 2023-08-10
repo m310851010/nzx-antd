@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { OptionItem } from '@xmagic/nzx-antd/checkbox';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
-import { map, Observable, of, shareReplay, tap } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { map, shareReplay, tap } from 'rxjs/operators';
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { DicSetting, NzxAntdService } from '@xmagic/nzx-antd';
 import { LOADING_ENABLED, SYNCED_ENABLED } from './fetcher.service';
@@ -122,7 +123,7 @@ export class DicService {
       .get<Record<string, NzSafeAny>>(url, {
         context: new HttpContext().set(SYNCED_ENABLED, synced).set(LOADING_ENABLED, false)
       })
-      .pipe(map(this.dicSettings.map));
+      .pipe(map(v => this.dicSettings.map(v, isNumber)));
   }
 
   /**

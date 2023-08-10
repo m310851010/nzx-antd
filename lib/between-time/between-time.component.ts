@@ -9,7 +9,7 @@ import {
   TemplateRef,
   ViewEncapsulation
 } from '@angular/core';
-import { NzSafeAny, NzStatus } from 'ng-zorro-antd/core/types';
+import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { InputBoolean } from 'ng-zorro-antd/core/util';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NzxBetweenComponent } from '@xmagic/nzx-antd/between';
@@ -48,10 +48,7 @@ export class NzxBetweenTimeComponent extends NzxBetweenComponent implements Cont
    * 控件id-开始
    */
   @Input() nzxStartId: string | null = null;
-  /**
-   * 设置校验状态-开始
-   */
-  @Input() nzxStartStatus: NzStatus = '';
+
   /**
    * 小时选项间隔-开始
    */
@@ -129,10 +126,7 @@ export class NzxBetweenTimeComponent extends NzxBetweenComponent implements Cont
    * 控件id-结束
    */
   @Input() nzxEndId: string | null = null;
-  /**
-   * 设置校验状态-结束
-   */
-  @Input() nzxEndStatus: NzStatus = '';
+
   /**
    * 小时选项间隔-结束
    */

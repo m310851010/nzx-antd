@@ -9,7 +9,8 @@ import {
   Router,
   RouterStateSnapshot
 } from '@angular/router';
-import { Observable, of, tap } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { NzxUtils } from '@xmagic/nzx-antd/util';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzxAntdService } from '@xmagic/nzx-antd';

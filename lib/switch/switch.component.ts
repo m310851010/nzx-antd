@@ -71,7 +71,7 @@ export class NzxSwitchComponent extends BaseControl<NzSafeAny> implements Contro
     this.nzxValue = value === this.nzxCheckedValue;
   }
 
-  override setDisabledState(isDisabled: boolean): void {
+  setDisabledState(isDisabled: boolean): void {
     this.nzDisabled = isDisabled;
   }
 }

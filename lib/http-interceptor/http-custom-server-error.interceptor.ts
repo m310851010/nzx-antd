@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Observable, catchError } from 'rxjs';
+import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { HttpError } from './http.model';
 import { LogoutService } from './logout.service';
 import { DEFAULT_RESPONSE_SETTING, NzxAntdService, ResponseSetting } from '@xmagic/nzx-antd';
@@ -27,10 +28,11 @@ export class HttpCustomServerErrorInterceptor implements HttpInterceptor {
 
   /**
    * 只抛出自定义异常, 对于http内部异常由拦截器统一处理
+   * @param req
    * @param error
-   * @param caught 原始异常
+   * @param _caught 原始异常
    */
-  handleError(req: HttpRequest<HttpError>, error: HttpError, caught: Observable<HttpEvent<HttpError>>) {
+  handleError(req: HttpRequest<HttpError>, error: HttpError, _caught: Observable<HttpEvent<HttpError>>) {
     if (error.httpError) {
       return this.settings.handleError(req, error);
       // 登录超时  强制下线

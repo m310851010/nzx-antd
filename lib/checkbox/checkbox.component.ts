@@ -46,7 +46,7 @@ export class NzxCheckboxComponent<T = NzSafeAny>
   /**
    * 禁用所有复选框
    */
-  @Input() override nzxDisabled = false;
+  @Input() nzxDisabled = false;
   /**
    * 布局方式, 水平/垂直
    */

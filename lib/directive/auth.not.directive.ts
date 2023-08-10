@@ -45,17 +45,17 @@ export class AuthNotDirective<T = unknown> extends AuthDirective {
   /**
    * 是否允许渲染, 没有权限的时候渲染
    * @param hasAuth 是否有权限
-   * @param value 权限码
+   * @param _value 权限码
    * @protected
    */
-  protected override canRender(hasAuth: boolean, value: T) {
+  protected canRender(hasAuth: boolean, _value: T) {
     return !hasAuth;
   }
 
   constructor(
-    protected override _viewContainer: ViewContainerRef,
-    public override templateRef: TemplateRef<AuthContext<T>>,
-    public override antdService: NzxAntdService
+    protected _viewContainer: ViewContainerRef,
+    public templateRef: TemplateRef<AuthContext<T>>,
+    public antdService: NzxAntdService
   ) {
     super(_viewContainer, templateRef, antdService);
   }

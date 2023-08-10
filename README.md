@@ -70,8 +70,8 @@ import { environment } from '../environments/environment';
   providedIn: 'root'
 })
 export class NzxAntdConfigService extends NzxAntdService {
-  override basePath = environment.basePath;
-  override response = { data: 'data' };
+  basePath = environment.basePath;
+  response = { data: 'data' };
   constructor() {
     super();
   }

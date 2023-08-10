@@ -38,6 +38,6 @@ export class HttpLoadingService {
    * @param complete
    */
   subscribe(next?: (value: boolean) => void, error?: (error: NzSafeAny) => void, complete?: () => void): Subscription {
-    return this.httpLoadingStatus.subscribe({ next, error, complete });
+    return this.httpLoadingStatus.subscribe(next, error, complete);
   }
 }

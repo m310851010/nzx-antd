@@ -97,7 +97,7 @@
             [nzShowFilter]="col.nzShowFilter"
             [nzSortPriority]="col.nzSortPriority === true"
             [nzFilterFn]="col.nzShowFilter && col.nzFilterFn == null ? true : col.nzFilterFn"
-            (nzFilterChange)="col.nzFilterChange?.($event, nzData)"
+            (nzFilterChange)="col.nzFilterChange && col.nzFilterChange($event, nzData)"
             [nzFilters]="col.nzFilters"
             [nzFilterMultiple]="col.nzFilterMultiple !== false"
             [nzWidth]="col.nzWidth == null && col.isIndex ? '60px' : col.nzWidth"
@@ -371,9 +371,9 @@
 
   <!-- 按钮列-->
   <ng-template #buttonControlTemplate>
-    <ng-container *ngIf="data.col.buttons?.length; else textValueTemplate">
+    <ng-container *ngIf="data.col.buttons && data.col.buttons.length; else textValueTemplate">
       <ng-container *ngFor="let btn of data.col.buttons; index as index; count as count; last as last">
-        <ng-container *let="row.buttons?.[data.col.name] as rowBtn">
+        <ng-container *let="row.buttons && row.buttons[data.col.name] as rowBtn">
           <button
             *ngIf="btn.link === false && (btn.visible || rowBtn?.visible !== false)"
             type="button"
@@ -395,7 +395,7 @@
           </button>
           <a
             *ngIf="btn.link !== false && (btn.visible || rowBtn?.visible !== false)"
-            [attr.href]="btn.href | linkHref: row:data:index:data.col"
+            [attr.href]="btn.href | linkHref : row : data : index : data.col"
             [attr.target]="rowBtn?.target || btn.target"
             (click)="btn.click && rowBtn?.disabled !== true && btn.click(row, data, $event)"
           >
@@ -420,13 +420,13 @@
   <ng-template #textValueTemplate>
     {{
       row
-        | colFormat: data.col:data.indexAttr.index
+        | colFormat : data.col : data.indexAttr.index
         | async
-        | defaultify: (data.col.nzShowCheckbox ? '' : data.col.defaultify || defaultText)
+        | defaultify : (data.col.nzShowCheckbox ? '' : data.col.defaultify || defaultText)
     }}
   </ng-template>
 </ng-template>
 
 <ng-template #totalTemplate let-range="range" let-total>
-  第 {{ range[0] / nzPageSize | math: 'ceil' }}/{{ total / nzPageSize | math: 'ceil' }} 页 共 {{ total }} 条
+  第 {{ range[0] / nzPageSize | math : 'ceil' }}/{{ total / nzPageSize | math : 'ceil' }} 页 共 {{ total }} 条
 </ng-template>

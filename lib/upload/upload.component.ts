@@ -225,7 +225,7 @@ export class NzxUploadComponent extends BaseControl<NzUploadFile[]> implements C
     }
   }
 
-  override setDisabledState(isDisabled: boolean) {
+  setDisabledState(isDisabled: boolean) {
     this.nzDisabled = isDisabled;
   }
 
@@ -299,26 +299,6 @@ export class NzxUploadComponent extends BaseControl<NzUploadFile[]> implements C
     }
     return null;
   }
-
-  /**
-   * 显示文件验证错误
-   * @param file 当前文件
-   * @param fileList 文件列表
-   * @param showValidateMessage 是否显示
-   * @private
-   */
-  private showFileErrorMessage(
-    file: NzUploadFile,
-    fileList: NzUploadFile[],
-    showValidateMessage?: boolean
-  ): FileValidateError | null {
-    const error = this.beforeUploadValidator(file, fileList);
-    if (error && showValidateMessage !== false) {
-      this.messageService.error(error.message || '文件不合法');
-    }
-    return error;
-  }
-
   private getError(
     errorType: ErrorType,
     file: NzUploadFile,

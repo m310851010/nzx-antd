@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Subject } from 'rxjs';
-import { ConfirmType, ModalOptions, NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import { ModalOptions, NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzxModalDragService } from './modal-drag.service';
 
@@ -29,7 +29,7 @@ export class NzxModalWrapService {
     this.modal.closeAll();
   }
 
-  confirm<T>(options: ModalOptions<T>, confirmType?: ConfirmType): NzModalRef<T> {
+  confirm<T>(options: ModalOptions<T>): NzModalRef<T> {
     return this.createModalWidthDrag(options, c => this.modal.confirm(c));
   }
 

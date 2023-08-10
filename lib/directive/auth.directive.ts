@@ -1,7 +1,7 @@
 import { Directive, EmbeddedViewRef, Input, OnDestroy, TemplateRef, ViewContainerRef } from '@angular/core';
 import { of, Subscription } from 'rxjs';
 import { NzxAntdService } from '@xmagic/nzx-antd';
-import { NzSafeAny } from 'ng-zorro-antd/core/types'
+import { NzSafeAny } from 'ng-zorro-antd/core/types';
 
 /**
  * 权限指令, 有权限渲染模板,否则渲染else模板
@@ -33,9 +33,9 @@ export class AuthDirective<T = unknown> implements OnDestroy {
    *
    */
   static ngTemplateContextGuard<T>(
-    dir: AuthDirective<T>,
-    ctx: NzSafeAny
-  ): ctx is AuthContext<Exclude<T, false | 0 | '' | null | undefined>> {
+    _dir: AuthDirective<T>,
+    _ctx: NzSafeAny
+  ): _ctx is AuthContext<Exclude<T, false | 0 | '' | null | undefined>> {
     return true;
   }
 
@@ -118,10 +118,10 @@ export class AuthDirective<T = unknown> implements OnDestroy {
   /**
    * 是否允许渲染
    * @param hasAuth 是否有权限
-   * @param value 权限码
+   * @param _value 权限码
    * @protected
    */
-  protected canRender(hasAuth: boolean, value: T) {
+  protected canRender(hasAuth: boolean, _value: T) {
     return hasAuth;
   }
 
