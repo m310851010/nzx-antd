@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpContext, HttpContextToken } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 import { NzxUtils } from '@xmagic/nzx-antd/util';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
@@ -87,7 +87,7 @@ export class FetcherService {
    * @param options 参数不包含函数不进行二次处理
    */
   public doFetch<T>(options: FetchOptions): Observable<T> {
-    const option: Record<string, NzSafeAny> = {};
+    const option: Record<string, Any> = {};
     if (options.responseType) {
       option.responseType = options.responseType;
     }
@@ -126,7 +126,7 @@ export class FetcherService {
    * 使用同步方式进行远程校验
    * @param options
    */
-  remoteValidate<T = NzSafeAny>(options: ValidatorOption<T>): ValidatorFn {
+  remoteValidate<T = Any>(options: ValidatorOption<T>): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (control.value == null || !control.value.length) {
         return null;
@@ -166,7 +166,7 @@ export class FetcherService {
 /**
  * 请求参数
  */
-export type FetchParams<T = NzSafeAny> = (() => Promise<T> | T) | Promise<T> | T;
+export type FetchParams<T = Any> = (() => Promise<T> | T) | Promise<T> | T;
 
 /**
  * 请求配置
@@ -185,7 +185,7 @@ export interface FetchOptions {
    * 发送之前的回调函数,仅URL 时有效
    * @param params
    */
-  beforeSend?: (params: NzSafeAny) => NzSafeAny;
+  beforeSend?: (params: Any) => Any;
   /**
    * 响应类型
    */
@@ -211,11 +211,11 @@ export interface FetchOptions {
 /**
  * 验证器请求参数
  */
-export type FetchValidatorParams<T = NzSafeAny> = ((control: AbstractControl) => Promise<T> | T) | Promise<T> | T;
+export type FetchValidatorParams<T = Any> = ((control: AbstractControl) => Promise<T> | T) | Promise<T> | T;
 /**
  * 远程验证器配置
  */
-export type ValidatorOption<T = NzSafeAny> = Omit<FetchOptions, 'beforeSend' | 'async' | 'data'> & {
+export type ValidatorOption<T = Any> = Omit<FetchOptions, 'beforeSend' | 'async' | 'data'> & {
   /**
    * 错误信息描述
    */
@@ -234,7 +234,7 @@ export type ValidatorOption<T = NzSafeAny> = Omit<FetchOptions, 'beforeSend' | '
    * @param params
    * @param control
    */
-  beforeSend?(params: NzSafeAny, control: AbstractControl): NzSafeAny;
+  beforeSend?(params: Any, control: AbstractControl): Any;
 };
 
 

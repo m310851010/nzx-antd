@@ -1,5 +1,5 @@
 import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 import { NzxUtils } from './utils';
 
 /**
@@ -91,7 +91,7 @@ export class FormUtilsClass {
    * @param message 错误信息
    * @param hasValue 是否有值函数判断
    */
-  required<T = NzSafeAny>(message: string = '不能为空', hasValue: (value: T) => boolean = value => !!value): ValidatorFn {
+  required<T = Any>(message: string = '不能为空', hasValue: (value: T) => boolean = value => !!value): ValidatorFn {
     return (control: AbstractControl) => {
       return hasValue(control.value) ? null : { required: { message, value: control.value } };
     };
@@ -246,7 +246,7 @@ export class FormUtilsClass {
   twoControl(
     form: FormGroup | FormArray | (() => FormGroup | FormArray),
     otherField: Array<string | number> | string,
-    compare: (v1: NzSafeAny, v2: NzSafeAny) => boolean,
+    compare: (v1: Any, v2: Any) => boolean,
     errMessage: ValidationErrors
   ): ValidatorFn {
     const fn = NzxUtils.isFunction(form) ? form : () => form;

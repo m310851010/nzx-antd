@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { NzxUtils } from '@xmagic/nzx-antd/util';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 
 /**
  * 根据路径获取数据
@@ -12,7 +12,7 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
   pure: true
 })
 export class PathValuePipe implements PipeTransform {
-  transform<T>(value: NzSafeAny, path: string, defaultValue?: NzSafeAny): T {
+  transform<T>(value: Any, path: string, defaultValue?: Any): T {
     return NzxUtils.get(value, path, defaultValue);
   }
 }

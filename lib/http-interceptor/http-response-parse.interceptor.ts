@@ -12,7 +12,7 @@ import { switchMap } from 'rxjs/operators';
 import { HttpError, ResponseModel } from './http.model';
 import { DEFAULT_RESPONSE_SETTING, NzxAntdService, ResponseSetting } from '@xmagic/nzx-antd';
 import { NzxUtils } from '@xmagic/nzx-antd/util';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 
 /**
  * 处理服务器返回的数据，改变其结构。
@@ -92,10 +92,10 @@ export class HttpResponseParseInterceptor implements HttpInterceptor {
   }
 
   private getBodyAttr(
-    req: HttpRequest<NzSafeAny>,
-    response: HttpResponse<NzSafeAny>,
-    body: NzSafeAny,
-    attrOrFn: string | ((req: HttpRequest<NzSafeAny>, response: HttpResponse<NzSafeAny>) => NzSafeAny)
+    req: HttpRequest<Any>,
+    response: HttpResponse<Any>,
+    body: Any,
+    attrOrFn: string | ((req: HttpRequest<Any>, response: HttpResponse<Any>) => Any)
   ) {
     return attrOrFn ? (NzxUtils.isFunction(attrOrFn) ? attrOrFn(req, response) : NzxUtils.get(body, attrOrFn)) : body;
   }

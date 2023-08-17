@@ -1,7 +1,6 @@
 import { Directive, EmbeddedViewRef, Input, OnDestroy, TemplateRef, ViewContainerRef } from '@angular/core';
 import { of, Subscription } from 'rxjs';
-import { NzxAntdService } from '@xmagic/nzx-antd';
-import { NzSafeAny } from 'ng-zorro-antd/core/types'
+import { NzxAntdService, Any } from '@xmagic/nzx-antd';
 
 /**
  * 权限指令, 有权限渲染模板,否则渲染else模板
@@ -34,7 +33,7 @@ export class AuthDirective<T = unknown> implements OnDestroy {
    */
   static ngTemplateContextGuard<T>(
     dir: AuthDirective<T>,
-    ctx: NzSafeAny
+    ctx: Any
   ): ctx is AuthContext<Exclude<T, false | 0 | '' | null | undefined>> {
     return true;
   }
@@ -143,7 +142,7 @@ export class AuthContext<T = unknown> {
   public auth: T = null!;
 }
 
-function assertTemplate(property: string, templateRef: TemplateRef<NzSafeAny> | null): void {
+function assertTemplate(property: string, templateRef: TemplateRef<Any> | null): void {
   const isTemplateRefOrNull = !!(!templateRef || templateRef.createEmbeddedView);
   if (!isTemplateRefOrNull) {
     throw new Error(`${property} must be a TemplateRef, but received '${templateRef}'.`);

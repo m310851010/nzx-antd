@@ -1,4 +1,4 @@
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 
 const rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g;
 const reEscapeChar = /\\(\\)?/g;
@@ -28,7 +28,7 @@ const reIsNative = RegExp(
  * @param path 属性路径
  * @param defaultValue 当属性不存在或为undefined返回defaultValue
  */
-export function get(obj: NzSafeAny, path: string, defaultValue?: NzSafeAny) {
+export function get(obj: Any, path: string, defaultValue?: Any) {
   const segments = stringToPath(path);
   let index = 0;
   const length = segments.length;
@@ -57,20 +57,20 @@ export function get(obj: NzSafeAny, path: string, defaultValue?: NzSafeAny) {
  * console.log(object.x[0].y.z);
  * // => 5
  */
-export function set(object: NzSafeAny, path: string, value: NzSafeAny) {
+export function set(object: Any, path: string, value: Any) {
   return object == null ? object : baseSet(object, path, value);
 }
 
-export function is(val: NzSafeAny, type: string) {
+export function is(val: Any, type: string) {
   return toStr.call(val) === `[object ${type}]`;
 }
 
-export function isObject(value: NzSafeAny) {
+export function isObject(value: Any) {
   const type = typeof value;
   return value != null && (type === 'object' || type === 'function');
 }
 
-export function assignValue(object: NzSafeAny, key: string, value: NzSafeAny) {
+export function assignValue(object: Any, key: string, value: Any) {
   const objValue = object[key];
   if (!(hasOwnProperty.call(object, key) && eq(objValue, value)) || (value === undefined && !(key in object))) {
     baseAssignValue(object, key, value);
@@ -97,10 +97,10 @@ function stringToPath(string: string) {
 }
 
 function baseSet(
-  object: NzSafeAny,
+  object: Any,
   _path: string,
-  value: NzSafeAny,
-  customizer: (objValue: NzSafeAny, key: string, nested: NzSafeAny) => NzSafeAny = obj => obj
+  value: Any,
+  customizer: (objValue: Any, key: string, nested: Any) => Any = obj => obj
 ) {
   if (!isObject(object)) {
     return object;
@@ -133,7 +133,7 @@ function baseSet(
   return object;
 }
 
-function isIndex(value: NzSafeAny | number, length?: number) {
+function isIndex(value: Any | number, length?: number) {
   const type = typeof value;
   length = length == null ? Number.MAX_SAFE_INTEGER : length;
 
@@ -146,7 +146,7 @@ function isIndex(value: NzSafeAny | number, length?: number) {
   );
 }
 
-function eq(value: NzSafeAny, other: NzSafeAny) {
+function eq(value: Any, other: Any) {
   return value === other || (value !== value && other !== other);
 }
 
@@ -158,16 +158,16 @@ const defineProperty = (() => {
   } catch (e) {}
 })();
 
-function getValue(object: NzSafeAny, key: string) {
+function getValue(object: Any, key: string) {
   return object == null ? undefined : object[key];
 }
 
-function getNative(object: NzSafeAny, key: string) {
+function getNative(object: Any, key: string) {
   const value = getValue(object, key);
   return baseIsNative(value) ? value : undefined;
 }
 
-function baseIsNative(value: NzSafeAny) {
+function baseIsNative(value: Any) {
   if (!isObject(value)) {
     return false;
   }
@@ -175,7 +175,7 @@ function baseIsNative(value: NzSafeAny) {
   return pattern.test(toSource(value));
 }
 
-function baseAssignValue(object: NzSafeAny, key: string, value: NzSafeAny) {
+function baseAssignValue(object: Any, key: string, value: Any) {
   if (key === '__proto__' && defineProperty) {
     defineProperty(object, key, {
       configurable: true,

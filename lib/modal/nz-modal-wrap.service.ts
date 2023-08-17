@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { ConfirmType, ModalOptions, NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 import { NzxModalDragService } from './modal-drag.service';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class NzxModalWrapService {
    * 创建对话框, 增加可拖拽功能
    * @param config ModalOptions
    */
-  create<T, R = NzSafeAny>(config: ModalOptions<T, R>): NzModalRef<T, R> {
+  create<T, R = Any>(config: ModalOptions<T, R>): NzModalRef<T, R> {
     return this.createModalWidthDrag(config, c => this.modal.create(c));
   }
 
@@ -49,7 +49,7 @@ export class NzxModalWrapService {
     return this.createModalWidthDrag(options, c => this.modal.warning(c));
   }
 
-  protected createModalWidthDrag<T, R = NzSafeAny>(
+  protected createModalWidthDrag<T, R = Any>(
     config: ModalOptions<T, R>,
     create: (newConfig: ModalOptions<T, R>) => NzModalRef<T, R>
   ) {
@@ -68,7 +68,7 @@ export class NzxModalWrapService {
     return modalRef;
   }
 
-  protected createModalConfig<T, R = NzSafeAny>(config: ModalOptions<T, R>, wrapCls: string): ModalOptions<T, R> {
+  protected createModalConfig<T, R = Any>(config: ModalOptions<T, R>, wrapCls: string): ModalOptions<T, R> {
     const defaultConfig: ModalOptions = {
       nzMaskClosable: false,
       nzTitle: '提示'

@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { from, map, Observable, of } from 'rxjs';
 import { FetcherService, FetchOptions } from '@xmagic/nzx-antd/service';
 import { NzxUtils } from '@xmagic/nzx-antd/util';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 
 /**
  * 把请求信息转换为异步对象
@@ -19,7 +19,7 @@ export class ToAsyncPipe implements PipeTransform {
    * @param value 可以是url或者Observable, Promise
    * @param option 配置项
    */
-  transform<T = NzSafeAny, U = NzSafeAny>(
+  transform<T = Any, U = Any>(
     value: string | Observable<T> | Promise<T> | T,
     option?: AsyncOption
   ): Observable<U> | null {
@@ -56,9 +56,9 @@ export type AsyncOption = Omit<FetchOptions, 'url'> & {
    * @param data
    * @param index
    */
-  map?: (data: NzSafeAny) => NzSafeAny;
+  map?: (data: Any) => Any;
   /**
    * 默认值
    */
-  defaultValue?: NzSafeAny;
+  defaultValue?: Any;
 };

@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, forwardRef, Input, TemplateRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { NzSafeAny, NzSizeDSType } from 'ng-zorro-antd/core/types';
+import { NzSizeDSType } from 'ng-zorro-antd/core/types';
 import { BaseControl } from '@xmagic/nzx-antd/util';
+import { Any } from '@xmagic/nzx-antd';
 
 @Component({
   selector: 'nzx-switch',
@@ -28,16 +29,16 @@ import { BaseControl } from '@xmagic/nzx-antd/util';
     }
   ]
 })
-export class NzxSwitchComponent extends BaseControl<NzSafeAny> implements ControlValueAccessor {
+export class NzxSwitchComponent extends BaseControl<Any> implements ControlValueAccessor {
   nzxValue!: boolean;
   /**
    * 选中时的值
    */
-  @Input() nzxCheckedValue: NzSafeAny = true;
+  @Input() nzxCheckedValue: Any = true;
   /**
    * 非选中时的值
    */
-  @Input() nzxUnCheckedValue: NzSafeAny = false;
+  @Input() nzxUnCheckedValue: Any = false;
   /**
    * 	disable 状态
    */
@@ -53,7 +54,7 @@ export class NzxSwitchComponent extends BaseControl<NzSafeAny> implements Contro
   /**
    * 选中时的内容
    */
-  @Input() nzCheckedChildren?: string | TemplateRef<void>;
+  @Input() nzCheckedChildren?: string | TemplateRef<void> | null;
   /**
    * 非选中时的内容
    */
@@ -67,7 +68,7 @@ export class NzxSwitchComponent extends BaseControl<NzSafeAny> implements Contro
     this.onChange(val ? this.nzxCheckedValue : this.nzxUnCheckedValue);
   }
 
-  writeValue(value: NzSafeAny | null): void {
+  writeValue(value: Any | null): void {
     this.nzxValue = value === this.nzxCheckedValue;
   }
 

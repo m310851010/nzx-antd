@@ -1,5 +1,5 @@
 import { Directive, Inject, Input, TemplateRef, ViewContainerRef } from '@angular/core';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 
 /**
  * 允许在模板内复用计算值（包含异步），避免重复重新计算。
@@ -20,7 +20,7 @@ export class LetDirective<T> {
     vc.createEmbeddedView(ref, new LetContext<T>(this));
   }
 
-  static ngTemplateContextGuard<T>(_dir: LetDirective<T>, _ctx: NzSafeAny): _ctx is LetDirective<T> {
+  static ngTemplateContextGuard<T>(_dir: LetDirective<T>, _ctx: Any): _ctx is LetDirective<T> {
     return true;
   }
 }

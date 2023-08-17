@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { OptionItem } from '@xmagic/nzx-antd/checkbox';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 import { map, Observable, of, shareReplay, tap } from 'rxjs';
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { DicSetting, NzxAntdService } from '@xmagic/nzx-antd';
@@ -119,10 +119,10 @@ export class DicService {
     }
     const url = typeof this.dicSettings.url === 'string' ? `${this.dicSettings.url}/${key}` : this.dicSettings.url(key);
     return this.http
-      .get<Record<string, NzSafeAny>>(url, {
+      .get<Record<string, Any>>(url, {
         context: new HttpContext().set(SYNCED_ENABLED, synced).set(LOADING_ENABLED, false)
       })
-      .pipe(map(this.dicSettings.map));
+      .pipe(map(v => this.dicSettings.map(v, isNumber)));
   }
 
   /**
@@ -141,4 +141,4 @@ export class DicService {
 /**
  * 字典项定义, {label: string; value: any}
  */
-export type DicItem = Pick<OptionItem, 'label' | 'value'> & { [prop: string]: NzSafeAny };
+export type DicItem = Pick<OptionItem, 'label' | 'value'> & { [prop: string]: Any };

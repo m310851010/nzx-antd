@@ -10,7 +10,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { CdkDragDrop, CdkDragRelease, CdkDragStart, moveItemInArray } from '@angular/cdk/drag-drop';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 import { NzxColumn } from '../../table.type';
 
 /**
@@ -55,7 +55,7 @@ export class NzxColumnSettingComponent<T> implements OnInit /*, OnChanges*/ {
   /**
    * 排序列触发
    */
-  @Output() sortedColumn = new EventEmitter<CdkDragDrop<NzxColumn<T>, NzSafeAny>>();
+  @Output() sortedColumn = new EventEmitter<CdkDragDrop<NzxColumn<T>, Any>>();
   /**
    * 列名选择Change
    */
@@ -93,7 +93,7 @@ export class NzxColumnSettingComponent<T> implements OnInit /*, OnChanges*/ {
    * @param event
    * @param list 排序数组
    */
-  dropColumn(event: CdkDragDrop<NzxColumn<T>, NzSafeAny>, list: NzxColumn<T>[]) {
+  dropColumn(event: CdkDragDrop<NzxColumn<T>, Any>, list: NzxColumn<T>[]) {
     moveItemInArray(list, event.previousIndex, event.currentIndex);
     this.sortedColumn.emit(event);
   }

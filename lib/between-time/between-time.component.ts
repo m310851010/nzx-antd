@@ -9,7 +9,8 @@ import {
   TemplateRef,
   ViewEncapsulation
 } from '@angular/core';
-import { NzSafeAny, NzStatus } from 'ng-zorro-antd/core/types';
+import { NzStatus } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 import { InputBoolean } from 'ng-zorro-antd/core/util';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NzxBetweenComponent } from '@xmagic/nzx-antd/between';
@@ -103,7 +104,7 @@ export class NzxBetweenTimeComponent extends NzxBetweenComponent implements Cont
   /**
    * 自定义的后缀图标
    */
-  @Input() nzxStartSuffixIcon?: string | TemplateRef<NzSafeAny>;
+  @Input() nzxStartSuffixIcon?: string | TemplateRef<Any>;
   /**
    * 隐藏禁止选择的选项
    */
@@ -180,7 +181,7 @@ export class NzxBetweenTimeComponent extends NzxBetweenComponent implements Cont
   /**
    * 自定义的后缀图标
    */
-  @Input() nzxEndSuffixIcon?: string | TemplateRef<NzSafeAny>;
+  @Input() nzxEndSuffixIcon?: string | TemplateRef<Any>;
   /**
    * 隐藏禁止选择的选项
    */

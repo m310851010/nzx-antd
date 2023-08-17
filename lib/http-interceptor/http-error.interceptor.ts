@@ -3,7 +3,7 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { HttpError } from './http.model';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 import { NzxAntdService } from '@xmagic/nzx-antd';
 
 /**
@@ -13,7 +13,7 @@ import { NzxAntdService } from '@xmagic/nzx-antd';
 export class HttpErrorInterceptor implements HttpInterceptor {
   constructor(protected antdService: NzxAntdService) {}
 
-  intercept(req: HttpRequest<NzSafeAny>, next: HttpHandler): Observable<HttpEvent<NzSafeAny>> {
+  intercept(req: HttpRequest<Any>, next: HttpHandler): Observable<HttpEvent<Any>> {
     return next.handle(req).pipe(catchError(error => this.handleError(req, error)));
   }
 
@@ -22,7 +22,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
    * @param req
    * @param errorResponse
    */
-  handleError(req: HttpRequest<NzSafeAny>, errorResponse: HttpErrorResponse) {
+  handleError(req: HttpRequest<Any>, errorResponse: HttpErrorResponse) {
     if (this.antdService.handleHttpError) {
       return this.antdService.handleHttpError(req, errorResponse) as Observable<never>;
     }

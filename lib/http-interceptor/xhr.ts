@@ -15,7 +15,7 @@ import { Injectable } from '@angular/core';
 import { XhrFactory } from '@angular/common';
 import { Observable, Observer } from 'rxjs';
 import { SYNCED_ENABLED } from '@xmagic/nzx-antd/service';
-import { NzSafeAny } from 'ng-zorro-antd/core/types'
+import { Any } from '@xmagic/nzx-antd';
 
 const XSSI_PREFIX = /^\)]}',?\n/;
 
@@ -23,7 +23,7 @@ const XSSI_PREFIX = /^\)]}',?\n/;
  * Determine an appropriate URL for the response, by checking either
  * XMLHttpRequest.responseURL or the X-Request-URL header.
  */
-function getResponseUrl(xhr: NzSafeAny): string | null {
+function getResponseUrl(xhr: Any): string | null {
   if ('responseURL' in xhr && xhr.responseURL) {
     return xhr.responseURL;
   }
@@ -50,7 +50,7 @@ export class AsyncHttpXhrBackend implements HttpBackend {
    * @param req The request object.
    * @returns An observable of the response events.
    */
-  handle(req: HttpRequest<NzSafeAny>): Observable<HttpEvent<NzSafeAny>> {
+  handle(req: HttpRequest<Any>): Observable<HttpEvent<Any>> {
     // Quick check to give a better error message when a user attempts to use
     // HttpClient.jsonp() without installing the HttpClientJsonpModule
     if (req.method === 'JSONP') {
@@ -58,7 +58,7 @@ export class AsyncHttpXhrBackend implements HttpBackend {
     }
 
     // Everything happens on Observable subscription.
-    return new Observable((observer: Observer<HttpEvent<NzSafeAny>>) => {
+    return new Observable((observer: Observer<HttpEvent<Any>>) => {
       // Start by setting up the XHR object with request method, URL, and withCredentials flag.
       const xhr = this.xhrFactory.build();
       // 是否同步 添加同步/异步请求支持
@@ -97,7 +97,7 @@ export class AsyncHttpXhrBackend implements HttpBackend {
         // xhr.response will be null, and xhr.responseText cannot be accessed to
         // retrieve the prefixed JSON data in order to strip the prefix. Thus, all JSON
         // is parsed by first requesting text and then applying JSON.parse.
-        xhr.responseType = (responseType !== 'json' ? responseType : 'text') as NzSafeAny;
+        xhr.responseType = (responseType !== 'json' ? responseType : 'text') as Any;
       }
 
       // Serialize the request body if one is present. If not, this will be set to null.
@@ -143,7 +143,7 @@ export class AsyncHttpXhrBackend implements HttpBackend {
         let status = partXhr.status;
 
         // The body will be read out if present.
-        let body: NzSafeAny | null = null;
+        let body: Any | null = null;
 
         if (status !== HttpStatusCode.NoContent) {
           // Use XMLHttpRequest.response if set, responseText otherwise.

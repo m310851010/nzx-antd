@@ -1,5 +1,5 @@
 import { TemplateRef } from '@angular/core';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 import { NzTableFilterFn, NzTableSize, NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
 import { Observable } from 'rxjs';
 import { NzButtonShape, NzButtonSize, NzButtonType } from 'ng-zorro-antd/button';
@@ -7,7 +7,7 @@ import { NzButtonShape, NzButtonSize, NzButtonType } from 'ng-zorro-antd/button'
 /**
  * 列配置
  */
-export interface NzxColumn<T = Record<string, NzSafeAny>> {
+export interface NzxColumn<T = Record<string, Any>> {
   thText?: string;
   /**
    * th内容自定义, 不包含th标签本身
@@ -32,7 +32,7 @@ export interface NzxColumn<T = Record<string, NzSafeAny>> {
    * @param row 行数据
    * @param index 行索引
    */
-  format?: (data: NzSafeAny, row: T, index: number) => Observable<NzSafeAny> | Promise<NzSafeAny> | NzSafeAny;
+  format?: (data: Any, row: T, index: number) => Observable<Any> | Promise<Any> | Any;
   thNgClass?: NzxClassType | ((col: NzxColumn<T>, colIndex: number) => NzxClassType);
   thNgStyle?: NzxStyleType | ((col: NzxColumn<T>, colIndex: number) => NzxStyleType);
   tdNgClass?: NzxClassType | ((col: NzxColumn<T>, colIndex: number) => NzxClassType);
@@ -65,7 +65,7 @@ export interface NzxColumn<T = Record<string, NzSafeAny>> {
   nzShowRowSelection?: boolean;
   nzSelections?: Array<{
     text: string;
-    onSelect(...args: NzSafeAny[]): NzSafeAny;
+    onSelect(...args: Any[]): Any;
   }>;
   nzShowSort?: boolean;
   nzSortPriority?: boolean;
@@ -79,8 +79,8 @@ export interface NzxColumn<T = Record<string, NzSafeAny>> {
   nzCustomFilter?: boolean;
   nzFilterFn?: NzTableFilterFn<T> | boolean;
   nzFilterMultiple?: boolean;
-  nzFilters?: Array<{ text: string; value: NzSafeAny; byDefault?: boolean }>;
-  nzFilterChange?: (value: NzSafeAny[] | NzSafeAny, nzData: T[]) => void;
+  nzFilters?: Array<{ text: string; value: Any; byDefault?: boolean }>;
+  nzFilterChange?: (value: Any[] | Any, nzData: T[]) => void;
 
   nzWidth?: string | null;
   thAlign?: 'left' | 'right' | 'center';
@@ -120,13 +120,13 @@ export interface NzxColumn<T = Record<string, NzSafeAny>> {
    * 当数据为null显示的默认文本
    */
   defaultText?: string;
-  [key: string]: NzSafeAny;
+  [key: string]: Any;
 }
 
 /**
  * 列中配置按钮
  */
-export interface NzxColumnButton<T = NzSafeAny> {
+export interface NzxColumnButton<T = Any> {
   /**
    * 是否显示按钮, 在数据中配置 { buttons: { 'name对应的列1': { visible: true, showDivider: true, text: '数据上更新按钮文本'}}}
    */
@@ -221,8 +221,8 @@ export interface IndexAttr {
   readonly odd: boolean;
 }
 
-export type NzxStyleType = { [klass: string]: NzSafeAny } | null;
-export type NzxClassType = string | string[] | Set<string> | { [klass: string]: NzSafeAny };
+export type NzxStyleType = { [klass: string]: Any } | null;
+export type NzxClassType = string | string[] | Set<string> | { [klass: string]: Any };
 
 export interface RowEventArg<T> {
   row: T;

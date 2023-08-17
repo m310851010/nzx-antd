@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DragDrop, DragRef } from '@angular/cdk/drag-drop';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { ModalTypes, NzModalService } from 'ng-zorro-antd/modal';
+import { Any } from '@xmagic/nzx-antd';
 
 /**
  * 对话框拖动服务
@@ -17,7 +17,7 @@ export class NzxModalDragService {
    * @param nzMask 是否有遮罩
    * @param nzModalType 对话框类型
    */
-  createDragHandler<T = NzSafeAny>(wrapCls: string, nzMask?: boolean, nzModalType?: ModalTypes): DragRef<T> {
+  createDragHandler<T = Any>(wrapCls: string, nzMask?: boolean, nzModalType?: ModalTypes): DragRef<T> {
     const wrapElement = document.querySelector<HTMLDivElement>(`.${wrapCls}`)!;
     const rootElement = wrapElement.querySelector<HTMLDivElement>(`.ant-modal-content`)!;
     const handle =

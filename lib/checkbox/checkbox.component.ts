@@ -15,8 +15,8 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { BaseControl } from '@xmagic/nzx-antd/util';
-import { NgStyleInterface, NzSafeAny, NgClassType } from 'ng-zorro-antd/core/types';
-
+import { NgStyleInterface, NgClassType } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 /**
  * 增强`nz-checkbox`组件, 把数据和值分离
  */
@@ -34,7 +34,7 @@ import { NgStyleInterface, NzSafeAny, NgClassType } from 'ng-zorro-antd/core/typ
     }
   ]
 })
-export class NzxCheckboxComponent<T = NzSafeAny>
+export class NzxCheckboxComponent<T = Any>
   extends BaseControl<T[]>
   implements ControlValueAccessor, OnInit, OnChanges
 {
@@ -130,7 +130,7 @@ export class NzxCheckboxComponent<T = NzSafeAny>
 /**
  * 数据配置项
  */
-export interface NzxCheckboxOption<T = NzSafeAny> {
+export interface NzxCheckboxOption<T = Any> {
   /**
    *
    */
@@ -177,7 +177,7 @@ export interface NzxCheckboxOption<T = NzSafeAny> {
   /**
    * 额外附加数据
    */
-  [key: string]: NzSafeAny;
+  [key: string]: Any;
 }
 
 export type OptionItem = Omit<NzxCheckboxOption, 'indeterminate' | 'ngModelChange'>;

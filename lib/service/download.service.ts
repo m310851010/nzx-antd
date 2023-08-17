@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FetcherService, FetchOptions } from './fetcher.service';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 import { HttpErrorBean } from '@xmagic/nzx-antd';
 
 @Injectable()
@@ -37,8 +37,8 @@ export class NzxDownloadService {
    * @param filename 文件名
    */
   saveAs(body: Blob, filename: string) {
-    if (typeof (window.navigator as NzSafeAny).msSaveBlob !== 'undefined') {
-      (window.navigator as NzSafeAny).msSaveBlob(body, filename);
+    if (typeof (window.navigator as Any).msSaveBlob !== 'undefined') {
+      (window.navigator as Any).msSaveBlob(body, filename);
       return;
     }
 

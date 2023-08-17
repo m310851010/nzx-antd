@@ -17,7 +17,7 @@ import {
   NzDateMode,
   DisabledTimeConfig
 } from 'ng-zorro-antd/date-picker';
-import { FunctionProp, NzSafeAny } from 'ng-zorro-antd/core/types';
+import { FunctionProp } from 'ng-zorro-antd/core/types';
 import { NzDatePickerI18nInterface } from 'ng-zorro-antd/i18n';
 import { NzxBetweenComponent } from '@xmagic/nzx-antd/between';
 import { NzxUtils } from '@xmagic/nzx-antd/util';
@@ -35,6 +35,7 @@ import {
   getStartYearDate,
   getTimeValue
 } from './datetime-utils';
+import { Any } from '@xmagic/nzx-antd';
 
 /**
  * 包含开始日期和结束日期两个日期控件，默认实现开始时间小于结束日期，也可以设置日期的最大值和最小值。
@@ -211,29 +212,29 @@ export class NzxBetweenDatetimeComponent extends NzxBetweenComponent implements 
   /**
    * 在面板中添加额外的页脚
    */
-  @Input() nzxStartRenderExtraFooter?: TemplateRef<NzSafeAny> | string | FunctionProp<TemplateRef<NzSafeAny> | string>;
+  @Input() nzxStartRenderExtraFooter?: TemplateRef<Any> | string | FunctionProp<TemplateRef<Any> | string>;
 
   /**
    * 在面板中添加额外的页脚
    */
-  @Input() nzxEndRenderExtraFooter?: TemplateRef<NzSafeAny> | string | FunctionProp<TemplateRef<NzSafeAny> | string>;
+  @Input() nzxEndRenderExtraFooter?: TemplateRef<Any> | string | FunctionProp<TemplateRef<Any> | string>;
   /**
    * 自定义的后缀图标
    */
-  @Input() nzxStartSuffixIcon?: string | TemplateRef<NzSafeAny>;
+  @Input() nzxStartSuffixIcon?: string | TemplateRef<Any>;
 
   /**
    * 自定义的后缀图标
    */
-  @Input() nzxEndSuffixIcon?: string | TemplateRef<NzSafeAny>;
+  @Input() nzxEndSuffixIcon?: string | TemplateRef<Any>;
   /**
    * 自定义渲染日期-开始
    */
-  @Input() nzxStartDateRender?: TemplateRef<NzSafeAny> | string | FunctionProp<TemplateRef<Date> | string>;
+  @Input() nzxStartDateRender?: TemplateRef<Any> | string | FunctionProp<TemplateRef<Date> | string>;
   /**
    * 自定义渲染日期-结束
    */
-  @Input() nzxEndDateRender?: TemplateRef<NzSafeAny> | string | FunctionProp<TemplateRef<Date> | string>;
+  @Input() nzxEndDateRender?: TemplateRef<Any> | string | FunctionProp<TemplateRef<Date> | string>;
 
   /**
    * 弹出日历和关闭日历的回调

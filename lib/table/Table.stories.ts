@@ -18,7 +18,7 @@ import { NzxPipeModule } from '@xmagic/nzx-antd/pipe';
 import { NzxServiceModule } from '@xmagic/nzx-antd/service';
 import { NzOutletModule } from 'ng-zorro-antd/core/outlet';
 import { NzxUtils } from '../util';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 import { NzxColorType } from '@xmagic/nzx-antd/button';
 import { ColFormatPipe } from '@xmagic/nzx-antd/table/transform/col-format.pipe';
 import { LinkHrefPipe } from '@xmagic/nzx-antd/table/transform/link-href.pipe';
@@ -62,12 +62,12 @@ export default {
     nzWidthConfig: { table: { type: { summary: 'ReadonlyArray<string | null>' } }, control: { type: 'array' } },
     beforeFetch: {
       table: {
-        type: { summary: '(params: Record<string, NzSafeAny>) => Record<string, NzSafeAny> | Promise<NzSafeAny>' }
+        type: { summary: '(params: Record<string, Any>) => Record<string, Any> | Promise<Any>' }
       }
     },
     afterFetch: {
       table: {
-        type: { summary: '(res: NzSafeAny, pageIndex: number) => PageInfo<T> | Promise<PageInfo<T>>' }
+        type: { summary: '(res: Any, pageIndex: number) => PageInfo<T> | Promise<PageInfo<T>>' }
       }
     },
     actionVisible: { table: { defaultValue: 'true' } },
@@ -117,7 +117,7 @@ const Template: (props?: Partial<NzxTableComponent>) => Story<NzxTableComponent>
 const xing = '赵钱孙李周吴郑王冯陈褚卫蒋沈韩杨'.split('');
 const nzData = Array(10)
   .fill(0)
-  .map<Record<string, NzSafeAny>>((m, i) => ({
+  .map<Record<string, Any>>((m, i) => ({
     name: xing[i % xing.length] + '三',
     org: '测试部门',
     firstName: xing[i % xing.length],
@@ -220,7 +220,7 @@ ScrollTemplate.args = {
   ],
   nzData: Array(100)
     .fill(0)
-    .map<Record<string, NzSafeAny>>((m, i) => ({
+    .map<Record<string, Any>>((m, i) => ({
       name: xing[i % xing.length] + '三',
       org: '测试部门',
       firstName: xing[i % xing.length],

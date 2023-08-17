@@ -28,7 +28,7 @@ import { BaseControl } from '@xmagic/nzx-antd/util';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzxUtils } from '@xmagic/nzx-antd/util';
 import { NzBytesPipe } from 'ng-zorro-antd/pipes';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 
 export enum ErrorType {
   /**
@@ -63,7 +63,7 @@ export class NzxUploadComponent extends BaseControl<NzUploadFile[]> implements C
   /**
    * 自定义按钮或显示内容
    */
-  @Input() nzxUploadButton?: string | TemplateRef<NzSafeAny>;
+  @Input() nzxUploadButton?: string | TemplateRef<Any>;
   /**
    * 上传的提示信息
    */
@@ -323,7 +323,7 @@ export class NzxUploadComponent extends BaseControl<NzUploadFile[]> implements C
     errorType: ErrorType,
     file: NzUploadFile,
     messages: { [K: string]: string },
-    fmtData?: Record<string, NzSafeAny>
+    fmtData?: Record<string, Any>
   ): FileValidateError {
     return {
       errorType,

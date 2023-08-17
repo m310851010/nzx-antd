@@ -1,7 +1,7 @@
 import { ElementRef } from '@angular/core';
 import { isNil } from 'ng-zorro-antd/core/util';
 import { Observable } from 'rxjs';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 import { assignValue, get as _get, set as _set, isObject as _isObject, is as _is } from './utils-fn';
 
 const hasOwn = Object.prototype.hasOwnProperty;
@@ -43,7 +43,7 @@ class UtilsClass {
 
   isObject = _isObject;
 
-  defaultIfy<T = NzSafeAny>(obj: T, defaultValue: NzSafeAny) {
+  defaultIfy<T = Any>(obj: T, defaultValue: Any) {
     return isNil(obj) ? defaultValue : obj;
   }
 
@@ -62,13 +62,13 @@ class UtilsClass {
    * 深度clone
    * @param target
    */
-  clone<T = NzSafeAny>(target: T): T {
+  clone<T = Any>(target: T): T {
     const _target = NzxUtils.isArray(target) ? [] : {};
     return this.extend(_target as T, target);
   }
 
   // Return undefined instead of __proto__ if '__proto__' is not an own property
-  private getProperty<T = NzSafeAny>(obj: T, name: string) {
+  private getProperty<T = Any>(obj: T, name: string) {
     if (name === '__proto__') {
       if (!hasOwn.call(obj, name)) {
         return void 0;
@@ -86,7 +86,7 @@ class UtilsClass {
    * @param target
    * @param args
    */
-  extend<T = NzSafeAny>(target: T, ...args: NzSafeAny[]): T {
+  extend<T = Any>(target: T, ...args: Any[]): T {
     let copyIsArray, clone;
 
     for (const options of args) {
@@ -126,7 +126,7 @@ class UtilsClass {
    * @param end 结束数字
    * @param fill 填充内容,默认
    */
-  range<T = NzSafeAny>(start: number, end: number, fill?: ((num: number, index: number) => T) | T): T[] {
+  range<T = Any>(start: number, end: number, fill?: ((num: number, index: number) => T) | T): T[] {
     const list: T[] = [];
     const fn = fill == null ? (i: number) => i as unknown as T : this.isFunction(fill) ? fill : () => fill;
     let index = 0;
@@ -212,7 +212,7 @@ class UtilsClass {
    * @param pidName parentId属性名
    * @param childrenName children属性名
    */
-  listToTree<T extends { pid?: string; id?: string; [key: string]: NzSafeAny }>(
+  listToTree<T extends { pid?: string; id?: string; [key: string]: Any }>(
     list: T[],
     idName: keyof T = 'id',
     pidName: keyof T = 'pid',
@@ -221,7 +221,7 @@ class UtilsClass {
     if (!list || !list.length) {
       return [];
     }
-    const nodeMap: { [key: string]: NzSafeAny } = {};
+    const nodeMap: { [key: string]: Any } = {};
     for (const node of list) {
       nodeMap[node[idName]] = node;
       // @ts-ignore
@@ -248,7 +248,7 @@ class UtilsClass {
    * const myObservable = this.http.get<string>('url', { context: new HttpContext().set(SYNCED_ENABLED, true)});
    * const value = getAjaxValue(myObservable); // value为string类型
    */
-  getAjaxValue<T = NzSafeAny>(observable: Observable<T>) {
+  getAjaxValue<T = Any>(observable: Observable<T>) {
     let value!: T;
     observable.subscribe(result => (value = result)).unsubscribe();
     return value;
@@ -286,7 +286,7 @@ class UtilsClass {
    * @example
    * Utils.format('{s.0.name}', { s: [{name: 111}] }) => 111
    */
-  format(template: string | null, data?: Record<string, NzSafeAny>): string {
+  format(template: string | null, data?: Record<string, Any>): string {
     if (template == null || !data) {
       return template || '';
     }
@@ -368,11 +368,11 @@ class UtilsClass {
     return this.is(val, 'Number');
   }
 
-  isPromise<T = NzSafeAny>(val: NzSafeAny): val is Promise<T> {
+  isPromise<T = Any>(val: Any): val is Promise<T> {
     return this.is(val, 'Promise') || (this.isObject(val) && this.isFunction(val.then) && this.isFunction(val.catch));
   }
 
-  isObservable(obj: NzSafeAny): obj is Observable<NzSafeAny> {
+  isObservable(obj: Any): obj is Observable<Any> {
     return obj instanceof Observable || (obj && typeof obj.subscribe === 'function');
   }
 
@@ -392,22 +392,22 @@ class UtilsClass {
     return this.is(val, 'RegExp');
   }
 
-  isArray(val: NzSafeAny): val is Array<NzSafeAny> {
+  isArray(val: Any): val is Array<Any> {
     if (typeof Array.isArray === 'function') {
       return Array.isArray(val);
     }
     return this.is(val, 'Array');
   }
 
-  isWindow(val: NzSafeAny): val is Window {
+  isWindow(val: Any): val is Window {
     return typeof window !== 'undefined' && this.is(val, 'Window');
   }
 
-  isElement(val: NzSafeAny): val is Element {
+  isElement(val: Any): val is Element {
     return this.isObject(val) && !!val.tagName;
   }
 
-  isMap(val: unknown): val is Map<NzSafeAny, NzSafeAny> {
+  isMap(val: unknown): val is Map<Any, Any> {
     return this.is(val, 'Map');
   }
 
@@ -473,7 +473,7 @@ class UtilsClass {
    * 是否是纯对象值
    * @param obj
    */
-  isPlainObject<T = NzSafeAny>(obj: T) {
+  isPlainObject<T = Any>(obj: T) {
     if (!obj || !this.isObject(obj)) {
       return false;
     }
@@ -553,18 +553,18 @@ class UtilsClass {
    * @param obj
    * @returns
    */
-  serializeParams<T>(obj: T): Record<string, NzSafeAny>[] {
+  serializeParams<T>(obj: T): Record<string, Any>[] {
     if (!obj) {
       return [];
     }
 
-    const query: Record<string, NzSafeAny>[] = [];
+    const query: Record<string, Any>[] = [];
     this.buildParam(obj, query);
     return query;
   }
 
-  private buildParam<T extends Record<string, NzSafeAny>>(inObj: T, list: Record<string, NzSafeAny>[]) {
-    let value: NzSafeAny;
+  private buildParam<T extends Record<string, Any>>(inObj: T, list: Record<string, Any>[]) {
+    let value: Any;
     let subName: string;
     let innerObj: Record<string, string>;
     for (const name in inObj) {
@@ -611,7 +611,7 @@ export const NzxUtils = new UtilsClass();
  * 树节点
  */
 export interface TreeNode {
-  [key: string]: NzSafeAny;
+  [key: string]: Any;
 
   /**
    * 子节点
@@ -619,4 +619,4 @@ export interface TreeNode {
   children?: TreeNode[];
 }
 
-export type TreeChildren<T = NzSafeAny> = (node: T, parentNode: T | undefined, level: number) => T[] | null;
+export type TreeChildren<T = Any> = (node: T, parentNode: T | undefined, level: number) => T[] | null;

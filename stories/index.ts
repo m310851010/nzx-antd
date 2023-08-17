@@ -29,6 +29,7 @@ export const HIDE_CONTROL = {
  * @param template 模板
  */
 export function storyFactory<T>(props?: Partial<T>, template?: string): Story<T> {
+  // @ts-ignore
   const fn: Story<T> = args => {
     return {
       props: args,
@@ -46,10 +47,13 @@ export function storyFactory<T>(props?: Partial<T>, template?: string): Story<T>
  * @param props 属性名称列表
  */
 export function hideControlArgType<T>(...props: (keyof T)[]): Record<string, InputType> {
-  return props.reduce((prev, curr) => {
-    prev[curr] = { ...HIDE_CONTROL };
-    return prev;
-  }, {} as Record<keyof T, InputType>);
+  return props.reduce(
+    (prev, curr) => {
+      prev[curr] = { ...HIDE_CONTROL };
+      return prev;
+    },
+    {} as Record<keyof T, InputType>
+  );
 }
 
 /**

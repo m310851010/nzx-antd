@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { NzxAntdService } from '@xmagic/nzx-antd';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 
 /**
  * 对请求头进行处理
@@ -11,7 +11,7 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
 export class HttpHeaderInterceptor implements HttpInterceptor {
   constructor(protected antdService: NzxAntdService) {}
 
-  intercept(req: HttpRequest<NzSafeAny>, next: HttpHandler): Observable<HttpEvent<NzSafeAny>> {
+  intercept(req: HttpRequest<Any>, next: HttpHandler): Observable<HttpEvent<Any>> {
     const headers: Record<string, string> = { 'X-Requested-With': 'XMLHttpRequest' };
     if (
       !req.headers.has('Content-Type') &&

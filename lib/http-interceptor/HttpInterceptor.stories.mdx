@@ -32,7 +32,6 @@ import { NzxHttpInterceptorModule } from '@xmagic/nzx-antd/http-interceptor';
 
 ```ts
 import { Injectable } from '@angular/core';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable()
@@ -43,7 +42,7 @@ export class TestService {
    */
   getInfo(): Observable<string> {
     const data = { id: 1, details: [{ name: 'test', info: { level: 1, code: 'test code' } }] };
-    return this.http.get<string>('/api/test', { params: data as NzSafeAny });
+    return this.http.get<string>('/api/test', { params: data as Any });
   }
 }
 ```

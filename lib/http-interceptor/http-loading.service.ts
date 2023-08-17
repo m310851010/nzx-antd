@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 
 @Injectable({ providedIn: 'root' })
 export class HttpLoadingService {
@@ -37,7 +37,7 @@ export class HttpLoadingService {
    * @param error
    * @param complete
    */
-  subscribe(next?: (value: boolean) => void, error?: (error: NzSafeAny) => void, complete?: () => void): Subscription {
+  subscribe(next?: (value: boolean) => void, error?: (error: Any) => void, complete?: () => void): Subscription {
     return this.httpLoadingStatus.subscribe({ next, error, complete });
   }
 }

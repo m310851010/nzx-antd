@@ -1,10 +1,10 @@
-import { NzSafeAny } from 'ng-zorro-antd/core/types'
+import { Any } from '@xmagic/nzx-antd';
 
 /**
  * 服务端响应实体, 可以通过设置 http请求参数
  * {observe: 'response'} 拿到完整数据
  */
-export interface ResponseModel<T = NzSafeAny> {
+export interface ResponseModel<T = Any> {
   /**
    * 服务端返回编码
    */
@@ -16,7 +16,7 @@ export interface ResponseModel<T = NzSafeAny> {
 /**
  * http 请求出错后，在中间件中封闭为统一的格式。
  */
-export class HttpError<T = NzSafeAny> {
+export class HttpError<T = Any> {
   /**
    *
    * @param httpError 是否是HTTP原始异常

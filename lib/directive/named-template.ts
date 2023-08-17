@@ -1,5 +1,5 @@
 import { Directive, Input, OnInit, TemplateRef } from '@angular/core';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 
 /**
  * 获取模板名称
@@ -40,7 +40,7 @@ export class NamedTemplate<T> implements OnInit {
 
   resolveName() {
     if (!this.named && this.template) {
-      const tplRef = this.template as NzSafeAny;
+      const tplRef = this.template as Any;
       // localNames为数组, 如果没有name则为null
       this.named = tplRef._declarationTContainer.localNames?.[0];
     }

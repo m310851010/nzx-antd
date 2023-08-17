@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpParams, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { HttpDefaultCodec } from './http-default-encoder';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 import { NzxUtils } from '@xmagic/nzx-antd/util';
 
 /**
@@ -12,11 +12,11 @@ import { NzxUtils } from '@xmagic/nzx-antd/util';
 export class HttpParamsInterceptor implements HttpInterceptor {
   constructor() {}
 
-  intercept(req: HttpRequest<NzSafeAny>, next: HttpHandler): Observable<HttpEvent<NzSafeAny>> {
+  intercept(req: HttpRequest<Any>, next: HttpHandler): Observable<HttpEvent<Any>> {
     return next.handle(this.processParameters(req));
   }
 
-  processParameters(req: HttpRequest<NzSafeAny>) {
+  processParameters(req: HttpRequest<Any>) {
     if (req.params == null) {
       return req;
     }
@@ -26,7 +26,7 @@ export class HttpParamsInterceptor implements HttpInterceptor {
   }
 
   processGetParams(params: HttpParams) {
-    const result: Record<string, NzSafeAny> = { r: Math.random() };
+    const result: Record<string, Any> = { r: Math.random() };
 
     params.keys().reduce((acc, key) => {
       const values = params.getAll(key);

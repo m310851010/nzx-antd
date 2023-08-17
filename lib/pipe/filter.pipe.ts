@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 import { NzxUtils } from '@xmagic/nzx-antd/util';
 
 @Pipe({
@@ -7,15 +7,15 @@ import { NzxUtils } from '@xmagic/nzx-antd/util';
   pure: true
 })
 export class FilterPipe implements PipeTransform {
-  transform<T = NzSafeAny>(array: T[], matcher: string, searchText?: string): T[];
-  transform<T = NzSafeAny>(array: T[], matcher: FilterMatcherFn<T>): T[];
+  transform<T = Any>(array: T[], matcher: string, searchText?: string): T[];
+  transform<T = Any>(array: T[], matcher: FilterMatcherFn<T>): T[];
 
   /**
    * Filter array
    *
    * 过滤数组
    */
-  transform<T = NzSafeAny>(array: T[], matcher: FilterMatcherFn<T> | string, searchText?: string): T[] {
+  transform<T = Any>(array: T[], matcher: FilterMatcherFn<T> | string, searchText?: string): T[] {
     if (typeof matcher === 'string') {
       if (NzxUtils.isEmpty(searchText)) {
         return array;

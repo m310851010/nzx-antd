@@ -1,5 +1,5 @@
 import { Injectable, Optional } from '@angular/core';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +29,7 @@ export class NzxStorageService {
    * 获取值
    * @param key key
    */
-  getItem<T = NzSafeAny>(key: string): T | null {
+  getItem<T = Any>(key: string): T | null {
     const value = this.storage.getItem(key);
     return value == null ? null : (JSON.parse(value) as T);
   }
@@ -55,7 +55,7 @@ export class NzxStorageService {
    * @param key
    * @param value
    */
-  setItem<T = NzSafeAny>(key: string, value: T): void {
+  setItem<T = Any>(key: string, value: T): void {
     this.storage.setItem(key, JSON.stringify(value));
   }
 }

@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { NzxColumn, NzxColumnButton } from '../table.type';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 import { NzxUtils } from '@xmagic/nzx-antd/util';
 
 /**
@@ -10,7 +10,7 @@ import { NzxUtils } from '@xmagic/nzx-antd/util';
   name: 'linkHref'
 })
 export class LinkHrefPipe implements PipeTransform {
-  transform(btn: NzxColumnButton, row: NzSafeAny, data: NzSafeAny[], index: number, col: NzxColumn): unknown {
+  transform(btn: NzxColumnButton, row: Any, data: Any[], index: number, col: NzxColumn): unknown {
     if (!btn.href) {
       return undefined;
     }
