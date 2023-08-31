@@ -2,13 +2,9 @@ import { ElementRef } from '@angular/core';
 import { isNil } from 'ng-zorro-antd/core/util';
 import { Observable } from 'rxjs';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
-import { assignValue, get as _get, set as _set, isObject as _isObject, is as _is } from './utils-fn';
-
-const hasOwn = Object.prototype.hasOwnProperty;
-const gOPD = Object.getOwnPropertyDescriptor;
+import { get as _get, set as _set, is as _is, isPlainObject as _isPlainObject, merge } from './utils-fn';
 
 class UtilsClass {
-  assign = this.extend;
 
   /**
    * 根据属性路径获取对象的属性值
@@ -37,11 +33,11 @@ class UtilsClass {
    */
   set = _set;
 
-  private setProperty = assignValue;
-
   is = _is;
 
-  isObject = _isObject;
+  isObject(val: NzSafeAny) {
+    return val != null && _is(val, 'Object');
+  }
 
   defaultIfy<T = NzSafeAny>(obj: T, defaultValue: NzSafeAny) {
     return isNil(obj) ? defaultValue : obj;
@@ -63,62 +59,18 @@ class UtilsClass {
    * @param target
    */
   clone<T = NzSafeAny>(target: T): T {
-    const _target = NzxUtils.isArray(target) ? [] : {};
+    const _target = this.isArray(target) ? [] : {};
     return this.extend(_target as T, target);
   }
 
-  // Return undefined instead of __proto__ if '__proto__' is not an own property
-  private getProperty<T = NzSafeAny>(obj: T, name: string) {
-    if (name === '__proto__') {
-      if (!hasOwn.call(obj, name)) {
-        return void 0;
-      } else if (gOPD) {
-        // @ts-ignore
-        return gOPD(obj, name).value;
-      }
-    }
-    // @ts-ignore
-    return obj[name];
-  }
+  assign = merge;
 
   /**
    * 继承
    * @param target
    * @param args
    */
-  extend<T = NzSafeAny>(target: T, ...args: NzSafeAny[]): T {
-    let copyIsArray, clone;
-
-    for (const options of args) {
-      if (options == null) {
-        continue;
-      }
-
-      for (const name in options) {
-        const src = this.getProperty(target, name);
-        const copy = this.getProperty(options, name);
-        if (target === copy || copy === undefined) {
-          continue;
-        }
-
-        // tslint:disable-next-line:no-conditional-assignment
-        if (NzxUtils.isPlainObject(copy) || (copyIsArray = NzxUtils.isArray(copy))) {
-          if (copyIsArray) {
-            copyIsArray = false;
-            clone = src && NzxUtils.isArray(src) ? src : [];
-          } else {
-            clone = src && NzxUtils.isPlainObject(src) ? src : {};
-          }
-
-          this.setProperty(target, name, this.extend(clone, copy));
-        } else {
-          this.setProperty(target, name, copy);
-        }
-      }
-    }
-
-    return target;
-  }
+  extend = merge;
 
   /**
    * 根据开始和结束数字返回一个数组
@@ -473,27 +425,7 @@ class UtilsClass {
    * 是否是纯对象值
    * @param obj
    */
-  isPlainObject<T = NzSafeAny>(obj: T) {
-    if (!obj || !this.isObject(obj)) {
-      return false;
-    }
-
-    const hasOwnConstructor = hasOwn.call(obj, 'constructor');
-    const hasIsPrototypeOf =
-      // @ts-ignore
-      obj.constructor && obj.constructor.prototype && hasOwn.call(obj.constructor.prototype, 'isPrototypeOf');
-    // @ts-ignore
-    if (obj.constructor && !hasOwnConstructor && !hasIsPrototypeOf) {
-      return false;
-    }
-
-    let key;
-    for (key in obj) {
-      /**/
-    }
-
-    return typeof key === 'undefined' || hasOwn.call(obj, key);
-  }
+  isPlainObject = _isPlainObject;
 
   /**
    * 转换为日期
