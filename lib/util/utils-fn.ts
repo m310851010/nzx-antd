@@ -36,7 +36,7 @@ export function get(obj: NzSafeAny, path: string, defaultValue?: NzSafeAny) {
   while (obj != null && index < length) {
     obj = obj[toKey(segments[index++])];
   }
-  return index && index === length ? obj : defaultValue;
+  return index && index === length ? (obj === undefined ? defaultValue : obj) : defaultValue;
 }
 
 /**
