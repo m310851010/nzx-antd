@@ -193,8 +193,9 @@ export interface DicSetting {
   /**
    * 后台数据转换为label, value属性值, 符合select, checkbox的数据结构
    * @param data
+   * @param isNumber 是否是数字
    */
-  map: <T>(data: T) => { label: string; value: NzSafeAny; [prop: string]: NzSafeAny }[];
+  map: <T>(data: T, isNumber?: boolean) => { label: string; value: NzSafeAny; [prop: string]: NzSafeAny }[];
 }
 
 /**

@@ -59,11 +59,35 @@ export class DicService {
   }
 
   /**
+   * 获取字典项对应的名称
+   * @param key 字典key
+   * @param itemKey 字典项的key
+   */
+  getLabel(key: string, itemKey?: string | number) {
+    if (itemKey == null) {
+      return of(null);
+    }
+    return this.getDicMap(key, NzxUtils.isNumber(itemKey)).pipe(map(dic => dic[itemKey]));
+  }
+
+  /**
+   * 同步获取字典项对应的名称
+   * @param key 字典key
+   * @param itemKey 字典项的key
+   */
+  getLabelSync(key: string, itemKey?: string | number) {
+    if (itemKey == null) {
+      return of(null);
+    }
+    return this.getDicMapSync(key, NzxUtils.isNumber(itemKey))[itemKey];
+  }
+
+  /**
    * 获取map形式的字典数据, 异步请求, 请求会被缓存 可以多次调用
    * @param key 字典key
    * @param isNumber 是否是数字
    */
-  getDicMap(key: string, isNumber?: boolean): Observable<Record<string, string>> {
+  getDicMap(key: string, isNumber?: boolean): Observable<Record<string, string | number>> {
     return this.getDic(key, isNumber).pipe(map(this.listToMap));
   }
 
@@ -118,11 +142,18 @@ export class DicService {
       throw new Error('未配置字典接口地址,请在NzxAntdService中配置"dic"属性的"url"值');
     }
     const url = typeof this.dicSettings.url === 'string' ? `${this.dicSettings.url}/${key}` : this.dicSettings.url(key);
+    const dicMap =
+      this.dicSettings.map ||
+      ((data?: { children?: { code: string; name: string }[] }, isNumber?: boolean) => {
+        return (data?.children || []).map(
+          v => ({ ...v, label: v.name, value: isNumber ? +v.code : v.code } as DicItem)
+        );
+      });
     return this.http
       .get<Record<string, NzSafeAny>>(url, {
         context: new HttpContext().set(SYNCED_ENABLED, synced).set(LOADING_ENABLED, false)
       })
-      .pipe(map(this.dicSettings.map));
+      .pipe(map(list => dicMap(list, isNumber)));
   }
 
   /**

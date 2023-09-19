@@ -44,7 +44,7 @@ class UtilsClass {
   }
 
   trim(string: string) {
-    return (string || '').replace(/^[\s\uFEFF]+|[\s\uFEFF]+$/g, '');
+    return (string || '').toString().replace(/^[\s\uFEFF]+|[\s\uFEFF]+$/g, '');
   }
 
   /**

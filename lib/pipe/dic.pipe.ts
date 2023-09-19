@@ -1,19 +1,15 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { DicItem, DicService } from '@xmagic/nzx-antd/service';
-import { Observable } from 'rxjs';
+import { DicService } from '@xmagic/nzx-antd/service';
 
 /**
  * 字典管道
  * @example
  *
  * ``` html
- * {{'status' | dic | async}}
+ * {{1 | dic: 'status' | async}}
  *
- * {{'status' | dic: true | async}}
+ * {{'A' | dic: 'status' | async}}
  *
- * // 配置filter使用
- *
- * {{'status' | dic | async | filter: 'value' : 'test value' }}
  * ```
  */
 @Pipe({
@@ -25,23 +21,13 @@ export class DicPipe implements PipeTransform {
 
   /**
    * 字典管道
-   * @param key 字典key
-   * @param isNumber 是否数字
-   * @param isMap 返回数组结构
+   * @param key 字典项key
+   * @param dicName 字典名称
    */
-  transform(key: string, isNumber?: boolean, isMap?: false): Observable<DicItem[]> | null;
-  /**
-   * 字典管道
-   * @param key 字典key
-   * @param isNumber 是否数字
-   * @param isMap 返回map结构
-   */
-  transform(key: string, isNumber?: boolean, isMap?: true): Observable<Record<string, string>> | null;
-
-  transform(key: string, isNumber?: boolean, isMap?: boolean): Observable<DicItem[] | Record<string, string>> | null {
+  transform(key: string | number | null, dicName: string) {
     if (key == null) {
       return null;
     }
-    return isMap ? this.dicService.getDicMap(key, isNumber) : this.dicService.getDic(key, isNumber);
+    return this.dicService.getLabel(dicName, key);
   }
 }
