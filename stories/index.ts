@@ -29,6 +29,7 @@ export const HIDE_CONTROL = {
  * @param template 模板
  */
 export function storyFactory<T>(props?: Partial<T>, template?: string): Story<T> {
+  // @ts-ignore
   const fn: Story<T> = args => {
     return {
       props: args,

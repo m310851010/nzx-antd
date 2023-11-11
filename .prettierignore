@@ -16,3 +16,6 @@ package.json
 src/templates/
 assets/
 **/*.min.*
+package-lock.json
+documentation
+e2e

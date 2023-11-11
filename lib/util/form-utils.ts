@@ -1,4 +1,4 @@
-import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzxUtils } from './utils';
 
@@ -12,11 +12,11 @@ export class FormUtilsClass {
    * @param callback 回调函数
    */
   forEachFormControl(form: AbstractControl, callback: (ctrl: AbstractControl) => void) {
-    if (form instanceof FormGroup) {
+    if (form instanceof UntypedFormGroup) {
       callback(form);
       for (const i in form.controls) {
         const ctrl = form.controls[i];
-        if (ctrl instanceof FormControl) {
+        if (ctrl instanceof UntypedFormControl) {
           callback(ctrl);
         } else {
           this.forEachFormControl(ctrl, callback);
@@ -25,11 +25,11 @@ export class FormUtilsClass {
       return;
     }
 
-    if (form instanceof FormArray) {
+    if (form instanceof UntypedFormArray) {
       callback(form);
       for (let i = 0; i < form.length; i++) {
         const ctrl = form.at(i);
-        if (ctrl instanceof FormControl) {
+        if (ctrl instanceof UntypedFormControl) {
           callback(ctrl);
         } else {
           this.forEachFormControl(ctrl, callback);
@@ -38,7 +38,7 @@ export class FormUtilsClass {
       return;
     }
 
-    if (form instanceof FormControl) {
+    if (form instanceof UntypedFormControl) {
       callback(form);
       return;
     }
@@ -244,7 +244,7 @@ export class FormUtilsClass {
    * @param errMessage  错误提示
    */
   twoControl(
-    form: FormGroup | FormArray | (() => FormGroup | FormArray),
+    form: UntypedFormGroup | UntypedFormArray | (() => UntypedFormGroup | UntypedFormArray),
     otherField: Array<string | number> | string,
     compare: (v1: NzSafeAny, v2: NzSafeAny) => boolean,
     errMessage: ValidationErrors
@@ -277,7 +277,7 @@ export class FormUtilsClass {
    * @param message 提示信息
    */
   equalControl(
-    form: FormGroup | FormArray | (() => FormGroup | FormArray),
+    form: UntypedFormGroup | UntypedFormArray | (() => UntypedFormGroup | UntypedFormArray),
     otherField: Array<string | number> | string,
     message: string
   ): ValidatorFn {
@@ -291,7 +291,7 @@ export class FormUtilsClass {
    * @param otherField 另一个被验证的字段名
    * @param message 提示信息
    */
-  gtControl(form: FormGroup | FormArray, otherField: Array<string | number> | string, message: string): ValidatorFn {
+  gtControl(form: UntypedFormGroup | UntypedFormArray, otherField: Array<string | number> | string, message: string): ValidatorFn {
     const errMessage = { gtValidator: { message } };
     return this.twoControl(form, otherField, (v1, v2) => Number(v1) > Number(v2), errMessage);
   }
@@ -303,7 +303,7 @@ export class FormUtilsClass {
    * @param message 提示信息
    */
   gteControl(
-    form: FormGroup | FormArray | (() => FormGroup | FormArray),
+    form: UntypedFormGroup | UntypedFormArray | (() => UntypedFormGroup | UntypedFormArray),
     otherField: Array<string | number> | string,
     message: string
   ): ValidatorFn {
@@ -318,7 +318,7 @@ export class FormUtilsClass {
    * @param message 提示信息
    */
   ltControl(
-    form: FormGroup | FormArray | (() => FormGroup | FormArray),
+    form: UntypedFormGroup | UntypedFormArray | (() => UntypedFormGroup | UntypedFormArray),
     otherField: Array<string | number> | string,
     message: string
   ): ValidatorFn {
@@ -333,7 +333,7 @@ export class FormUtilsClass {
    * @param message 提示信息
    */
   lteControl(
-    form: FormGroup | FormArray | (() => FormGroup | FormArray),
+    form: UntypedFormGroup | UntypedFormArray | (() => UntypedFormGroup | UntypedFormArray),
     otherField: Array<string | number> | string,
     message: string
   ): ValidatorFn {
@@ -346,7 +346,7 @@ export class FormUtilsClass {
    * @param form
    * @param message
    */
-  unique(form: FormGroup | FormArray, message: string = '不允许重复'): ValidatorFn {
+  unique(form: UntypedFormGroup | UntypedFormArray, message: string = '不允许重复'): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) {
         return null;

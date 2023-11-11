@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpContext, HttpErrorResponse, HttpEvent, HttpRequest, HttpResponse } from '@angular/common/http';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { Observable, throwError } from 'rxjs';
 
 @Injectable({
@@ -22,16 +21,16 @@ export class NzxAntdService {
   /**
    * 自定义处理原始请求, 返回null,void则使用默认处理器
    */
-  handleRequest?: (req: HttpRequest<NzSafeAny>, url: string) => HttpRequest<NzSafeAny> | null | HttpRequestOptions;
+  handleRequest?: (req: HttpRequest<Any>, url: string) => HttpRequest<Any> | null | HttpRequestOptions;
   /**
    * 当发生http异常时(http code 非200), 映射成HttpErrorBean
    */
-  handleHttpError?: (req: HttpRequest<NzSafeAny>, errorResponse: HttpErrorResponse) => Observable<HttpErrorBean>;
+  handleHttpError?: (req: HttpRequest<Any>, errorResponse: HttpErrorResponse) => Observable<HttpErrorBean>;
 
   /**
    * 是否有权限
    */
-  hasAuth?: <T = NzSafeAny>(value: T) => Observable<boolean>;
+  hasAuth?: <T = Any>(value: T) => Observable<boolean>;
   /**
    * 权限变更, 通常切换用户时需要
    */
@@ -90,22 +89,22 @@ export interface ResponseSetting {
   /**
    * message字段名称, 支持路径属性
    */
-  message?: string | ((req: HttpRequest<NzSafeAny>, response: HttpResponse<NzSafeAny>) => NzSafeAny);
+  message?: string | ((req: HttpRequest<Any>, response: HttpResponse<Any>) => Any);
   /**
    * data字段名称, 支持路径属性
    */
-  data?: string | ((req: HttpRequest<NzSafeAny>, response: HttpResponse<NzSafeAny>) => NzSafeAny);
+  data?: string | ((req: HttpRequest<Any>, response: HttpResponse<Any>) => Any);
 
   /**
    * 是否请求成功
    * @param body 响应对象
    */
-  success?: (req: HttpRequest<NzSafeAny>, response: HttpResponse<NzSafeAny>) => boolean;
+  success?: (req: HttpRequest<Any>, response: HttpResponse<Any>) => boolean;
   /**
    * 错误处理器
    * @param error 错误信息
    */
-  handleError?: (req: HttpRequest<NzSafeAny>, error: HttpErrorBean) => Observable<HttpEvent<HttpErrorBean>>;
+  handleError?: (req: HttpRequest<Any>, error: HttpErrorBean) => Observable<HttpEvent<HttpErrorBean>>;
   /**
    * 是否登录超时, 返回false, 会进入handleError处理器, 不会触发退出登录
    * @param error 错误信息
@@ -153,11 +152,11 @@ export interface TableSetting {
   /**
    * 请求之前处理函数
    */
-  beforeFetch?: (params: Record<string, NzSafeAny>) => Record<string, NzSafeAny> | Promise<NzSafeAny>;
+  beforeFetch?: (params: Record<string, Any>) => Record<string, Any> | Promise<Any>;
   /**
    * 请求之后处理函数
    */
-  afterFetch?: <T>(res: NzSafeAny, pageIndex: number) => PageInfo<T> | Promise<PageInfo<T>>;
+  afterFetch?: <T>(res: Any, pageIndex: number) => PageInfo<T> | Promise<PageInfo<T>>;
 }
 
 /**
@@ -168,14 +167,14 @@ export interface HttpRequestOptions {
   reportProgress?: boolean;
   responseType?: 'arraybuffer' | 'blob' | 'json' | 'text';
   withCredentials?: boolean;
-  body?: NzSafeAny | null;
+  body?: Any | null;
   method?: string;
   url?: string;
-  setHeaders?: Record<string, NzSafeAny>;
-  setParams?: Record<string, NzSafeAny>;
+  setHeaders?: Record<string, Any>;
+  setParams?: Record<string, Any>;
 }
 
-export interface HttpErrorBean<T = NzSafeAny> {
+export interface HttpErrorBean<T = Any> {
   httpError: boolean;
   code: number;
   message: string;
@@ -195,7 +194,7 @@ export interface DicSetting {
    * @param data
    * @param isNumber 是否是数字
    */
-  map: <T>(data: T, isNumber?: boolean) => { label: string; value: NzSafeAny; [prop: string]: NzSafeAny }[];
+  map: <T>(data: T, isNumber?: boolean) => { label: string; value: Any; [prop: string]: Any }[];
 }
 
 /**
@@ -212,3 +211,6 @@ export interface PageInfo<T> {
    */
   pageIndex?: number;
 }
+
+// @ts-ignore
+export type Any = any;

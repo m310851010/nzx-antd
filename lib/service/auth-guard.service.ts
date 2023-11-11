@@ -1,14 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  CanActivateChild,
-  CanLoad,
-  Data,
-  Route,
-  Router,
-  RouterStateSnapshot
-} from '@angular/router';
+import { ActivatedRouteSnapshot, Data, Route, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable, of, tap } from 'rxjs';
 import { NzxUtils } from '@xmagic/nzx-antd/util';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
@@ -38,7 +29,7 @@ import { NzxAntdService } from '@xmagic/nzx-antd';
 @Injectable({
   providedIn: 'root'
 })
-export class NzxAuthGuardService implements CanActivate, CanActivateChild, CanLoad {
+export class NzxAuthGuardService  {
   protected hasAuth: Required<NzxAntdService>['hasAuth'] = () => of(true);
 
   constructor(private antdService: NzxAntdService, private router: Router, private injector: Injector) {

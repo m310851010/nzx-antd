@@ -21,8 +21,8 @@
 
 ## 🖥 使用环境
 
-- [Angular](https://angular.io) >= v13.0.0
-- [ng-zorro-antd](https://ng.ant.design) >= v13.0.0
+- [Angular](https://angular.io) >= v16.0.0
+- [ng-zorro-antd](https://ng.ant.design) >= v16.0.0
 
 ## 📦 安装
 

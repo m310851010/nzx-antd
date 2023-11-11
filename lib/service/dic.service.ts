@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { OptionItem } from '@xmagic/nzx-antd/checkbox';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { map, Observable, of, shareReplay, tap } from 'rxjs';
 import { HttpClient, HttpContext } from '@angular/common/http';
-import { DicSetting, NzxAntdService } from '@xmagic/nzx-antd';
+import { Any, DicSetting, NzxAntdService } from '@xmagic/nzx-antd';
 import { LOADING_ENABLED, SYNCED_ENABLED } from './fetcher.service';
 import { finalize } from 'rxjs/operators';
 import { NzxUtils } from '@xmagic/nzx-antd/util';
@@ -27,7 +26,10 @@ export class DicService {
    * @private
    */
   private dicSettings: DicSetting;
-  constructor(protected http: HttpClient, protected antdService: NzxAntdService) {
+  constructor(
+    protected http: HttpClient,
+    protected antdService: NzxAntdService
+  ) {
     this.dicSettings = Object.assign(
       {
         map: (data: { children: { code: string; name: string }[] }) =>
@@ -146,11 +148,11 @@ export class DicService {
       this.dicSettings.map ||
       ((data?: { children?: { code: string; name: string }[] }, isNumber?: boolean) => {
         return (data?.children || []).map(
-          v => ({ ...v, label: v.name, value: isNumber ? +v.code : v.code } as DicItem)
+          v => ({ ...v, label: v.name, value: isNumber ? +v.code : v.code }) as DicItem
         );
       });
     return this.http
-      .get<Record<string, NzSafeAny>>(url, {
+      .get<Record<string, Any>>(url, {
         context: new HttpContext().set(SYNCED_ENABLED, synced).set(LOADING_ENABLED, false)
       })
       .pipe(map(list => dicMap(list, isNumber)));
@@ -172,4 +174,4 @@ export class DicService {
 /**
  * 字典项定义, {label: string; value: any}
  */
-export type DicItem = Pick<OptionItem, 'label' | 'value'> & { [prop: string]: NzSafeAny };
+export type DicItem = Pick<OptionItem, 'label' | 'value'> & { [prop: string]: Any };

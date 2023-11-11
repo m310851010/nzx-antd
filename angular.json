@@ -42,6 +42,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "outputPath": "",
+            "index": "",
+            "main": "",
             "tsConfig": "tsconfig.json",
             "styles": ["stories/styles.less"],
             "scripts": [],
@@ -58,14 +61,29 @@
             }
           }
         },
+
         "storybook": {
           "builder": "@storybook/angular:start-storybook",
           "options": {
-            "browserTarget": "storybook:build"
+            "configDir": ".storybook",
+            "browserTarget": "storybook:build",
+            "compodoc": true,
+            "compodocArgs": ["-e", "json", "-d", "."],
+            "port": 6006
+          }
+        },
+        "build-storybook": {
+          "builder": "@storybook/angular:build-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "browserTarget": "storybook:build",
+            "compodoc": true,
+            "compodocArgs": ["-e", "json", "-d", "."],
+            "outputDir": "storybook-static"
           }
         }
+
       }
     }
-  },
-  "defaultProject": "nzx-antd"
+  }
 }

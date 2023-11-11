@@ -30,7 +30,7 @@ import {
   NzTableSortOrder
 } from 'ng-zorro-antd/table';
 import { PaginationItemRenderContext } from 'ng-zorro-antd/pagination';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { Any } from '@xmagic/nzx-antd';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { NzxUtils } from '@xmagic/nzx-antd/util';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
@@ -75,7 +75,7 @@ import { NamedTemplate } from '@xmagic/nzx-antd/directive';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { '[class.nzx-table]': 'true' }
 })
-export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
+export class NzxTableComponent<T extends Record<string, Any> = Any>
   implements OnInit, AfterContentInit, AfterViewInit, OnChanges, OnDestroy
 {
   /**
@@ -121,12 +121,12 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
   /**
    * 请求之前处理函数
    */
-  @Input() beforeFetch?: (params: Record<string, NzSafeAny>) => Record<string, NzSafeAny> | Promise<NzSafeAny>;
+  @Input() beforeFetch?: (params: Record<string, Any>) => Record<string, Any> | Promise<Any>;
   /**
    * 请求之后处理函数
    */
   @Input() afterFetch?: (
-    res: NzSafeAny,
+    res: Any,
     pageIndex: number,
     reset: boolean
   ) => Partial<PageInfo<T>> | Promise<Partial<PageInfo<T>>>;
@@ -184,15 +184,15 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
   /**
    * 表格标题
    */
-  @Input() nzTitle?: string | TemplateRef<NzSafeAny>;
+  @Input() nzTitle?: string | TemplateRef<Any>;
   /**
    * 表格尾部
    */
-  @Input() nzFooter?: string | TemplateRef<NzSafeAny>;
+  @Input() nzFooter?: string | TemplateRef<Any>;
   /**
    * 无数据时显示内容
    */
-  @Input() nzNoResult?: string | TemplateRef<NzSafeAny>;
+  @Input() nzNoResult?: string | TemplateRef<Any>;
   /**
    * 	页数选择器可选值
    */
@@ -288,7 +288,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
   /**
    * 加载指示符
    */
-  @Input() nzLoadingIndicator?: TemplateRef<NzSafeAny>;
+  @Input() nzLoadingIndicator?: TemplateRef<Any>;
   /**
    * 是否展示外边框和列边框
    */
@@ -334,7 +334,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
   /**
    * 由外部传入模板列表
    */
-  @Input() tplMap?: Map<string, TemplateRef<NzSafeAny>>;
+  @Input() tplMap?: Map<string, TemplateRef<Any>>;
   /**
    * 虚拟滚动数据 TrackByFunction 函数
    */
@@ -409,9 +409,9 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
   /**
    * 排序列触发
    */
-  @Output() sortedColumn = new EventEmitter<CdkDragDrop<NzxColumn<T>, NzSafeAny>>();
+  @Output() sortedColumn = new EventEmitter<CdkDragDrop<NzxColumn<T>, Any>>();
 
-  @ContentChildren(NamedTemplate) children!: QueryList<NamedTemplate<NzSafeAny>>;
+  @ContentChildren(NamedTemplate) children!: QueryList<NamedTemplate<Any>>;
   @ViewChild('basicTable') nzTable!: NzTableComponent<T>;
   private resize$ = new Subject<void>();
 
@@ -438,7 +438,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * @param size 表格大小
    * @param table nz表格组件
    */
-  tableSizeChange(size: NzxTableSize, table: NzTableComponent<NzSafeAny>) {
+  tableSizeChange(size: NzxTableSize, table: NzTableComponent<Any>) {
     this.nzSize = size;
     // @ts-ignore
     const tableMainElement = table.elementRef.nativeElement.querySelector('.ant-table');
@@ -510,8 +510,8 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
 
     return new Promise<PageInfo<T>>((resolve, reject) => {
       const fetchSetting = Object.assign({}, FETCH_SETTING, this.antdService.table, this.fetchSetting);
-      const setResult: (res: Record<string, NzSafeAny> | T) => void = res => {
-        this.setFetchResult(res, fetchSetting, reset).then(v => resolve(v as PageInfo<T>), reject);
+      const setResult: (res: Record<string, Any> | T) => void = res => {
+        this.setFetchResult(res, fetchSetting, reset).then(v => resolve(v as unknown as PageInfo<T>), reject);
       };
 
       if (NzxUtils.isString(this.api)) {
@@ -531,18 +531,18 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
             })
           )
           .subscribe({
-            next: res => this.setFetchResult(res, fetchSetting, reset).then(v => resolve(v as PageInfo<T>), reject),
+            next: res => this.setFetchResult(res, fetchSetting, reset).then(v => resolve(v as unknown as PageInfo<T>), reject),
             error: err => reject(err)
           });
         return;
       }
 
       if (NzxUtils.isObservable(this.api)) {
-        (this.api as Observable<T[]>).subscribe({ next: setResult, error: err => reject(err) });
+        (this.api as unknown as Observable<T[]>).subscribe({ next: setResult, error: err => reject(err) });
         return;
       }
       if (NzxUtils.isPromise(this.api)) {
-        (this.api as Promise<T[]>).then(setResult, reject);
+        (this.api as unknown as Promise<T[]>).then(setResult, reject);
         return;
       }
 
@@ -569,8 +569,8 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * @param data
    * @protected
    */
-  protected doFetch(url: string, method?: string, params?: NzSafeAny, data?: NzSafeAny): Observable<PageInfo<T>> {
-    const option: { params?: NzSafeAny; body?: NzSafeAny } = {};
+  protected doFetch(url: string, method?: string, params?: Any, data?: Any): Observable<PageInfo<T>> {
+    const option: { params?: Any; body?: Any } = {};
     method ||= 'post';
     if (/^post|put$/i.test(method)) {
       option.params = params;
@@ -647,7 +647,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    */
   private mergeParams(reset = true, fetchSetting: FetchSetting) {
     const nzPageIndex = reset ? 1 : this.nzPageIndex;
-    const params: Record<string, NzSafeAny> = {};
+    const params: Record<string, Any> = {};
     NzxUtils.set(params, fetchSetting.pageIndexField!, nzPageIndex);
     NzxUtils.set(params, fetchSetting.pageSizeField!, this.nzPageSize);
 
@@ -664,7 +664,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * @param obj
    * @protected
    */
-  protected isAsync(obj: NzSafeAny): boolean {
+  protected isAsync(obj: Any): boolean {
     return NzxUtils.isObservable(obj) || NzxUtils.isPromise(obj);
   }
 
@@ -685,7 +685,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * @protected
    */
   protected resolveTemplateColumn() {
-    const nameTemplateMap: Record<string, TemplateRef<NzSafeAny>> = {};
+    const nameTemplateMap: Record<string, TemplateRef<Any>> = {};
     for (const tpl of this.children) {
       nameTemplateMap[tpl.named] = tpl.template;
     }
@@ -712,7 +712,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
   protected stringToTemplate(
     col: NzxColumn<T>,
     key: keyof NzxColumn,
-    nameTemplateMap: Record<string, TemplateRef<NzSafeAny>>
+    nameTemplateMap: Record<string, TemplateRef<Any>>
   ) {
     const newKey = '_' + key;
     if (typeof col[key] === 'string') {
@@ -835,7 +835,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
    * 拖拽排序
    * @param event
    */
-  onSortedColumn(event: CdkDragDrop<NzxColumn<T>, NzSafeAny>) {
+  onSortedColumn(event: CdkDragDrop<NzxColumn<T>, Any>) {
     moveItemInArray(this._headerColumns[0], event.previousIndex, event.currentIndex);
     this.sortedColumn.emit(event);
   }
@@ -880,7 +880,7 @@ export class NzxTableComponent<T extends Record<string, NzSafeAny> = NzSafeAny>
 
     const headerRows: NzxColumn<T>[][] = Array.from({ length: maxLevel + 1 })
       .fill(0)
-      .map(() => []) as NzSafeAny;
+      .map(() => []) as Any;
 
     const bodyRows: NzxColumn<T>[] = [];
     allColumns.forEach(col => {
