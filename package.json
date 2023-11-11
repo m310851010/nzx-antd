@@ -10,8 +10,6 @@
     "build:nzx-antd": "ng build nzx-antd && node version path=./dist/nzx-antd/version",
     "publish:nzx-antd": "cd dist/nzx-antd &&　npm publish --access public",
     "docs:json": "compodoc -p ./tsconfig.json -e json -d .",
-    "storybook1": "npm run docs:json && start-storybook -p 6006",
-    "build-storybook1": "npm run docs:json && build-storybook",
     "storybook": "ng run storybook:storybook",
     "build-storybook": "ng run storybook:build-storybook"
   },
