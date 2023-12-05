@@ -61,7 +61,7 @@ export const DEFAULT_RESPONSE_SETTING: ResponseSetting = {
   message: 'message',
   data: 'result',
   // tslint:disable-next-line:triple-equals
-  success: response => response.body.code == 200,
+  success: (_, response) => response.body.code == 200,
   // tslint:disable-next-line:triple-equals
   timeout: error => error.code == 401,
   forceLogout: () => false,

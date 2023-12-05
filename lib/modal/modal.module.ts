@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NzxModalWrapService } from './nz-modal-wrap.service';
+import { NzxModalService } from './nzx-modal.service';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzxModalDragDirective } from './modal-drag.directive';
 import { NzxModalDragService } from './modal-drag.service';
@@ -8,6 +8,6 @@ import { NzxModalDragService } from './modal-drag.service';
   declarations: [NzxModalDragDirective],
   imports: [NzModalModule],
   exports: [NzxModalDragDirective],
-  providers: [NzxModalWrapService, NzxModalDragService]
+  providers: [NzxModalService, NzxModalDragService]
 })
 export class NzxModalModule {}
