@@ -1,6 +1,6 @@
 import { moduleMetadata, Story, Meta } from '@storybook/angular';
 import { storyFactory } from '@stories';
-import { NzButtonComponent, NzButtonModule } from 'ng-zorro-antd/button';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzxTableComponent } from './table.component';
 import { NzxTableHeaderComponent } from './header/table-header/table-header.component';
 import { NzxColumnSettingComponent } from './header/column-setting/column-setting.component';
@@ -19,10 +19,9 @@ import { NzxServiceModule } from '@xmagic/nzx-antd/service';
 import { NzOutletModule } from 'ng-zorro-antd/core/outlet';
 import { NzxUtils } from '../util';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
-import { NzxColorType } from '@xmagic/nzx-antd/button';
-import { ColFormatPipe } from '@xmagic/nzx-antd/table/transform/col-format.pipe';
-import { LinkHrefPipe } from '@xmagic/nzx-antd/table/transform/link-href.pipe';
-import { ColSpanPipe } from '@xmagic/nzx-antd/table/transform/col-span.pipe';
+import { ColFormatPipe } from './transform/col-format.pipe';
+import { LinkHrefPipe } from './transform/link-href.pipe';
+import { ColSpanPipe } from './transform/col-span.pipe';
 
 export default {
   title: '组件/Table 表格',
