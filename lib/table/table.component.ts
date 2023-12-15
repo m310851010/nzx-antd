@@ -424,7 +424,9 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
   ) {}
 
   ngOnInit(): void {
-    merge(this.nzPageIndexChange, this.nzPageSizeChange).pipe(debounceTime(50)).subscribe(() => this.fetch(false));
+    merge(this.nzPageIndexChange, this.nzPageSizeChange)
+      .pipe(debounceTime(50))
+      .subscribe(() => this.fetch(false));
     this.nzPageSize = this.nzPageSize || this.antdService.table?.nzPageSize || 10;
     this.resolveColumns();
     this.fetch();
@@ -532,7 +534,8 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
             })
           )
           .subscribe({
-            next: res => this.setFetchResult(res, fetchSetting, reset).then(v => resolve(v as unknown as PageInfo<T>), reject),
+            next: res =>
+              this.setFetchResult(res, fetchSetting, reset).then(v => resolve(v as unknown as PageInfo<T>), reject),
             error: err => reject(err)
           });
         return;

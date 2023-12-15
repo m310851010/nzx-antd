@@ -5,12 +5,13 @@ import {
   Component,
   forwardRef,
   Input,
-  TemplateRef, ViewChild
+  TemplateRef,
+  ViewChild
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NzSafeAny, NzSizeDSType } from 'ng-zorro-antd/core/types';
 import { BaseControl } from '@xmagic/nzx-antd/util';
-import { NzSwitchComponent } from "ng-zorro-antd/switch";
+import { NzSwitchComponent } from 'ng-zorro-antd/switch';
 
 @Component({
   selector: 'nzx-switch',
@@ -77,11 +78,11 @@ export class NzxSwitchComponent extends BaseControl<NzSafeAny> implements Contro
   }
 
   ngAfterViewInit(): void {
-   const touched = this.nzSwitch.onTouched;
-   this.nzSwitch.onTouched = () => {
-     touched.call(this.nzSwitch);
-     this.onTouched();
-   };
+    const touched = this.nzSwitch.onTouched;
+    this.nzSwitch.onTouched = () => {
+      touched.call(this.nzSwitch);
+      this.onTouched();
+    };
   }
 
   ngModelChange(val: boolean) {

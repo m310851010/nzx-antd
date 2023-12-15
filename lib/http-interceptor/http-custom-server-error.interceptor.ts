@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Observable, catchError } from 'rxjs';
+import { Observable, catchError, throwError } from 'rxjs';
 import { HttpError } from './http.model';
 import { LogoutService } from './logout.service';
 import { DEFAULT_RESPONSE_SETTING, NzxAntdService, ResponseSetting } from '@xmagic/nzx-antd';
@@ -13,7 +13,10 @@ import { NzxUtils } from '@xmagic/nzx-antd/util';
 export class HttpCustomServerErrorInterceptor implements HttpInterceptor {
   protected readonly settings: Required<ResponseSetting>;
 
-  constructor(protected logoutNotify: LogoutService, protected antdService: NzxAntdService) {
+  constructor(
+    protected logoutNotify: LogoutService,
+    protected antdService: NzxAntdService
+  ) {
     this.settings = NzxUtils.extend(
       {},
       DEFAULT_RESPONSE_SETTING,
@@ -27,6 +30,7 @@ export class HttpCustomServerErrorInterceptor implements HttpInterceptor {
 
   /**
    * 只抛出自定义异常, 对于http内部异常由拦截器统一处理
+   * @param req
    * @param error
    * @param caught 原始异常
    */
@@ -36,6 +40,7 @@ export class HttpCustomServerErrorInterceptor implements HttpInterceptor {
       // 登录超时  强制下线
     } else if (this.settings.timeout(error) || this.settings.forceLogout(error)) {
       this.logoutNotify.notifyLogin(error);
+      return throwError(() => error);
     }
     return this.settings.handleError(req, error);
   }
