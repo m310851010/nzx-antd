@@ -48,7 +48,7 @@ import {
   TrTemplateArgs
 } from './table.type';
 import { FETCH_SETTING } from './const';
-import { debounceTime, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
+import { debounceTime, fromEvent, merge, Observable, Subject, takeUntil } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { NzxAntdService } from '@xmagic/nzx-antd';
@@ -424,6 +424,7 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
   ) {}
 
   ngOnInit(): void {
+    merge(this.nzPageIndexChange, this.nzPageSizeChange).pipe(debounceTime(50)).subscribe(() => this.fetch(false));
     this.nzPageSize = this.nzPageSize || this.antdService.table?.nzPageSize || 10;
     this.resolveColumns();
     this.fetch();
@@ -822,13 +823,6 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
     if (changes.api && !changes.api.isFirstChange()) {
       this.fetch(true);
     }
-
-    if (
-      (changes.nzPageIndex && !changes.nzPageIndex.isFirstChange()) ||
-      (changes.nzPageSize && !changes.nzPageSize.isFirstChange())
-    ) {
-      this.fetch();
-    }
   }
 
   /**
@@ -940,9 +934,5 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
     } else {
       this.scrollY = `${element.clientHeight}px`;
     }
-  }
-
-  onCellClick(row: any) {
-    console.log(row);
   }
 }

@@ -69,8 +69,8 @@
   [nzVirtualMaxBufferPx]="nzVirtualMaxBufferPx"
   [nzVirtualMinBufferPx]="nzVirtualMinBufferPx"
   [nzVirtualForTrackBy]="nzVirtualForTrackBy"
-  (nzPageIndexChange)="nzPageIndexChange.emit($event); fetch(false)"
-  (nzPageSizeChange)="nzPageSizeChange.emit($event); fetch(false)"
+  (nzPageIndexChange)="nzPageIndexChange.emit($event)"
+  (nzPageSizeChange)="nzPageSizeChange.emit($event)"
   (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
   (nzQueryParams)="nzQueryParams.emit($event)"
 >
@@ -366,45 +366,42 @@
   </ng-container>
 
   <ng-template #tdTemplateTemplate>
-    {{ nzPageSize * (nzPageIndex - 1) + data.indexAttr.index + 1 }}
+    {{ nzPageSize * (nzPageIndex - 1) + indexAttr.index + 1 }}
   </ng-template>
 
   <!-- 按钮列-->
   <ng-template #buttonControlTemplate>
-    <ng-container *ngIf="data.col.buttons?.length; else textValueTemplate">
-      <ng-container *ngFor="let btn of data.col.buttons; index as index; count as count; last as last">
-        <ng-container *let="row.buttons?.[data.col.name] as rowBtn">
+    <ng-container *ngIf="data.col.buttons | colButton: data.col: row: indexAttr | async as buttons; else textValueTemplate">
+      <ng-container *ngFor="let btn of buttons; index as index; count as count; last as last">
+        <ng-container *ngIf="btn && (btn.visible | colButtonVisible)(row, indexAttr, data.col) !== false">
           <button
-            *ngIf="btn.link === false && (btn.visible || rowBtn?.visible !== false)"
+            *ngIf="btn.link === false"
             type="button"
             nz-button
             [type]="btn.type || 'button'"
-            [nzBlock]="rowBtn?.nzBlock || btn.nzBlock"
-            [nzDanger]="rowBtn?.nzDanger || btn.nzDanger"
-            [nzGhost]="rowBtn?.nzGhost || btn.nzGhost"
-            [nzSize]="rowBtn?.nzSize || btn.nzSize || 'small'"
-            [nzLoading]="rowBtn?.nzLoading || btn.nzLoading"
-            [nzSearch]="rowBtn?.nzSearch || btn.nzSearch"
-            [nzShape]="rowBtn?.nzShape || btn.nzShape"
-            [nzType]="rowBtn?.nzType || btn.nzType || 'link'"
-            [disabled]="rowBtn?.disabled || btn.nzType"
+            [nzBlock]="btn.nzBlock"
+            [nzDanger]="btn.nzDanger"
+            [nzGhost]="btn.nzGhost"
+            [nzSize]="btn.nzSize || 'small'"
+            [nzLoading]="btn.nzLoading"
+            [nzSearch]="btn.nzSearch"
+            [nzShape]="btn.nzShape"
+            [nzType]="'link'"
+            [disabled]="btn.nzType"
             (click)="btn.click && btn.click(row, data, $event)"
           >
-            <i *ngIf="rowBtn?.icon || btn.icon" nz-icon [nzType]="rowBtn?.icon || btn.icon"></i>
-            {{ rowBtn?.text || btn.text }}
+            <i *ngIf="btn.icon" nz-icon [nzType]="btn?.icon"></i>
+            {{ btn.text }}
           </button>
           <a
-            *ngIf="btn.link !== false && (btn.visible || rowBtn?.visible !== false)"
+            *ngIf="btn.link !== false"
             [attr.href]="btn.href | linkHref: row:data:index:data.col"
-            [attr.target]="rowBtn?.target || btn.target"
-            (click)="btn.click && rowBtn?.disabled !== true && btn.click(row, data, $event)"
+            [attr.target]="btn.target"
+            (click)="btn.click && btn.disabled !== true && btn.click(row, data, $event)"
           >
-            {{ rowBtn?.text || btn.text }}
+            {{ btn.text }}
           </a>
-          <nz-divider
-            *ngIf="(btn.showDivider || rowBtn?.showDivider !== false) && count > 1 && !last"
-            nzType="vertical"
-          ></nz-divider>
+          <nz-divider *ngIf="btn.showDivider !== false && count > 1 && !last" nzType="vertical" ></nz-divider>
         </ng-container>
       </ng-container>
 
@@ -420,7 +417,7 @@
   <ng-template #textValueTemplate>
     {{
       row
-        | colFormat: data.col:data.indexAttr.index
+        | colFormat: data.col:indexAttr.index
         | async
         | defaultify: (data.col.nzShowCheckbox ? '' : data.col.defaultify || defaultText)
     }}

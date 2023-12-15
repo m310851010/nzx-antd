@@ -130,7 +130,7 @@ export interface NzxColumnButton<T = NzSafeAny> {
   /**
    * 是否显示按钮, 在数据中配置 { buttons: { 'name对应的列1': { visible: true, showDivider: true, text: '数据上更新按钮文本'}}}
    */
-  visible?: boolean;
+  visible?: boolean | undefined | null | void | ((row: T, rowIndex: IndexAttr,column: NzxColumn<T>) => boolean | undefined | null | void);
   /**
    * 是否显示分割线, 在数据中配置 { 行数据, buttons: {'name对应的列1': {按钮配置}, 'name对应的列3': {按钮配置}}
    */
