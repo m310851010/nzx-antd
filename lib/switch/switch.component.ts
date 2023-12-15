@@ -1,12 +1,22 @@
-import { ChangeDetectionStrategy, Component, forwardRef, Input, TemplateRef } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  forwardRef,
+  Input,
+  TemplateRef, ViewChild
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NzSafeAny, NzSizeDSType } from 'ng-zorro-antd/core/types';
 import { BaseControl } from '@xmagic/nzx-antd/util';
+import { NzSwitchComponent } from "ng-zorro-antd/switch";
 
 @Component({
   selector: 'nzx-switch',
   template: `
     <nz-switch
+      #nzSwitch
       [(ngModel)]="nzxValue"
       [nzCheckedChildren]="nzCheckedChildren"
       [nzUnCheckedChildren]="nzUnCheckedChildren"
@@ -15,8 +25,6 @@ import { BaseControl } from '@xmagic/nzx-antd/util';
       [nzLoading]="nzLoading"
       [nzControl]="nzControl"
       (ngModelChange)="ngModelChange($event)"
-      (click)="onTouched()"
-      (focus)="onTouched()"
     ></nz-switch>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,7 +36,8 @@ import { BaseControl } from '@xmagic/nzx-antd/util';
     }
   ]
 })
-export class NzxSwitchComponent extends BaseControl<NzSafeAny> implements ControlValueAccessor {
+export class NzxSwitchComponent extends BaseControl<NzSafeAny> implements ControlValueAccessor, AfterViewInit {
+  @ViewChild('nzSwitch', { static: true }) nzSwitch!: NzSwitchComponent;
   nzxValue!: boolean;
   /**
    * 选中时的值
@@ -49,7 +58,7 @@ export class NzxSwitchComponent extends BaseControl<NzSafeAny> implements Contro
   /**
    * 	是否完全由用户控制状态, Switch 的状态完全由用户接管，不再自动根据点击事件改变数据。
    */
-  @Input() nzControl?: boolean;
+  @Input() nzControl = false;
   /**
    * 选中时的内容
    */
@@ -63,15 +72,29 @@ export class NzxSwitchComponent extends BaseControl<NzSafeAny> implements Contro
    */
   @Input() nzSize?: NzSizeDSType;
 
+  constructor(private cdr: ChangeDetectorRef) {
+    super();
+  }
+
+  ngAfterViewInit(): void {
+   const touched = this.nzSwitch.onTouched;
+   this.nzSwitch.onTouched = () => {
+     touched.call(this.nzSwitch);
+     this.onTouched();
+   };
+  }
+
   ngModelChange(val: boolean) {
     this.onChange(val ? this.nzxCheckedValue : this.nzxUnCheckedValue);
   }
 
   writeValue(value: NzSafeAny | null): void {
     this.nzxValue = value === this.nzxCheckedValue;
+    this.cdr.markForCheck();
   }
 
   override setDisabledState(isDisabled: boolean): void {
     this.nzDisabled = isDisabled;
+    this.cdr.markForCheck();
   }
 }
