@@ -37,6 +37,7 @@
 
 <nz-table
   #basicTable
+  class="nzx-inner-table"
   [nzData]="nzData"
   [nzTableLayout]="nzTableLayout"
   [nzFrontPagination]="nzFrontPagination"
@@ -53,7 +54,7 @@
   [nzLoading]="nzLoading"
   [nzLoadingIndicator]="nzLoadingIndicator"
   [nzLoadingDelay]="nzLoadingDelay"
-  [nzScroll]="{ x: scrollX, y: scrollY }"
+  [nzScroll]="nzScroll"
   [nzTitle]="nzTitle"
   [nzFooter]="nzFooter"
   [nzNoResult]="nzNoResult"
@@ -174,7 +175,9 @@
             first: index === 0,
             last: nzData.length === index + 1,
             even: index % 2 === 0,
-            odd: index % 2 !== 0
+            odd: index % 2 !== 0,
+            level: 0,
+            parent: null
           }
         "
       ></ng-container>
@@ -198,16 +201,26 @@
             first: first,
             last: last,
             even: even,
-            odd: odd
+            odd: odd,
+            level: 0,
+            parent: null
           }
         "
       ></ng-container>
     </ng-container>
   </tbody>
 
-  <ng-template #trTemplate let-row let-index="index" let-first="first" let-last="last" let-even="even" let-odd="odd">
+  <ng-template #trTemplate
+               let-row
+               let-index="index"
+               let-first="first"
+               let-last="last"
+               let-even="even"
+               let-odd="odd"
+               let-level="level"
+               let-parent="parent">
     <tr
-      *ngIf="row.parent?.expand || !row.parent"
+      *ngIf="!parent || parent.expand"
       (click)="
         onRowClick({
           row: row,
@@ -306,10 +319,10 @@
             [nzIndeterminate]="row.indeterminate"
             [(nzChecked)]="row.checked"
             (nzCheckedChange)="tdCheckedChange($event, col, row, {index, first, last, even, odd})"
-            [nzShowExpand]="col.showExpand && row.showExpand"
+            [nzShowExpand]="col.showExpand && row.children && row.children.length"
             [(nzExpand)]="row.expand"
-            (nzExpandChange)="col.nzExpandChange && col.nzExpandChange($event, col, row, {index, first, last, even, odd})"
-            [nzIndentSize]="col.showExpand && row.nzIndentSize ? row.nzIndentSize : null"
+            (nzExpandChange)="defaultCollapse(row, $event);col.nzExpandChange && col.nzExpandChange($event, col, row, {index, first, last, even, odd})"
+            [nzIndentSize]="col.showExpand ? (level * nzIndentSize) : null"
             [nzLeft]="col.fixed === 'left'"
             [nzRight]="col.fixed === 'right'"
             [nzAlign]="col.tdAlign || col.nzAlign"
@@ -339,6 +352,31 @@
         </ng-container>
       </ng-container>
     </tr>
+
+
+    <ng-container *ngFor="let child of row.children; index as cIndex; first as cFirst; last as cLast; even as cEven; odd as cOdd">
+      <ng-container
+        *ngTemplateOutlet="
+          nzxTr || trTemplate;
+          context: {
+            $implicit: child,
+            level: level + 1,
+            parentIndex: index,
+            row: child,
+            nzData: nzData,
+            nzPageData: basicTable.data,
+            columns: _bodyColumns,
+            index: cIndex,
+            first: cFirst,
+            last: cLast,
+            even: cEven,
+            odd: cOdd,
+            parent: row
+          }
+        "
+      ></ng-container>
+    </ng-container>
+
   </ng-template>
 </nz-table>
 

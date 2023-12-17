@@ -23,6 +23,41 @@
     background: @table-striped-bgcolor;
   }
 
+  &-fit {
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    .nzx-inner-table{
+      width: 100%;
+      flex: 1;
+      display: flex;
+
+      .ant-spin-nested-loading{
+        width: 100%;
+      }
+      .ant-spin-container{
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+
+        >.ant-table {
+          width: 100%;
+          flex: 1;
+          position: relative;
+
+          .ant-table-container{
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+          }
+        }
+      }
+    }
+  }
+
   .ant-table-column-title {
     position: initial;
   }

@@ -7,9 +7,9 @@ import {
   ContentChildren,
   ElementRef,
   EventEmitter,
+  HostListener,
   Input,
   OnChanges,
-  OnDestroy,
   OnInit,
   Output,
   QueryList,
@@ -48,7 +48,7 @@ import {
   TrTemplateArgs
 } from './table.type';
 import { FETCH_SETTING } from './const';
-import { debounceTime, fromEvent, merge, Observable, Subject, takeUntil } from 'rxjs';
+import { debounceTime, merge, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { NzxAntdService } from '@xmagic/nzx-antd';
@@ -73,10 +73,10 @@ import { NamedTemplate } from '@xmagic/nzx-antd/directive';
   preserveWhitespaces: false,
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { '[class.nzx-table]': 'true' }
+  host: { '[class.nzx-table]': 'true', '[class.nzx-table-fit]': 'nzxFit' }
 })
 export class NzxTableComponent<T extends Record<string, Any> = Any>
-  implements OnInit, AfterContentInit, AfterViewInit, OnChanges, OnDestroy
+  implements OnInit, AfterContentInit, AfterViewInit, OnChanges
 {
   /**
    * 当前选中的行
@@ -90,6 +90,8 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
   _bodyColumns: NzxColumn<T>[] = [];
   _allColumns: NzxColumn<T>[] = [];
 
+  private _nzTotal = 0;
+  private _nzShowPagination = true;
   sortInfo?: SorterResult;
   defaultPageSizeOptions = [10, 15, 20, 30, 40, 50, 100];
 
@@ -224,7 +226,15 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
   /**
    * 当前总数据，在服务器渲染时需要传入
    */
-  @Input() nzTotal = 0;
+  @Input() set nzTotal(value: number) {
+    if (this._nzTotal! && value) {
+      setTimeout(() => this.fixedFit());
+    }
+    this._nzTotal = value;
+  }
+  get nzTotal() {
+    return this._nzTotal;
+  }
   /**
    * 表头分组时指定每列宽度，与 th 的 [nzWidth] 不可混用
    */
@@ -240,27 +250,26 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
   /**
    * 横向支持滚动
    */
-  @Input() scrollX?: string;
+  @Input() set scrollX(value: string | null) {
+    this.nzScroll = { ...this.nzScroll, x: value };
+  }
+
   /**
    * 纵向支持滚动
    */
-  @Input() scrollY?: string;
+  @Input() set scrollY(value: string | null) {
+    this.nzScroll = { ...this.nzScroll, y: value };
+  }
+
+  nzScroll: {
+    x?: string | null;
+    y?: string | null;
+  } = { x: this.scrollX, y: this.scrollY };
+
   /**
-   * 最小滚动宽度
+   * 表格是否自动撑满
    */
-  @Input() minScrollX?: number;
-  /**
-   * 最小滚动高度
-   */
-  @Input() minScrollY?: number;
-  /**
-   * 自动设置scrollX, 撑满父级容易
-   */
-  @Input() scrollXFillParent?: boolean;
-  /**
-   * 自动设置scrollY, 撑满父级容易
-   */
-  @Input() scrollYFillParent?: boolean;
+  @Input() nzxFit?: boolean;
   /**
    * 指定分页显示的尺寸
    */
@@ -276,7 +285,15 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
   /**
    * 	是否显示分页器
    */
-  @Input() nzShowPagination = true;
+  @Input() set nzShowPagination(value: boolean) {
+    this._nzShowPagination = value;
+    setTimeout(() => this.fixedFit());
+  }
+
+  get nzShowPagination() {
+    return this._nzShowPagination;
+  }
+
   /**
    * 页面是否加载中
    */
@@ -348,6 +365,10 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
    */
   @Input() nzxTr?: TemplateRef<TrTemplateArgs<T>>;
   /**
+   * 如果是树结构, 设置缩进大小
+   */
+  @Input() nzIndentSize = 20;
+  /**
    * 页数改变时的回调函数
    */
   @Output() readonly nzPageSizeChange = new EventEmitter<number>();
@@ -412,8 +433,9 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
   @Output() sortedColumn = new EventEmitter<CdkDragDrop<NzxColumn<T>, Any>>();
 
   @ContentChildren(NamedTemplate) children!: QueryList<NamedTemplate<Any>>;
-  @ViewChild('basicTable') nzTable!: NzTableComponent<T>;
-  private resize$ = new Subject<void>();
+  @ViewChild('basicTable', { static: true }) nzTable!: NzTableComponent<T>;
+  @ViewChild('basicTable', { static: true, read: ElementRef<HTMLDivElement> })
+  nzTableElementRef!: ElementRef<HTMLDivElement>;
 
   constructor(
     protected cdr: ChangeDetectorRef,
@@ -480,7 +502,7 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
    */
   fixedClick(column: NzxColumn<T>) {
     const hasFixed = this._allColumns.filter(value => value.fixed).length;
-    this.scrollX = hasFixed ? '100vw' : undefined;
+    this.scrollX = hasFixed ? '100vw' : null;
   }
 
   /**
@@ -795,23 +817,12 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
     if (this.nzSize === 'mini') {
       this.tableSizeChange(this.nzSize, this.nzTable);
     }
+    setTimeout(() => this.fixedFit());
+  }
 
-    if (this.scrollXFillParent || this.scrollYFillParent) {
-      const element = this.elementRef.nativeElement.parentElement!;
-      const fixedAutoScroll = () => {
-        if (this.scrollXFillParent) {
-          this.fixXFillParent(element);
-        }
-
-        if (this.scrollYFillParent) {
-          this.fixYFillParent(element);
-        }
-      };
-      fromEvent(window, 'resize')
-        .pipe(takeUntil(this.resize$), debounceTime(80))
-        .subscribe(() => fixedAutoScroll());
-      fixedAutoScroll();
-    }
+  @HostListener('window:resize', ['$event'])
+  onWindowResize() {
+    this.fixedFit();
   }
 
   ngOnChanges(changes: { [P in keyof this]?: SimpleChange } & SimpleChanges): void {
@@ -837,9 +848,22 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
     this.sortedColumn.emit(event);
   }
 
-  ngOnDestroy(): void {
-    this.resize$.next();
-    this.resize$.complete();
+  /**
+   * 折叠子节点
+   * @param row
+   * @param $event
+   */
+  defaultCollapse(row: T, $event: boolean): void {
+    const { children } = row || {};
+    if (!$event && children && children.length) {
+      children.forEach((c: T) => {
+        if (c && c.children && c.children.length) {
+          // @ts-ignore
+          c.expand = false;
+          this.defaultCollapse(c, false);
+        }
+      });
+    }
   }
 
   /**
@@ -908,34 +932,26 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
   }
 
   /**
-   * 计算x轴滚动大小
-   * @param element
+   * 计算撑满父容器
    * @private
    */
-  private fixXFillParent(element: HTMLElement) {
-    if (!element.clientWidth) {
+  protected fixedFit() {
+    if (!this.nzxFit) {
       return;
     }
-    if (this.minScrollX) {
-      this.scrollX = `${element.clientWidth >= this.minScrollX ? element.clientWidth : this.minScrollX}px`;
-    } else {
-      this.scrollX = `${element.clientWidth}px`;
-    }
-  }
-
-  /**
-   * 计算y轴滚动大小
-   * @param element
-   * @private
-   */
-  private fixYFillParent(element: HTMLElement) {
-    if (!element.clientHeight) {
+    const element = this.nzTableElementRef.nativeElement!;
+    const table = element.querySelector<HTMLElement>('.ant-table')!;
+    const container = element.querySelector<HTMLElement>('.ant-table-container')!;
+    if (!table || !container) {
       return;
     }
-    if (this.minScrollY) {
-      this.scrollY = `${element.clientHeight >= this.minScrollY ? element.clientHeight : this.minScrollY}px`;
-    } else {
-      this.scrollY = `${element.clientHeight}px`;
-    }
+    container.style.position = 'absolute';
+    const headers = table.querySelectorAll('.ant-table-thead');
+    let height = 0;
+    headers.forEach(v => (height += v.getBoundingClientRect().height));
+    const scrollY = table.getBoundingClientRect().height - height;
+    container.style.position = '';
+    this.scrollY = `${scrollY}px`;
+    this.cdr.markForCheck();
   }
 }
