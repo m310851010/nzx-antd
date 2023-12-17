@@ -319,7 +319,7 @@
             [nzIndeterminate]="row.indeterminate"
             [(nzChecked)]="row.checked"
             (nzCheckedChange)="tdCheckedChange($event, col, row, {index, first, last, even, odd})"
-            [nzShowExpand]="col.showExpand && row.children && row.children.length"
+            [nzShowExpand]="col.showExpand && row.children && row.children.length > 0"
             [(nzExpand)]="row.expand"
             (nzExpandChange)="defaultCollapse(row, $event);col.nzExpandChange && col.nzExpandChange($event, col, row, {index, first, last, even, odd})"
             [nzIndentSize]="col.showExpand ? (level * nzIndentSize) : null"
@@ -353,27 +353,26 @@
       </ng-container>
     </tr>
 
-
     <ng-container *ngFor="let child of row.children; index as cIndex; first as cFirst; last as cLast; even as cEven; odd as cOdd">
       <ng-container
         *ngTemplateOutlet="
-          nzxTr || trTemplate;
-          context: {
-            $implicit: child,
-            level: level + 1,
-            parentIndex: index,
-            row: child,
-            nzData: nzData,
-            nzPageData: basicTable.data,
-            columns: _bodyColumns,
-            index: cIndex,
-            first: cFirst,
-            last: cLast,
-            even: cEven,
-            odd: cOdd,
-            parent: row
-          }
-        "
+            nzxTr || trTemplate;
+            context: {
+              $implicit: child,
+              level: level + 1,
+              parentIndex: index,
+              row: child,
+              nzData: nzData,
+              nzPageData: basicTable.data,
+              columns: _bodyColumns,
+              index: cIndex,
+              first: cFirst,
+              last: cLast,
+              even: cEven,
+              odd: cOdd,
+              parent: row
+            }
+          "
       ></ng-container>
     </ng-container>
 
@@ -410,9 +409,9 @@
 
   <!-- 按钮列-->
   <ng-template #buttonControlTemplate>
-    <ng-container *ngIf="data.col.buttons | colButton: data.col: row: indexAttr | async as buttons; else textValueTemplate">
+    <ng-container *ngIf="data.col.buttons as buttons; else textValueTemplate">
       <ng-container *ngFor="let btn of buttons; index as index; count as count; last as last">
-        <ng-container *ngIf="btn && (btn.visible | colButtonVisible)(row, indexAttr, data.col) !== false">
+        <ng-container *ngIf="btn && (btn.visible | colButtonVisible)(row, indexAttr, data.col) !== false && (btn.permission | hasAuth | async)">
           <button
             *ngIf="btn.link === false"
             type="button"

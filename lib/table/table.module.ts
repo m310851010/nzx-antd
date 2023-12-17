@@ -21,12 +21,12 @@ import { ColFormatPipe } from './transform/col-format.pipe';
 import { LinkHrefPipe } from './transform/link-href.pipe';
 import { NzxDirectiveModule } from '@xmagic/nzx-antd/directive';
 import { ColSpanPipe } from './transform/col-span.pipe';
-import { ColButtonPipe } from './transform/col-button.pipe';
 import { ColButtonVisiblePipe } from './transform/col-button-visible.pipe';
+import { HasAuthPipe } from './transform/has-auth.pipe';
 
 const COMPONENT = [NzxTableComponent, NzxTableHeaderComponent, NzxColumnSettingComponent];
 @NgModule({
-  declarations: [COMPONENT, ColFormatPipe, LinkHrefPipe, ColSpanPipe, ColButtonPipe, ColButtonVisiblePipe],
+  declarations: [COMPONENT, ColFormatPipe, LinkHrefPipe, ColSpanPipe, ColButtonVisiblePipe, HasAuthPipe],
   imports: [
     CommonModule,
     FormsModule,

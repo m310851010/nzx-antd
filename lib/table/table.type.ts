@@ -130,7 +130,16 @@ export interface NzxColumnButton<T = NzSafeAny> {
   /**
    * 是否显示按钮, 在数据中配置 { buttons: { 'name对应的列1': { visible: true, showDivider: true, text: '数据上更新按钮文本'}}}
    */
-  visible?: boolean | undefined | null | void | ((row: T, rowIndex: IndexAttr,column: NzxColumn<T>) => boolean | undefined | null | void);
+  visible?:
+    | boolean
+    | undefined
+    | null
+    | void
+    | ((row: T, rowIndex: IndexAttr, column: NzxColumn<T>) => boolean | undefined | null | void);
+  /**
+   * 权限标识, 需要配置NzxAntdService.hasAuth
+   */
+  permission?: NzSafeAny;
   /**
    * 是否显示分割线, 在数据中配置 { 行数据, buttons: {'name对应的列1': {按钮配置}, 'name对应的列3': {按钮配置}}
    */
@@ -195,7 +204,7 @@ export interface NzxColumnButton<T = NzSafeAny> {
   /**
    * 如果是a标签,设置href, 允许数据中配置
    */
-  href: string | ((row: T, data: T[], index: number, col: NzxColumn<T>) => string);
+  href?: string | ((row: T, data: T[], index: number, col: NzxColumn<T>) => string);
 }
 
 export interface IndexAttr {
