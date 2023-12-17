@@ -227,10 +227,8 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
    * 当前总数据，在服务器渲染时需要传入
    */
   @Input() set nzTotal(value: number) {
-    if (this._nzTotal! && value) {
-      setTimeout(() => this.fixedFit());
-    }
     this._nzTotal = value;
+    setTimeout(() => this.fixedFit());
   }
   get nzTotal() {
     return this._nzTotal;
