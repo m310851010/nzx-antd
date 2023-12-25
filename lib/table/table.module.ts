@@ -23,10 +23,19 @@ import { NzxDirectiveModule } from '@xmagic/nzx-antd/directive';
 import { ColSpanPipe } from './transform/col-span.pipe';
 import { ColButtonVisiblePipe } from './transform/col-button-visible.pipe';
 import { HasAuthPipe } from './transform/has-auth.pipe';
+import { ColButtonsPipe } from './transform/col-buttons.pipe';
 
 const COMPONENT = [NzxTableComponent, NzxTableHeaderComponent, NzxColumnSettingComponent];
 @NgModule({
-  declarations: [COMPONENT, ColFormatPipe, LinkHrefPipe, ColSpanPipe, ColButtonVisiblePipe, HasAuthPipe],
+  declarations: [
+    COMPONENT,
+    ColFormatPipe,
+    LinkHrefPipe,
+    ColSpanPipe,
+    ColButtonVisiblePipe,
+    HasAuthPipe,
+    ColButtonsPipe
+  ],
   imports: [
     CommonModule,
     FormsModule,

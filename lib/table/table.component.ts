@@ -54,6 +54,7 @@ import { HttpClient } from '@angular/common/http';
 import { NzxAntdService } from '@xmagic/nzx-antd';
 import { FetcherService, FetchParams } from '@xmagic/nzx-antd/service';
 import { NamedTemplate } from '@xmagic/nzx-antd/directive';
+import { NzSafeAny } from 'ng-zorro-antd/core/types';
 
 /**
  * 基于nz-table二次封装的表格组件
@@ -85,7 +86,7 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
   /**
    * 当前页数据
    */
-  _currentPageData: readonly T[] = [];
+  _currentPageData: T[] = [];
   _headerColumns: NzxColumn<T>[][] = [];
   _bodyColumns: NzxColumn<T>[] = [];
   _allColumns: NzxColumn<T>[] = [];
@@ -240,7 +241,7 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
   /**
    * 表格数据
    */
-  @Input() nzData: readonly T[] = [];
+  @Input() nzData: T[] = [];
   /**
    * 指定分页显示的位置
    */
@@ -366,6 +367,11 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
    * 如果是树结构, 设置缩进大小
    */
   @Input() nzIndentSize = 20;
+
+  /**
+   * 树表的checkable状态下节点选择完全受控（父子节点选中状态不再关联）, 默认false
+   */
+  @Input() nzCheckStrictly?: boolean;
   /**
    * 页数改变时的回调函数
    */
@@ -758,8 +764,14 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
     if (col.enableCheckAll !== false) {
       col.checked = evt;
       col.nzIndeterminate = false;
-      // @ts-ignore
-      this._currentPageData.forEach(v => !v.disabled && (v.checked = evt));
+      NzxUtils.forEachTree(this._currentPageData, v => {
+        if (!v.disabled) {
+          // @ts-ignore
+          v.checked = evt;
+          // @ts-ignore
+          v.nzIndeterminate = false;
+        }
+      });
     }
     if (col.thCheckedChange) {
       col.thCheckedChange(evt, col);
@@ -772,10 +784,33 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
    * @param evt
    * @param col
    * @param row
+   * @param pathTrace 父节点路径
    * @param rowIndex
    */
-  tdCheckedChange(evt: boolean, col: NzxColumn<T>, row: T, rowIndex: IndexAttr) {
+  tdCheckedChange(evt: boolean, col: NzxColumn<T>, row: T, pathTrace: [T, T], rowIndex: IndexAttr) {
     if (col.enableCheckAll !== false) {
+      // 非受控的checkbox
+      if (this.nzCheckStrictly !== true) {
+        // @ts-ignore
+        row.nzIndeterminate = false;
+        NzxUtils.forEachTree(row.children, node => {
+          if (!node.disabled) {
+            node.checked = evt;
+          }
+        });
+
+        let [parents, parent] = pathTrace;
+        while (parent) {
+          if (parent.children) {
+            this._refreshCheckedStatus(parent, parent.children);
+          }
+          if (!parents) {
+            break;
+          }
+          parent = parents[1];
+          parents = parents[0];
+        }
+      }
       this.refreshCheckedStatus(col);
     }
     if (col.tdCheckedChange) {
@@ -784,7 +819,7 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
     this.cdr.markForCheck();
   }
 
-  onCurrentPageDataChange(list: readonly T[]): void {
+  onCurrentPageDataChange(list: T[]): void {
     this._currentPageData = list;
     const col = this._bodyColumns.filter(v => v.nzShowCheckbox)[0];
     if (col) {
@@ -796,13 +831,17 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
   }
 
   refreshCheckedStatus(col: NzxColumn<T>): void {
-    const list = this._currentPageData.filter(v => !v.disabled);
+    this._refreshCheckedStatus(col, this._currentPageData);
+  }
+
+  private _refreshCheckedStatus(parent: Record<string, NzSafeAny>, listData: Record<string, NzSafeAny>[]): void {
+    const list = listData.filter(v => !v.disabled);
     if (list.length) {
-      col.checked = list.every(v => v.checked);
-      col.nzIndeterminate = !col.checked && list.some(v => v.checked);
+      parent.checked = list.every(v => v.checked);
+      parent.nzIndeterminate = !parent.checked && list.some(v => v.checked);
     } else {
-      col.checked = false;
-      col.nzIndeterminate = false;
+      parent.checked = false;
+      parent.nzIndeterminate = false;
     }
   }
 

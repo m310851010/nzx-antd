@@ -203,7 +203,8 @@
             even: even,
             odd: odd,
             level: 0,
-            parent: null
+            parent: null,
+            pathTrace: []
           }
         "
       ></ng-container>
@@ -218,7 +219,8 @@
                let-even="even"
                let-odd="odd"
                let-level="level"
-               let-parent="parent">
+               let-parent="parent"
+               let-pathTrace="pathTrace">
     <tr
       *ngIf="!parent || parent.expand"
       (click)="
@@ -316,9 +318,9 @@
             "
             [nzShowCheckbox]="col.nzShowCheckbox || row.showCheckbox"
             [nzDisabled]="row.disabled"
-            [nzIndeterminate]="row.indeterminate"
+            [nzIndeterminate]="row.nzIndeterminate"
             [(nzChecked)]="row.checked"
-            (nzCheckedChange)="tdCheckedChange($event, col, row, {index, first, last, even, odd})"
+            (nzCheckedChange)="tdCheckedChange($event, col, row, pathTrace, {index, first, last, even, odd})"
             [nzShowExpand]="col.showExpand && row.children && row.children.length > 0"
             [(nzExpand)]="row.expand"
             (nzExpandChange)="defaultCollapse(row, $event);col.nzExpandChange && col.nzExpandChange($event, col, row, {index, first, last, even, odd})"
@@ -344,7 +346,8 @@
                     indexAttr: { index: index, first: first, last: last, even: even, odd: odd }
                   },
                   row: row,
-                  indexAttr: { index: index, first: first, last: last, even: even, odd: odd }
+                  indexAttr: { index: index, first: first, last: last, even: even, odd: odd },
+                  parent: parent
                 }
               "
             ></ng-container>
@@ -370,7 +373,8 @@
               last: cLast,
               even: cEven,
               odd: cOdd,
-              parent: row
+              parent: row,
+              pathTrace: [pathTrace, row]
             }
           "
       ></ng-container>
@@ -391,13 +395,13 @@
   </ng-template>
 </ng-template>
 
-<ng-template #tdDataRender let-data let-row="row" let-indexAttr="indexAttr">
+<ng-template #tdDataRender let-data let-row="row" let-indexAttr="indexAttr" let-parent="parent">
   <ng-container *ngIf="!data.col.isIndex; else tdTemplateTemplate">
     <ng-container *ngIf="data.col._tdTemplate; else buttonControlTemplate">
       <ng-container
         *ngTemplateOutlet="
           data.col._tdTemplate;
-          context: { $implicit: row, row: row, data: data, col: data.col, indexAttr: indexAttr }
+          context: { $implicit: row, row: row, data: data, col: data.col, indexAttr: indexAttr, parent: parent }
         "
       ></ng-container>
     </ng-container>
@@ -409,8 +413,8 @@
 
   <!-- 按钮列-->
   <ng-template #buttonControlTemplate>
-    <ng-container *ngIf="data.col.buttons as buttons; else textValueTemplate">
-      <ng-container *ngFor="let btn of buttons; index as index; count as count; last as last">
+    <ng-container *ngIf="data.col.buttons; else textValueTemplate">
+      <ng-container *ngFor="let btn of (data.col.buttons | colButtons: row : indexAttr: data.col : parent | async); index as index; count as count; last as last">
         <ng-container *ngIf="btn && (btn.visible | colButtonVisible)(row, indexAttr, data.col) !== false && (btn.permission | hasAuth | async)">
           <button
             *ngIf="btn.link === false"
@@ -426,6 +430,8 @@
             [nzShape]="btn.nzShape"
             [nzType]="'link'"
             [disabled]="btn.nzType"
+            [ngClass]="btn.ngClass"
+            [ngStyle]="btn.ngStyle"
             (click)="btn.click && btn.click(row, data, $event)"
           >
             <i *ngIf="btn.icon" nz-icon [nzType]="btn?.icon"></i>
@@ -433,8 +439,10 @@
           </button>
           <a
             *ngIf="btn.link !== false"
-            [attr.href]="btn.href | linkHref: row:data:index:data.col"
+            [attr.href]="btn | linkHref: row:data:index:data.col"
             [attr.target]="btn.target"
+            [ngClass]="btn.ngClass"
+            [ngStyle]="btn.ngStyle"
             (click)="btn.click && btn.disabled !== true && btn.click(row, data, $event)"
           >
             {{ btn.text }}
@@ -442,13 +450,6 @@
           <nz-divider *ngIf="btn.showDivider !== false && count > 1 && !last" nzType="vertical" ></nz-divider>
         </ng-container>
       </ng-container>
-
-      <ng-container
-        *ngTemplateOutlet="
-          data.col._tdTemplate;
-          context: { $implicit: row, row: row, data: data, col: data.col, indexAttr: indexAttr }
-        "
-      ></ng-container>
     </ng-container>
   </ng-template>
 

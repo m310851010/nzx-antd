@@ -5,7 +5,6 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { get as _get, set as _set, is as _is, isPlainObject as _isPlainObject, merge } from './utils-fn';
 
 class UtilsClass {
-
   /**
    * 根据属性路径获取对象的属性值
    * @param obj 原始对象
@@ -95,7 +94,7 @@ class UtilsClass {
    * @param childrenName 子节点字段名称
    */
   forEachTree<T extends TreeNode>(
-    treeNodes: T[],
+    treeNodes: T[] | undefined | null,
     accept: (node: T, parentNode: T | undefined, level: number) => boolean | void,
     childrenName: keyof T | TreeChildren<T> = 'children'
   ): void {
@@ -191,6 +190,31 @@ class UtilsClass {
       }
     }
     return treeNodes;
+  }
+
+  /**
+   * 打平树结构
+   * @param treeNodes 树结构
+   * @param accept 函数返回false即结束遍历, true或者undefined将继续遍历
+   * @param childrenName 子节点字段名称
+   */
+  flatTree<T extends TreeNode>(
+    treeNodes: T[],
+    accept: (node: T, parentNode: T | undefined, level: number) => boolean | void = () => true,
+    childrenName: keyof T | TreeChildren<T> = 'children'
+  ): T[] {
+    const list: T[] = [];
+    this.forEachTree(
+      treeNodes,
+      (node, parentNode, level) => {
+        if (accept(node, parentNode, level) === false) {
+          return;
+        }
+        list.push(node);
+      },
+      childrenName
+    );
+    return list;
   }
 
   /**

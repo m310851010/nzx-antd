@@ -115,13 +115,15 @@ export interface NzxColumn<T = Record<string, NzSafeAny>> {
   /**
    * 列中按钮配置
    */
-  buttons?: NzxColumnButton[];
+  buttons?: NzxButtons | ((row: T, rowIndex: IndexAttr, column: NzxColumn<T>, parentRow?: T) => NzxButtons);
   /**
    * 当数据为null显示的默认文本
    */
   defaultText?: string;
   [key: string]: NzSafeAny;
 }
+
+export type NzxButtons = NzxColumnButton[] | Observable<NzxColumnButton[]> | Promise<NzxColumnButton[]>;
 
 /**
  * 列中配置按钮
@@ -192,6 +194,8 @@ export interface NzxColumnButton<T = NzSafeAny> {
    * 允许数据中配置
    */
   nzType?: NzButtonType;
+  ngClass?: NzxClassType;
+  ngStyle?: NzxStyleType;
   /**
    * 允许数据中配置
    */
