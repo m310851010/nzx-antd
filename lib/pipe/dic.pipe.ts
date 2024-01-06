@@ -35,7 +35,7 @@ export class DicPipe implements PipeTransform {
   transform(
     key: string | number | null,
     dicItemsOrKey: Observable<DicItem[] | undefined | null> | string,
-    isGetItem: boolean
+    isGetItem?: boolean
   ) {
     if (key == null) {
       return of(null);
