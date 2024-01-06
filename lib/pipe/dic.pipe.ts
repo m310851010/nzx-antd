@@ -1,14 +1,21 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { DicService } from '@xmagic/nzx-antd/service';
+import { DicItem, DicService } from '@xmagic/nzx-antd/service';
+import { map, Observable, of } from 'rxjs';
+import { NzxUtils } from '@xmagic/nzx-antd/util';
 
 /**
  * 字典管道
  * @example
  *
  * ``` html
- * {{1 | dic: 'status' | async}}
+ * {{1 | dic: 'status' | async}} // 'label'
  *
- * {{'A' | dic: 'status' | async}}
+ * {{'A' | dic: 'status' | async}} // 'label'
+ *
+ * {{'A' | dic: statusObservable$ | async}} // 'label'
+ *
+ * {{'A' | dic: statusObservable$ : true | async}} // dic item
+ *
  *
  * ```
  */
@@ -22,12 +29,18 @@ export class DicPipe implements PipeTransform {
   /**
    * 字典管道
    * @param key 字典项key
-   * @param dicName 字典名称
+   * @param dicItemsOrKey 字典名称
+   * @param isGetItem 是否获取字典项
    */
-  transform(key: string | number | null, dicName: string) {
+  transform(
+    key: string | number | null,
+    dicItemsOrKey: Observable<DicItem[] | undefined | null> | string,
+    isGetItem: boolean
+  ) {
     if (key == null) {
-      return null;
+      return of(null);
     }
-    return this.dicService.getLabel(dicName, key);
+    const dic$ = NzxUtils.isString(dicItemsOrKey) ? this.dicService.getDic(dicItemsOrKey) : dicItemsOrKey;
+    return dic$.pipe(map(list => NzxUtils.listToMap(list, 'value', isGetItem ? (v: DicItem) => v : 'label')[key]));
   }
 }

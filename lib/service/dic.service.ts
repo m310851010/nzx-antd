@@ -85,12 +85,12 @@ export class DicService {
   }
 
   /**
-   * 获取map形式的字典数据, 异步请求, 请求会被缓存 可以多次调用
+   * 获取map{value: label}形式的字典数据, 异步请求, 请求会被缓存 可以多次调用
    * @param key 字典key
    * @param isNumber 是否是数字
    */
-  getDicMap(key: string, isNumber?: boolean): Observable<Record<string, string | number>> {
-    return this.getDic(key, isNumber).pipe(map(this.listToMap));
+  getDicMap(key: string, isNumber?: boolean): Observable<Record<string, string>> {
+    return this.getDic(key, isNumber).pipe(map(list => NzxUtils.listToMap(list, 'value', 'label')));
   }
 
   /**
@@ -113,7 +113,25 @@ export class DicService {
    * @param isNumber 是否是数字
    */
   getDicMapSync(key: string, isNumber?: boolean): Record<string, string> {
-    return this.listToMap(this.getDicSync(key, isNumber));
+    return NzxUtils.listToMap(this.getDicSync(key, isNumber), 'value', 'label');
+  }
+
+  /**
+   * 获取map即{value: DicItem}形式的字典数据, 异步请求, 请求会被缓存 可以多次调用
+   * @param key 字典key
+   * @param isNumber 是否是数字
+   */
+  getDicMapItem(key: string, isNumber?: boolean): Observable<Record<string, DicItem>> {
+    return this.getDic(key, isNumber).pipe(map(list => NzxUtils.listToMap(list)));
+  }
+
+  /**
+   * 获取map即{value: DicItem}形式的字典数据, 同步请求, 请求会被缓存 可以多次调用
+   * @param key 字典key
+   * @param isNumber 是否是数字
+   */
+  getDicMapItemSync(key: string, isNumber?: boolean): Record<string, DicItem> {
+    return NzxUtils.listToMap(this.getDicSync(key, isNumber));
   }
 
   /**
@@ -156,18 +174,6 @@ export class DicService {
         context: new HttpContext().set(SYNCED_ENABLED, synced).set(LOADING_ENABLED, false)
       })
       .pipe(map(list => dicMap(list, isNumber)));
-  }
-
-  /**
-   * 字典列表转Map结构
-   * @param list 字典列表
-   */
-  listToMap(list: DicItem[]): Record<string, string> {
-    const data: Record<string, string> = {};
-    for (const v of list) {
-      data[v.value] = v.label;
-    }
-    return data;
   }
 }
 

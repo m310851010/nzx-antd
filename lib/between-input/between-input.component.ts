@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NzxBetweenComponent } from '@xmagic/nzx-antd/between';
+import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
 
 @Component({
   selector: 'nzx-between-input',
@@ -25,6 +26,7 @@ import { NzxBetweenComponent } from '@xmagic/nzx-antd/between';
 })
 export class NzxBetweenInputComponent extends NzxBetweenComponent implements ControlValueAccessor {
   nzxValue: InputValueType = {};
+
   /**
    * 控件类型, 输入框 或 数字框
    */
@@ -91,12 +93,13 @@ export class NzxBetweenInputComponent extends NzxBetweenComponent implements Con
   /**
    * 指定输入框展示值的格式-开始
    */
-  @Input() nzxStartFormatter: (value: number | string) => string | number = v => v;
+  @Input() nzxStartFormatter?: NzInputNumberComponent['nzFormatter'];
   /**
    * 指定输入框展示值的格式-结束
    */
-  @Input() nzxEndFormatter: (value: number | string) => string | number = v => v;
+  @Input() nzxEndFormatter?: NzInputNumberComponent['nzFormatter'];
 
+  defaultFormat = (v: number) => v;
   constructor(protected cdr: ChangeDetectorRef) {
     super();
   }

@@ -79,6 +79,7 @@ export class NzxCheckboxComponent<T = NzSafeAny>
    */
   @Output() nzxItemChange = new EventEmitter<NzxCheckboxOption<T>>();
   nzxValue: T[] = [];
+  private canValueChange = true;
   constructor(protected cdr: ChangeDetectorRef) {
     super();
   }
@@ -93,7 +94,10 @@ export class NzxCheckboxComponent<T = NzSafeAny>
     }
   }
 
-  ngModelChange(values: T[]) {
+  ngModelChange(values: T[]): void {
+    if (!this.canValueChange) {
+      return;
+    }
     if (!this.nzxMultiple && this.lastCheckbox && values.length > 1) {
       values = values.filter(v => v === this.lastCheckbox!.value);
     }
@@ -104,13 +108,19 @@ export class NzxCheckboxComponent<T = NzSafeAny>
 
   onItemChange(checked: boolean, item: NzxCheckboxOption<T>) {
     item.indeterminate = false;
+    this.canValueChange = true;
     if (!this.nzxMultiple) {
       // 取消上一次选中
       if (checked && this.lastCheckbox && this.lastCheckbox !== item) {
         this.lastCheckbox.checked = false;
+
+        // 单选模式必须选中一个
       } else if (!checked && this.lastCheckbox === item && this.nzxRequired) {
+        this.canValueChange = false;
+        // 改为选中状态, 同时禁止触发ngModelChange
         setTimeout(() => {
           item.checked = true;
+          this.canValueChange = true;
           this.cdr.markForCheck();
         });
         return;

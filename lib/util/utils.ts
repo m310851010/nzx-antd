@@ -255,6 +255,34 @@ class UtilsClass {
   }
 
   /**
+   * 列表转Map结构 即 {value: label}
+   * @param list 数组
+   * @param keyName key值的属性名
+   * @param valueName value的属性名或函数处理
+   */
+  listToMap<T, K>(
+    list: T[] | undefined | null,
+    keyName?: keyof T,
+    valueName?: keyof T | ((item: T) => K)
+  ): Record<string, K> {
+    const data: Record<string, K> = {};
+    if (!list || !list.length) {
+      return data;
+    }
+    const key = keyName || 'value';
+    let valueFn: Function = (item: T) => item;
+    if (valueName) {
+      valueFn = NzxUtils.isFunction(valueName) ? valueName : (item: T) => item[valueName];
+    }
+
+    for (const v of list) {
+      // @ts-ignore
+      data[v[key]] = valueFn(v);
+    }
+    return data;
+  }
+
+  /**
    * 字符串模版函数
    * @param template 模版
    * @param data 数据

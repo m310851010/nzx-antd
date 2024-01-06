@@ -62,7 +62,7 @@
       [nzStep]="data.step"
       [nzPrecision]="data.precision"
       [nzId]="data.id"
-      [nzFormatter]="data.formatter"
+      [nzFormatter]="data.formatter || defaultFormat"
       [nzMax]="data.max"
       [nzMin]="data.min"
       (ngModelChange)="ngModelChange()"
