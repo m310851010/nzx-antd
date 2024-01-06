@@ -298,6 +298,10 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
    */
   @Input() nzLoading = false;
   /**
+   * 是否自动显示loading
+   */
+  @Input() nzxAutoLoading = false;
+  /**
    * 是否显示外边框
    */
   @Input() nzOuterBordered = false;
@@ -537,6 +541,7 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
       return null;
     }
 
+    this.nzxAutoLoading && (this.nzLoading = true);
     return new Promise<PageInfo<T>>((resolve, reject) => {
       const fetchSetting = Object.assign({}, FETCH_SETTING, this.antdService.table, this.fetchSetting);
       const setResult: (res: Record<string, Any> | T) => void = res => {
@@ -577,7 +582,7 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
       }
 
       setResult([]);
-    });
+    }).finally(() => this.nzxAutoLoading && (this.nzLoading = false));
   }
 
   /**
