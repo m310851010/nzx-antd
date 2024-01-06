@@ -47,6 +47,10 @@ export class NzxAntdService {
   table?: TableSetting;
 
   /**
+   * defaultify管道的默认值, 默认 --
+   */
+  defaultify?: string;
+  /**
    * 字典配置
    */
   dic?: DicSetting;
