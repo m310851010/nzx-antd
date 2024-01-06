@@ -541,7 +541,11 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
       return null;
     }
 
-    this.nzxAutoLoading && (this.nzLoading = true);
+    if (this.nzxAutoLoading) {
+      this.nzLoading = true;
+      this.cdr.markForCheck();
+    }
+
     return new Promise<PageInfo<T>>((resolve, reject) => {
       const fetchSetting = Object.assign({}, FETCH_SETTING, this.antdService.table, this.fetchSetting);
       const setResult: (res: Record<string, Any> | T) => void = res => {
@@ -582,7 +586,12 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
       }
 
       setResult([]);
-    }).finally(() => this.nzxAutoLoading && (this.nzLoading = false));
+    }).finally(() => {
+      if (this.nzxAutoLoading) {
+        this.nzLoading = false;
+      }
+      this.cdr.markForCheck();
+    });
   }
 
   /**
