@@ -35,7 +35,7 @@ import { NgStyleInterface, NzSafeAny, NgClassType } from 'ng-zorro-antd/core/typ
   ]
 })
 export class NzxCheckboxComponent<T = NzSafeAny>
-  extends BaseControl<T[]>
+  extends BaseControl<T[] | T>
   implements ControlValueAccessor, OnInit, OnChanges
 {
   private lastCheckbox?: NzxCheckboxOption<T>;
@@ -52,9 +52,16 @@ export class NzxCheckboxComponent<T = NzSafeAny>
    */
   @Input() nzxLayout: 'horizontal' | 'vertical' = 'horizontal';
   /**
-   * 是否可以多选
+   * 是否可以多选,默认true
+   * 单选状态下(nzxMultiple = false), 值是单个而非数组, 即 <nzx-checkbox [(ngModel)]="test"></nzx-checkbox> // test = 1
+   * 多选状态下(nzxMultiple = true),值是数组, 即 <nzx-checkbox [(ngModel)]="test"></nzx-checkbox> // test = [1]
    */
   @Input() nzxMultiple = true;
+  /**
+   * 是否必填,在单选状态下(即nzxMultiple = false),是否必须要选一个
+   *
+   */
+  @Input() nzxRequired = true;
   /**
    * 所有label的模板
    */
@@ -92,14 +99,21 @@ export class NzxCheckboxComponent<T = NzSafeAny>
     }
     this.nzxValue = values;
     this.onTouched();
-    this.onChange(this.nzxValue);
+    this.onChange(!this.nzxMultiple ? this.nzxValue[0] : this.nzxValue);
   }
 
   onItemChange(checked: boolean, item: NzxCheckboxOption<T>) {
     item.indeterminate = false;
     if (!this.nzxMultiple) {
+      // 取消上一次选中
       if (checked && this.lastCheckbox && this.lastCheckbox !== item) {
         this.lastCheckbox.checked = false;
+      } else if (!checked && this.lastCheckbox === item && this.nzxRequired) {
+        setTimeout(() => {
+          item.checked = true;
+          this.cdr.markForCheck();
+        });
+        return;
       }
       this.lastCheckbox = item;
     }
@@ -109,7 +123,7 @@ export class NzxCheckboxComponent<T = NzSafeAny>
     this.nzxItemChange.emit(item);
   }
 
-  writeValue(value: T[] | null): void {
+  writeValue(value: T[] | T | null): void {
     this.nzxValue = value == null ? [] : Array.isArray(value) ? value : [value];
     if (this.nzxOptions && this.nzxOptions.length) {
       if (!this.nzxMultiple && this.nzxValue.length > 1) {
