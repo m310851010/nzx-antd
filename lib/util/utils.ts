@@ -260,25 +260,24 @@ class UtilsClass {
    * @param keyName key值的属性名, 如果为空则使用当前值作为key
    * @param valueName value的属性名或函数处理
    */
-  listToMap<T, K>(
+  listToMap<T, V>(
     list: T[] | undefined | null,
     keyName?: keyof T | null | undefined,
-    valueName?: keyof T | ((item: T) => K)
-  ): Record<string, K> {
-    const data: Record<string, K> = {};
+    valueName?: keyof T | ((item: T) => V)
+  ): Record<string, V> {
+    const record: Record<string, V> = {};
     if (!list || !list.length) {
-      return data;
+      return record;
     }
-    let valueFn: Function = (item: T) => item;
+    let fn: Function = (item: T) => item;
     if (valueName) {
-      valueFn = NzxUtils.isFunction(valueName) ? valueName : (item: T) => item[valueName];
+      fn = NzxUtils.isFunction(valueName) ? valueName : (item: T) => item[valueName];
     }
 
     for (const v of list) {
-      // @ts-ignore
-      data[v[keyName ?? v]] = valueFn(v);
+      record[(keyName ? v[keyName] : v) as string] = fn(v) as V;
     }
-    return data;
+    return record;
   }
 
   /**
