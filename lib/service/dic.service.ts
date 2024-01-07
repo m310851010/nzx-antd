@@ -122,7 +122,7 @@ export class DicService {
    * @param isNumber 是否是数字
    */
   getDicMapItem(key: string, isNumber?: boolean): Observable<Record<string, DicItem>> {
-    return this.getDic(key, isNumber).pipe(map(list => NzxUtils.listToMap(list)));
+    return this.getDic(key, isNumber).pipe(map(list => NzxUtils.listToMap(list, 'value')));
   }
 
   /**
@@ -131,7 +131,7 @@ export class DicService {
    * @param isNumber 是否是数字
    */
   getDicMapItemSync(key: string, isNumber?: boolean): Record<string, DicItem> {
-    return NzxUtils.listToMap(this.getDicSync(key, isNumber));
+    return NzxUtils.listToMap(this.getDicSync(key, isNumber), 'value');
   }
 
   /**

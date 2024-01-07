@@ -257,19 +257,18 @@ class UtilsClass {
   /**
    * 列表转Map结构 即 {value: label}
    * @param list 数组
-   * @param keyName key值的属性名
+   * @param keyName key值的属性名, 如果为空则使用当前值作为key
    * @param valueName value的属性名或函数处理
    */
   listToMap<T, K>(
     list: T[] | undefined | null,
-    keyName?: keyof T,
+    keyName?: keyof T | null | undefined,
     valueName?: keyof T | ((item: T) => K)
   ): Record<string, K> {
     const data: Record<string, K> = {};
     if (!list || !list.length) {
       return data;
     }
-    const key = keyName || 'value';
     let valueFn: Function = (item: T) => item;
     if (valueName) {
       valueFn = NzxUtils.isFunction(valueName) ? valueName : (item: T) => item[valueName];
@@ -277,7 +276,7 @@ class UtilsClass {
 
     for (const v of list) {
       // @ts-ignore
-      data[v[key]] = valueFn(v);
+      data[v[keyName ?? v]] = valueFn(v);
     }
     return data;
   }
