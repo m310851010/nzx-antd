@@ -1,8 +1,17 @@
-import { TemplateRef } from '@angular/core';
+import {InjectionToken, TemplateRef, Type} from '@angular/core';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzTableFilterFn, NzTableSize, NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
 import { Observable } from 'rxjs';
 import { NzButtonShape, NzButtonSize, NzButtonType } from 'ng-zorro-antd/button';
+
+export const TABLE_WIDGET = new InjectionToken<TableWidget[]>('TABLE_WIDGET');
+
+export interface TableWidget {
+  name: string;
+  component: Type<any>
+}
+
+export type TableWidgetMap = Record<string, Type<any>>
 
 /**
  * 列配置
@@ -117,6 +126,10 @@ export interface NzxColumn<T = Record<string, NzSafeAny>> {
    */
   buttons?: NzxButtons | ((row: T, rowIndex: IndexAttr, column: NzxColumn<T>, parentRow?: T) => NzxButtons);
   /**
+   * 自定义控件-根据配置加载
+   */
+  widgets?: NzxWidgets | ((row: T, rowIndex: IndexAttr, column: NzxColumn<T>, parentRow?: T) => NzxWidgets);
+  /**
    * 当数据为null显示的默认文本
    */
   defaultText?: string;
@@ -124,6 +137,25 @@ export interface NzxColumn<T = Record<string, NzSafeAny>> {
 }
 
 export type NzxButtons = NzxColumnButton[] | Observable<NzxColumnButton[]> | Promise<NzxColumnButton[]>;
+export type NzxWidgets = NzxWidget[] | Observable<NzxWidget[]> | Promise<NzxWidget[]>;
+
+export interface NzxWidget<T = NzSafeAny> {
+  type: string;
+  props: Record<string, any>;
+  /**
+   * 是否显示按钮, 在数据中配置 { buttons: { 'name对应的列1': { visible: true, showDivider: true, text: '数据上更新按钮文本'}}}
+   */
+  visible?:
+    | boolean
+    | undefined
+    | null
+    | void
+    | ((row: T, rowIndex: IndexAttr, column: NzxColumn<T>) => boolean | undefined | null | void);
+  /**
+   * 权限标识, 需要配置NzxAntdService.hasAuth
+   */
+  permission?: NzSafeAny;
+}
 
 /**
  * 列中配置按钮
@@ -200,7 +232,7 @@ export interface NzxColumnButton<T = NzSafeAny> {
    * 允许数据中配置
    */
   disabled?: boolean;
-  click: (row: T, data: T[], evt: MouseEvent) => void;
+  click: (row: T, data: T[], indexAttr: IndexAttr, evt: MouseEvent) => void;
   /**
    * 如果是a标签 则设置属性target, 允许数据中配置
    */
@@ -208,7 +240,7 @@ export interface NzxColumnButton<T = NzSafeAny> {
   /**
    * 如果是a标签,设置href, 允许数据中配置
    */
-  href?: string | ((row: T, data: T[], index: number, col: NzxColumn<T>) => string);
+  href?: string | ((row: T, data: T[], index: IndexAttr, col: NzxColumn<T>) => string);
 }
 
 export interface IndexAttr {
