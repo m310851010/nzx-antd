@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IndexAttr, NzxColumn } from '@xmagic/nzx-antd/table';
+import { IndexAttr, NzxColumn } from '../../table.type';
 
 @Component({
   selector: 'nzx-table-tag',
@@ -12,6 +12,8 @@ import { IndexAttr, NzxColumn } from '@xmagic/nzx-antd/table';
       (nzOnClose)="props.nzOnClose?.($event, row, params)"
       (nzCheckedChange)="props.nzCheckedChange?.($event, row, params)"
       (click)="props.click && props.click(row, params, $event)"
+      [ngClass]="props.ngClass"
+      [ngStyle]="props.ngStyle"
     >
       {{ props.text }}
     </nz-tag>

@@ -10,10 +10,9 @@ import { TableLinkComponent } from './table-link/table-link.component';
 import { LinkHrefPipe } from '../transform/link-href.pipe';
 import { TableTagComponent } from './table-tag/table-tag.component';
 import { NzTagModule } from 'ng-zorro-antd/tag';
-import { TABLE_WIDGET, TableWidget } from '../table.type';
 import { NzxSwitchComponent, NzxSwitchModule } from '@xmagic/nzx-antd/switch';
 import { NzInputNumberComponent, NzInputNumberModule } from 'ng-zorro-antd/input-number';
-import { TableWidgetService } from '@xmagic/nzx-antd/table/table-widget.service';
+import { TableWidgetService, TABLE_WIDGET, TableWidget } from '../table-widget.service';
 
 export function defaultTableWidget(): TableWidget[] {
   return [

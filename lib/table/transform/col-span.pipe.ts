@@ -19,7 +19,7 @@ export class ColSpanPipe implements PipeTransform {
     let colspan: number | null | void = 1;
 
     if (spanFunc) {
-      const result = spanFunc({
+      const result = spanFunc(row, {
         row,
         nzData,
         nzPageData,

@@ -1,5 +1,13 @@
-import { Injectable, Type } from '@angular/core';
-import { TableWidget, TableWidgetMap } from './table.type';
+import { Injectable, InjectionToken, Type } from '@angular/core';
+
+export const TABLE_WIDGET = new InjectionToken<TableWidget[]>('TABLE_WIDGET');
+
+export interface TableWidget {
+  name: string;
+  component: Type<any>;
+}
+
+export type TableWidgetMap = Record<string, Type<any>>;
 
 @Injectable({
   providedIn: 'root'

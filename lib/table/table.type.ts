@@ -1,17 +1,8 @@
-import { ComponentRef, InjectionToken, TemplateRef, Type } from '@angular/core';
+import { ComponentRef, TemplateRef } from '@angular/core';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzTableFilterFn, NzTableSize, NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
 import { Observable } from 'rxjs';
 import { NzButtonShape, NzButtonSize, NzButtonType } from 'ng-zorro-antd/button';
-
-export const TABLE_WIDGET = new InjectionToken<TableWidget[]>('TABLE_WIDGET');
-
-export interface TableWidget {
-  name: string;
-  component: Type<any>;
-}
-
-export type TableWidgetMap = Record<string, Type<any>>;
 
 /**
  * 列配置
@@ -148,7 +139,7 @@ export interface NzxWidget<T = NzSafeAny> {
   /**
    * 是否显示按钮, 在数据中配置 { buttons: { 'name对应的列1': { visible: true, showDivider: true, text: '数据上更新按钮文本'}}}
    */
-  visible?: boolean | undefined | null | void | ((params: CellArgType<T>) => boolean | undefined | null | void);
+  visible?: boolean | undefined | null | void | ((row: T, params: CellArgType<T>) => boolean | undefined | null | void);
   /**
    * 权限标识, 需要配置NzxAntdService.hasAuth
    */
@@ -184,6 +175,22 @@ export interface NzxWidget<T = NzSafeAny> {
    * @param params
    */
   params?: (row: T, params: CellArgType<T>) => Record<string, any>;
+
+  /**
+   * 宿主元素样式
+   */
+  style?: Record<string, any>;
+  /**
+   * 宿主元素的className
+   */
+  className?: Record<string, any>;
+  /**
+   * 宿主元素click事件
+   * @param row
+   * @param params
+   * @param evt
+   */
+  click?: (row: T, params: CellArgType<T>, evt: MouseEvent) => void;
 }
 
 /**
@@ -371,7 +378,7 @@ export type NzxTableSize = NzTableSize | 'mini';
 /**
  * 合并单元格参数
  */
-export type SpanFunc<T> = (params: CellArgType<T>) => void | RowColspan | [number, number] | null;
+export type SpanFunc<T> = (row: T, params: CellArgType<T>) => void | RowColspan | [number, number] | null;
 
 export type CellArgType<T> = {
   nzData: T[];

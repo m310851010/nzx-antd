@@ -1,4 +1,4 @@
-import { Inject, ModuleWithProviders, NgModule, Optional, Type } from '@angular/core';
+import { Inject, ModuleWithProviders, NgModule, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzxTableComponent } from './table.component';
@@ -23,15 +23,22 @@ import { ColSpanPipe } from './transform/col-span.pipe';
 import { ColButtonVisiblePipe } from './transform/col-button-visible.pipe';
 import { HasAuthPipe } from './transform/has-auth.pipe';
 import { ColButtonsPipe } from './transform/col-buttons.pipe';
-import { TABLE_WIDGET, TableWidget } from './table.type';
-import { TableWidgetService } from './table-widget.service';
+import { TableWidgetService, TABLE_WIDGET, TableWidget } from './table-widget.service';
 
 import { TableWidgetModule } from './table-widget/table-widget.module';
 import { TableWidgetDirective } from './table-widget.directive';
 
-const COMPONENT = [NzxTableComponent, NzxTableHeaderComponent, NzxColumnSettingComponent, TableWidgetDirective];
+const COMPONENT = [NzxTableComponent, NzxTableHeaderComponent, NzxColumnSettingComponent];
 @NgModule({
-  declarations: [COMPONENT, ColFormatPipe, ColSpanPipe, ColButtonVisiblePipe, HasAuthPipe, ColButtonsPipe],
+  declarations: [
+    COMPONENT,
+    ColFormatPipe,
+    ColSpanPipe,
+    ColButtonVisiblePipe,
+    HasAuthPipe,
+    TableWidgetDirective,
+    ColButtonsPipe
+  ],
   imports: [
     CommonModule,
     FormsModule,
