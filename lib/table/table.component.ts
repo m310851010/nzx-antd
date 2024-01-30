@@ -799,9 +799,9 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
    * @param col
    * @param row
    * @param pathTrace 父节点路径
-   * @param rowIndex
+   * @param indexAttr
    */
-  tdCheckedChange(evt: boolean, col: NzxColumn<T>, row: T, pathTrace: [T, T], rowIndex: IndexAttr) {
+  tdCheckedChange(evt: boolean, col: NzxColumn<T>, row: T, pathTrace: [T, T], indexAttr: IndexAttr) {
     if (col.enableCheckAll !== false) {
       // 非受控的checkbox
       if (this.nzCheckStrictly !== true) {
@@ -828,7 +828,7 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
       this.refreshCheckedStatus(col);
     }
     if (col.tdCheckedChange) {
-      col.tdCheckedChange(evt, col, row, rowIndex);
+      col.tdCheckedChange(evt, col, row, indexAttr);
     }
     this.cdr.markForCheck();
   }
@@ -990,7 +990,7 @@ export class NzxTableComponent<T extends Record<string, Any> = Any>
     if (!this.nzxFit) {
       return;
     }
-    const element = this.nzTableElementRef.nativeElement!;
+    const element = this.nzTableElementRef.nativeElement;
     const table = element.querySelector<HTMLElement>('.ant-table')!;
     const container = element.querySelector<HTMLElement>('.ant-table-container')!;
     if (!table || !container) {

@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { IndexAttr, NzxColumn, NzxColumnButton } from '../table.type';
+import { CellArgType, NzxColumnButton } from '../table.type';
 import { NzxUtils } from '@xmagic/nzx-antd/util';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 
@@ -9,7 +9,7 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
 export class ColButtonVisiblePipe implements PipeTransform {
   transform(
     value?: NzxColumnButton['visible']
-  ): (row: NzSafeAny, rowIndex: IndexAttr, column: NzxColumn<NzSafeAny>) => boolean | undefined | null | void {
+  ): (row: NzSafeAny, params: CellArgType<NzSafeAny>) => boolean | undefined | null | void {
     if (NzxUtils.isFunction(value)) {
       return value;
     }

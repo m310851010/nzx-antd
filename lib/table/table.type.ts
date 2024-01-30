@@ -1,4 +1,4 @@
-import { InjectionToken, TemplateRef, Type } from '@angular/core';
+import { ComponentRef, InjectionToken, TemplateRef, Type } from '@angular/core';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzTableFilterFn, NzTableSize, NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
 import { Observable } from 'rxjs';
@@ -39,15 +39,15 @@ export interface NzxColumn<T = Record<string, NzSafeAny>> {
    * 格式化列数据
    * @param data 当前字段数据
    * @param row 行数据
-   * @param index 行索引
+   * @param params 更多参数信息
    */
-  format?: (data: NzSafeAny, row: T, index: number) => Observable<NzSafeAny> | Promise<NzSafeAny> | NzSafeAny;
+  format?: (data: NzSafeAny, row: T, params: CellArgType<T>) => Observable<NzSafeAny> | Promise<NzSafeAny> | NzSafeAny;
   thNgClass?: NzxClassType | ((col: NzxColumn<T>, colIndex: number) => NzxClassType);
   thNgStyle?: NzxStyleType | ((col: NzxColumn<T>, colIndex: number) => NzxStyleType);
   tdNgClass?: NzxClassType | ((col: NzxColumn<T>, colIndex: number) => NzxClassType);
   tdNgStyle?: NzxStyleType | ((col: NzxColumn<T>, colIndex: number) => NzxStyleType);
-  tdClassName?: NzxClassType | ((row: T, rowIndex: number, col: NzxColumn<T>, colIndex: number) => NzxClassType);
-  tdStyle?: NzxStyleType | ((row: T, rowIndex: number, col: NzxColumn<T>, colIndex: number) => NzxStyleType);
+  tdClassName?: NzxClassType | ((row: T, indexAttr: number, col: NzxColumn<T>, colIndex: number) => NzxClassType);
+  tdStyle?: NzxStyleType | ((row: T, indexAttr: number, col: NzxColumn<T>, colIndex: number) => NzxStyleType);
 
   /**
    * 用于分组表头
@@ -70,7 +70,7 @@ export interface NzxColumn<T = Record<string, NzSafeAny>> {
   nzIndeterminate?: boolean;
   checked?: boolean;
   thCheckedChange?: (value: boolean, col: NzxColumn<T>) => void;
-  tdCheckedChange?: (value: boolean, col: NzxColumn<T>, row: T, rowIndex: IndexAttr) => void;
+  tdCheckedChange?: (value: boolean, col: NzxColumn<T>, row: T, indexAttr: IndexAttr) => void;
   nzShowRowSelection?: boolean;
   nzSelections?: Array<{
     text: string;
@@ -96,7 +96,7 @@ export interface NzxColumn<T = Record<string, NzSafeAny>> {
   tdAlign?: 'left' | 'right' | 'center';
   nzBreakWord?: boolean;
   nzEllipsis?: boolean;
-  nzExpandChange?: (expand: boolean, col: NzxColumn<T>, row: T, rowIndex: IndexAttr) => void;
+  nzExpandChange?: (expand: boolean, col: NzxColumn<T>, row: T, indexAttr: IndexAttr) => void;
   nzIndentSize?: number;
 
   fixed?: 'left' | 'right';
@@ -124,11 +124,11 @@ export interface NzxColumn<T = Record<string, NzSafeAny>> {
   /**
    * 列中按钮配置
    */
-  buttons?: NzxButtons | ((row: T, rowIndex: IndexAttr, column: NzxColumn<T>, parentRow?: T) => NzxButtons);
+  buttons?: NzxButtons | ((row: T, params: CellArgType<T> & { parentRow?: T }) => NzxButtons);
   /**
    * 自定义控件-根据配置加载
    */
-  widgets?: NzxWidgets | ((row: T, rowIndex: IndexAttr, column: NzxColumn<T>, parentRow?: T) => NzxWidgets);
+  widgets?: NzxWidgets | ((row: T, params: CellArgType<T> & { parentRow?: T }) => NzxWidgets);
   /**
    * 当数据为null显示的默认文本
    */
@@ -144,29 +144,46 @@ export interface NzxWidget<T = NzSafeAny> {
   /**
    * 传给组件的参数，会绑定到组件到属性上
    */
-  props: Record<string, any>;
+  props?: Record<string, any>;
   /**
    * 是否显示按钮, 在数据中配置 { buttons: { 'name对应的列1': { visible: true, showDivider: true, text: '数据上更新按钮文本'}}}
    */
-  visible?:
-    | boolean
-    | undefined
-    | null
-    | void
-    | ((row: T, rowIndex: IndexAttr, column: NzxColumn<T>) => boolean | undefined | null | void);
+  visible?: boolean | undefined | null | void | ((params: CellArgType<T>) => boolean | undefined | null | void);
   /**
    * 权限标识, 需要配置NzxAntdService.hasAuth
    */
   permission?: NzSafeAny;
 
   /**
+   * 组件加载完成时调用
+   * @param instance
+   * @param componentRef
+   */
+  onInit?: (
+    params: {
+      instance: any;
+      componentRef: ComponentRef<any>;
+    } & CellArgType<T>
+  ) => void;
+
+  /**
+   * 组件卸载时调用
+   * @param instance
+   * @param componentRef
+   */
+  onDestroy?: (
+    params: {
+      instance: any;
+      componentRef: ComponentRef<any>;
+    } & CellArgType<T>
+  ) => void;
+
+  /**
    * 传给组件的参数，会绑定到组件到属性上
    * @param row
-   * @param rowIndex
-   * @param column
-   * @param nzData
+   * @param params
    */
-  params?: (row: T, rowIndex: IndexAttr, column: NzxColumn<T>, nzData: T[]) => Record<string, any>;
+  params?: (row: T, params: CellArgType<T>) => Record<string, any>;
 }
 
 /**
@@ -176,12 +193,7 @@ export interface NzxColumnButton<T = NzSafeAny> {
   /**
    * 是否显示按钮, 在数据中配置 { buttons: { 'name对应的列1': { visible: true, showDivider: true, text: '数据上更新按钮文本'}}}
    */
-  visible?:
-    | boolean
-    | undefined
-    | null
-    | void
-    | ((row: T, rowIndex: IndexAttr, column: NzxColumn<T>) => boolean | undefined | null | void);
+  visible?: boolean | undefined | null | void | ((row: T, params: CellArgType<T>) => boolean | undefined | null | void);
   /**
    * 权限标识, 需要配置NzxAntdService.hasAuth
    */
@@ -244,7 +256,7 @@ export interface NzxColumnButton<T = NzSafeAny> {
    * 允许数据中配置
    */
   disabled?: boolean;
-  click: (row: T, data: T[], indexAttr: IndexAttr, evt: MouseEvent) => void;
+  click?: (row: T, params: CellArgType<T>, evt: MouseEvent) => void;
   /**
    * 如果是a标签 则设置属性target, 允许数据中配置
    */
@@ -252,7 +264,7 @@ export interface NzxColumnButton<T = NzSafeAny> {
   /**
    * 如果是a标签,设置href, 允许数据中配置
    */
-  href?: string | ((row: T, data: T[], index: IndexAttr, col: NzxColumn<T>) => string);
+  href?: string | ((row: T, params: CellArgType<T>) => string);
 }
 
 export interface IndexAttr {
@@ -284,7 +296,7 @@ export type NzxClassType = string | string[] | Set<string> | { [klass: string]: 
 export interface RowEventArg<T> {
   row: T;
   event: MouseEvent;
-  rowIndex: IndexAttr;
+  indexAttr: IndexAttr;
 }
 
 export interface CellEventArg<T> extends RowEventArg<T> {
@@ -366,7 +378,7 @@ export type CellArgType<T> = {
   nzPageData: T[];
   row: T;
   column: NzxColumn<T>;
-  rowIndex: IndexAttr;
+  indexAttr: IndexAttr;
   colIndex: IndexAttr;
 };
 

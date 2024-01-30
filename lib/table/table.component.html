@@ -228,21 +228,21 @@
       (click)="
         onRowClick({
           row: row,
-          rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
+          indexAttr: { index: index, first: first, last: last, even: even, odd: odd },
           event: $event
         })
       "
       (dblclick)="
         rowDblclick.emit({
           row: row,
-          rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
+          indexAttr: { index: index, first: first, last: last, even: even, odd: odd },
           event: $event
         })
       "
       (contextmenu)="
         rowContextmenu.emit({
           row: row,
-          rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
+          indexAttr: { index: index, first: first, last: last, even: even, odd: odd },
           event: $event
         })
       "
@@ -277,7 +277,7 @@
               cellClick.emit({
                 row: row,
                 column: col,
-                rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
+                indexAttr: { index: index, first: first, last: last, even: even, odd: odd },
                 colIndex: {
                   index: _index,
                   first: _first,
@@ -292,7 +292,7 @@
               cellDblclick.emit({
                 row: row,
                 column: col,
-                rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
+                indexAttr: { index: index, first: first, last: last, even: even, odd: odd },
                 colIndex: {
                   index: _index,
                   first: _first,
@@ -307,7 +307,7 @@
               cellContextmenu.emit({
                 row: row,
                 column: col,
-                rowIndex: { index: index, first: first, last: last, even: even, odd: odd },
+                indexAttr: { index: index, first: first, last: last, even: even, odd: odd },
                 colIndex: {
                   index: _index,
                   first: _first,
@@ -346,13 +346,16 @@
                 context: {
                   $implicit: {
                     col: col,
+                    column: col,
                     row: row,
                     context: this,
-                    indexAttr: { index: index, first: first, last: last, even: even, odd: odd }
+                    nzData: nzData,
+                    nzPageData: basicTable.data,
+                    indexAttr: { index: index, first: first, last: last, even: even, odd: odd },
+                    colIndex: { index: _index, first: _first, last: _last, even: _even, odd: _odd },
+                    parent: parent
                   },
-                  row: row,
-                  indexAttr: { index: index, first: first, last: last, even: even, odd: odd },
-                  parent: parent
+                  row: row
                 }
               "
             ></ng-container>
@@ -401,20 +404,15 @@
   </ng-template>
 </ng-template>
 
-<ng-template #tdDataRender let-data let-row="row" let-indexAttr="indexAttr" let-parent="parent">
+<ng-template #tdDataRender let-data let-row="row">
   <ng-container *ngIf="!data.col.isIndex; else tdTemplateTemplate">
     <ng-container *ngIf="data.col._tdTemplate; else buttonControlTemplate">
-      <ng-container
-        *ngTemplateOutlet="
-          data.col._tdTemplate;
-          context: { $implicit: row, row: row, data: data, col: data.col, indexAttr: indexAttr, parent: parent }
-        "
-      ></ng-container>
+      <ng-container *ngTemplateOutlet="data.col._tdTemplate; context: { $implicit: data }"></ng-container>
     </ng-container>
   </ng-container>
 
   <ng-template #tdTemplateTemplate>
-    {{ nzPageSize * (nzPageIndex - 1) + indexAttr.index + 1 }}
+    {{ nzPageSize * (nzPageIndex - 1) + data.indexAttr.index + 1 }}
   </ng-template>
 
   <!-- 按钮列-->
@@ -422,33 +420,34 @@
     <ng-container *ngIf="data.col.buttons; else widgetControlTemplate">
       <ng-container
         *ngFor="
-          let btn of data.col.buttons | colButtons: row : indexAttr : data.col : parent | async;
+          let btn of data.col.buttons | colButtons: row : data : data.parent | async;
           index as index;
           count as count;
           last as last
         "
       >
         <ng-container
-          *ngIf="
-            btn &&
-            (btn.visible | colButtonVisible)(row, indexAttr, data.col) !== false &&
-            (btn.permission | hasAuth | async)
-          "
+          *ngIf="btn && (btn.visible | colButtonVisible)(row, data) !== false && (btn.permission | hasAuth | async)"
         >
           <nzx-table-button
             *ngIf="btn.link === false"
             [props]="btn"
             [row]="row"
-            [indexAttr]="indexAttr"
-            [data]="data"
+            [indexAttr]="data.indexAttr"
+            [colIndex]="data.colIndex"
+            [nzData]="data.nzData"
+            [nzPageData]="data.nzPageData"
             [column]="data.col"
           ></nzx-table-button>
           <nzx-table-link
             *ngIf="btn.link !== false"
             [props]="btn"
             [row]="row"
-            [indexAttr]="indexAttr"
-            [data]="data"
+            [indexAttr]="data.indexAttr"
+            [colIndex]="data.colIndex"
+            [nzData]="data.nzData"
+            [nzPageData]="data.nzPageData"
+            [column]="data.col"
           ></nzx-table-link>
           <nz-divider *ngIf="btn.showDivider !== false && count > 1 && !last" nzType="vertical"></nz-divider>
         </ng-container>
@@ -459,20 +458,18 @@
   <!--自定义部件-->
   <ng-template #widgetControlTemplate>
     <ng-container *ngIf="data.col.widgets; else textValueTemplate">
-      <ng-container *ngFor="let btn of data.col.widgets | colButtons: row : indexAttr : data.col : parent | async">
+      <ng-container *ngFor="let btn of data.col.widgets | colButtons: row : data : data.parent | async">
         <ng-container
-          *ngIf="
-            btn &&
-            (btn.visible | colButtonVisible)(row, indexAttr, data.col) !== false &&
-            (btn.permission | hasAuth | async)
-          "
+          *ngIf="btn && (btn.visible | colButtonVisible)(row, data) !== false && (btn.permission | hasAuth | async)"
         >
           <ng-template
             table-widget
             [widget]="btn"
             [row]="row"
-            [indexAttr]="indexAttr"
-            [data]="data"
+            [indexAttr]="data.indexAttr"
+            [colIndex]="data.colIndex"
+            [nzData]="data.nzData"
+            [nzPageData]="data.nzPageData"
             [column]="data.col"
           ></ng-template>
         </ng-container>
@@ -483,7 +480,7 @@
   <ng-template #textValueTemplate>
     {{
       row
-        | colFormat: data.col : indexAttr.index
+        | colFormat: data.col : data.indexAttr.index
         | async
         | defaultify: (data.col.nzShowCheckbox ? '' : data.col.defaultify || defaultText)
     }}

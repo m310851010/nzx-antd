@@ -33,7 +33,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "nzx",
+            "prefix": "nzx,app",
             "style": "kebab-case"
           }
         ],

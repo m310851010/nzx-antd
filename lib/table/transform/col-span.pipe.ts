@@ -12,7 +12,7 @@ export class ColSpanPipe implements PipeTransform {
     nzData: T[],
     nzPageData: T[],
     column: NzxColumn<T>,
-    rowIndex: IndexAttr,
+    indexAttr: IndexAttr,
     colIndex: IndexAttr
   ): unknown {
     let rowspan: number | null | void = 1;
@@ -24,15 +24,15 @@ export class ColSpanPipe implements PipeTransform {
         nzData,
         nzPageData,
         column,
-        rowIndex,
+        indexAttr,
         colIndex
       });
       if (Array.isArray(result)) {
         rowspan = result[0];
         colspan = result[1];
       } else if (result != null) {
-        rowspan = result!.rowspan;
-        colspan = result!.colspan;
+        rowspan = result.rowspan;
+        colspan = result.colspan;
       }
     }
 

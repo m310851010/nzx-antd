@@ -22,7 +22,7 @@ export class TableWidgetService {
   }
 
   has(type: string): boolean {
-    return this.widgetMap.hasOwnProperty(type);
+    return Object.hasOwn(this.widgetMap, type);
   }
 
   get(type: string): Type<any> {

@@ -19,7 +19,7 @@ import { IndexAttr, NzxColumn } from '../../table.type';
       [disabled]="props.disabled"
       [ngClass]="props.ngClass"
       [ngStyle]="props.ngStyle"
-      (click)="props.click && props.click(row, data, indexAttr, $event)"
+      (click)="props.click && props.click(row, { row, nzData, nzPageData, colIndex, column, indexAttr }, $event)"
     >
       <i *ngIf="props.icon" nz-icon [nzType]="props.icon"></i>
       {{ props.text }}
@@ -28,8 +28,10 @@ import { IndexAttr, NzxColumn } from '../../table.type';
 })
 export class TableButtonComponent<T> {
   @Input() props: Record<string, any> = {};
-  @Input() data: T[] = [];
   @Input() row: T = {} as T;
   @Input() indexAttr!: IndexAttr;
+  @Input() colIndex!: IndexAttr;
   @Input() column!: NzxColumn<T>;
+  @Input() nzData: T[] = [];
+  @Input() nzPageData: T[] = [];
 }

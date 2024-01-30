@@ -241,7 +241,7 @@ export const ColspanCol = Template({
   ],
   nzData: NzxUtils.clone(nzData),
   nzxSpanFunc: params => {
-    if (params.rowIndex.index % 2 === 0) {
+    if (params.indexAttr.index % 2 === 0) {
       if (params.colIndex.index === 1) {
         return [1, 2];
       } else if (params.colIndex.index === 2) {

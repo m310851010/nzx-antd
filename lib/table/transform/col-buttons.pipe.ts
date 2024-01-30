@@ -1,26 +1,24 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { IndexAttr, NzxColumn } from '../table.type';
+import { CellArgType } from '../table.type';
 import { of } from 'rxjs';
 import { NzxUtils } from '@xmagic/nzx-antd/util';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
 
 @Pipe({
   name: 'colButtons'
 })
 export class ColButtonsPipe<T> implements PipeTransform {
   transform(
-    buttons: T[] | ((row: NzSafeAny, rowIndex: IndexAttr, column: NzxColumn<NzSafeAny>, parent: NzSafeAny) => T[]),
-    row: NzSafeAny,
-    rowIndex: IndexAttr,
-    column: NzxColumn<NzSafeAny>,
-    parent: NzSafeAny
+    buttons: T[] | ((row: T, params: CellArgType<T> & { parentRow?: T }) => T[]),
+    row: T,
+    params: CellArgType<T>,
+    parentRow?: T
   ) {
     if (!buttons) {
       return of([]);
     }
 
     if (NzxUtils.isFunction(buttons)) {
-      return resolveButton(buttons(row, rowIndex, column, parent));
+      return resolveButton(buttons(row, { ...params, parentRow }));
     }
     return resolveButton(buttons);
   }

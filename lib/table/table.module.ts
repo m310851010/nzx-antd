@@ -25,25 +25,9 @@ import { HasAuthPipe } from './transform/has-auth.pipe';
 import { ColButtonsPipe } from './transform/col-buttons.pipe';
 import { TABLE_WIDGET, TableWidget } from './table.type';
 import { TableWidgetService } from './table-widget.service';
-import { NzxSwitchComponent, NzxSwitchModule } from '@xmagic/nzx-antd/switch';
-import { NzInputNumberComponent, NzInputNumberModule } from 'ng-zorro-antd/input-number';
-import { NzTagComponent, NzTagModule } from 'ng-zorro-antd/tag';
-import { TableWidgetModule } from './table-widget/table-widget.module';
-import { TableButtonComponent } from './table-widget/table-button/table-button.component';
-import { TableInputComponent } from './table-widget/table-input/table-input.component';
-import { TableLinkComponent } from './table-widget/table-link/table-link.component';
-import { TableWidgetDirective } from '@xmagic/nzx-antd/table/table-widget.directive';
 
-export function defaultTableWidget(): TableWidget[] {
-  return [
-    { name: 'switch', component: NzxSwitchComponent },
-    { name: 'input', component: TableInputComponent },
-    { name: 'number', component: NzInputNumberComponent },
-    { name: 'tag', component: NzTagComponent },
-    { name: 'button', component: TableButtonComponent },
-    { name: 'link', component: TableLinkComponent }
-  ];
-}
+import { TableWidgetModule } from './table-widget/table-widget.module';
+import { TableWidgetDirective } from './table-widget.directive';
 
 const COMPONENT = [NzxTableComponent, NzxTableHeaderComponent, NzxColumnSettingComponent, TableWidgetDirective];
 @NgModule({
@@ -66,10 +50,6 @@ const COMPONENT = [NzxTableComponent, NzxTableHeaderComponent, NzxColumnSettingC
     NzOutletModule,
     NzButtonModule,
     NzxDirectiveModule,
-    // 以下是注册的小部件
-    NzxSwitchModule,
-    NzInputNumberModule,
-    NzTagModule,
     TableWidgetModule
   ],
   exports: [COMPONENT]
@@ -85,23 +65,10 @@ export class NzxTableModule {
     widgets.forEach(c => service.register(c));
   }
 
-  static forRoot(widgets: TableWidget[] = []): ModuleWithProviders<NzxTableModule> {
-    return {
-      ngModule: NzxTableModule,
-      providers: [
-        { provide: TABLE_WIDGET, multi: true, useFactory: defaultTableWidget },
-        { provide: TABLE_WIDGET, useValue: widgets, multi: true }
-      ]
-    };
-  }
-
   static forChild(config: TableWidget[] = []): ModuleWithProviders<NzxTableModule> {
     return {
       ngModule: NzxTableModule,
-      providers: [
-        { provide: TABLE_WIDGET, multi: true, useFactory: defaultTableWidget },
-        { provide: TABLE_WIDGET, useValue: config, multi: true }
-      ]
+      providers: [{ provide: TABLE_WIDGET, useValue: config, multi: true }]
     };
   }
 }
