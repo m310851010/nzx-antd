@@ -10,9 +10,7 @@
       ],
       "parserOptions": {
         "project": [
-          "./src/tsconfig.app.json",
-          "./src/tsconfig.spec.json",
-          "./e2e/tsconfig.e2e.json"
+          "./lib/tsconfig.lib.json"
         ],
         "createDefaultProgram": true
       },
@@ -35,7 +33,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "app",
+            "prefix": "nzx",
             "style": "kebab-case"
           }
         ],

@@ -11,13 +11,7 @@ import { LinkHrefPipe } from '../transform/link-href.pipe';
 
 @NgModule({
   declarations: [TableInputComponent, TableButtonComponent, TableLinkComponent, LinkHrefPipe],
-  imports: [
-    CommonModule,
-    FormsModule,
-    NzInputModule,
-    NzButtonModule,
-    NzIconModule,
-  ],
+  imports: [CommonModule, FormsModule, NzInputModule, NzButtonModule, NzIconModule],
   exports: [TableInputComponent, TableButtonComponent, TableLinkComponent]
 })
-export class TableWidgetModule { }
+export class TableWidgetModule {}

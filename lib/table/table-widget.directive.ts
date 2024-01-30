@@ -1,30 +1,40 @@
-import {Directive, Input, ViewContainerRef} from '@angular/core';
-import {IndexAttr, NzxColumn} from "./table.type";
-import {TableWidgetService} from "./table-widget.service";
+import { Directive, Input, ViewContainerRef } from '@angular/core';
+import { IndexAttr, NzxColumn, NzxWidget } from './table.type';
+import { TableWidgetService } from './table-widget.service';
 
 @Directive({
-  selector: '[table-widget]',
-  standalone: true
+  selector: '[table-widget]'
 })
 export class TableWidgetDirective<T> {
-  @Input() props: Record<string, any> = {};
   @Input() data: T[] = [];
   @Input() row: T = {} as T;
   @Input() indexAttr!: IndexAttr;
   @Input() column!: NzxColumn<T>;
+  @Input() widget!: NzxWidget<T>;
 
-  constructor(private stWidgetRegistry: TableWidgetService, private viewContainerRef: ViewContainerRef) {}
+  constructor(
+    private stWidgetRegistry: TableWidgetService,
+    private viewContainerRef: ViewContainerRef
+  ) {}
 
   ngOnInit(): void {
-    const widget = this.column.widget!;
-    const componentType = this.stWidgetRegistry.get(widget.type);
-
     this.viewContainerRef.clear();
+    if (!this.widget) {
+      return;
+    }
+    const componentType = this.stWidgetRegistry.get(this.widget.type);
+    if (!componentType) {
+      console.warn(`组件类型“${this.widget.type}”未注册`);
+      return;
+    }
+
     const componentRef = this.viewContainerRef.createComponent(componentType);
-    const { row, column } = this;
-    const data: { [key: string]: any } = widget.params ? widget.params({ row, column }) : { row };
-    Object.keys(data).forEach(key => {
-      (componentRef.instance)[key] = data[key];
-    });
+    const data: Record<string, any> = this.widget.params
+      ? this.widget.params(this.row, this.indexAttr, this.column, this.data)
+      : { row: this.row };
+
+    if (data) {
+      Object.assign(componentRef.instance, this.widget.props, data);
+    }
   }
 }

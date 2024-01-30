@@ -3,7 +3,6 @@
 # **/*.html
 **/test.ts
 src/index.html
-projects/commons/assets/**/*
 
 .stylelintrc
 .prettierrc

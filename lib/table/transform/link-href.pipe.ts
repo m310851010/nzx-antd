@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { IndexAttr, NzxColumn, NzxColumnButton} from '../table.type';
+import { IndexAttr, NzxColumn, NzxColumnButton } from '../table.type';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzxUtils } from '@xmagic/nzx-antd/util';
 

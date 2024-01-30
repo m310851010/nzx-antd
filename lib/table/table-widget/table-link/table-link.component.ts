@@ -1,18 +1,19 @@
 import { Component, Input } from '@angular/core';
-import { IndexAttr, NzxColumn, NzxColumnButton} from '../../table.type';
-
+import { IndexAttr, NzxColumn, NzxColumnButton } from '../../table.type';
 
 @Component({
   selector: 'nzx-table-link',
-  template: `<a
-    [attr.href]="props | linkHref: row: data : indexAttr : column"
-    [attr.target]="props.target"
-    [ngClass]="props.ngClass"
-    [ngStyle]="props.ngStyle"
-    (click)="props.click && !props.disabled && props.click(row, data, indexAttr, $event)"
-  >
-    {{ props.text }}
-  </a>`
+  template: `
+    <a
+      [attr.href]="props | linkHref: row : data : indexAttr : column"
+      [attr.target]="props.target"
+      [ngClass]="props.ngClass"
+      [ngStyle]="props.ngStyle"
+      (click)="props.click && !props.disabled && props.click(row, data, indexAttr, $event)"
+    >
+      {{ props.text }}
+    </a>
+  `
 })
 export class TableLinkComponent<T> {
   @Input() props!: NzxColumnButton;

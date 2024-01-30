@@ -211,16 +211,18 @@
     </ng-container>
   </tbody>
 
-  <ng-template #trTemplate
-               let-row
-               let-index="index"
-               let-first="first"
-               let-last="last"
-               let-even="even"
-               let-odd="odd"
-               let-level="level"
-               let-parent="parent"
-               let-pathTrace="pathTrace">
+  <ng-template
+    #trTemplate
+    let-row
+    let-index="index"
+    let-first="first"
+    let-last="last"
+    let-even="even"
+    let-odd="odd"
+    let-level="level"
+    let-parent="parent"
+    let-pathTrace="pathTrace"
+  >
     <tr
       *ngIf="!parent || parent.expand"
       (click)="
@@ -320,11 +322,14 @@
             [nzDisabled]="row.disabled"
             [nzIndeterminate]="row.nzIndeterminate"
             [(nzChecked)]="row.checked"
-            (nzCheckedChange)="tdCheckedChange($event, col, row, pathTrace, {index, first, last, even, odd})"
+            (nzCheckedChange)="tdCheckedChange($event, col, row, pathTrace, { index, first, last, even, odd })"
             [nzShowExpand]="col.showExpand && row.children && row.children.length > 0"
             [(nzExpand)]="row.expand"
-            (nzExpandChange)="defaultCollapse(row, $event);col.nzExpandChange && col.nzExpandChange($event, col, row, {index, first, last, even, odd})"
-            [nzIndentSize]="col.showExpand ? (level * nzIndentSize) : null"
+            (nzExpandChange)="
+              defaultCollapse(row, $event);
+              col.nzExpandChange && col.nzExpandChange($event, col, row, { index, first, last, even, odd })
+            "
+            [nzIndentSize]="col.showExpand ? level * nzIndentSize : null"
             [nzLeft]="col.fixed === 'left'"
             [nzRight]="col.fixed === 'right'"
             [nzAlign]="col.tdAlign || col.nzAlign"
@@ -356,30 +361,31 @@
       </ng-container>
     </tr>
 
-    <ng-container *ngFor="let child of row.children; index as cIndex; first as cFirst; last as cLast; even as cEven; odd as cOdd">
+    <ng-container
+      *ngFor="let child of row.children; index as cIndex; first as cFirst; last as cLast; even as cEven; odd as cOdd"
+    >
       <ng-container
         *ngTemplateOutlet="
-            nzxTr || trTemplate;
-            context: {
-              $implicit: child,
-              level: level + 1,
-              parentIndex: index,
-              row: child,
-              nzData: nzData,
-              nzPageData: basicTable.data,
-              columns: _bodyColumns,
-              index: cIndex,
-              first: cFirst,
-              last: cLast,
-              even: cEven,
-              odd: cOdd,
-              parent: row,
-              pathTrace: [pathTrace, row]
-            }
-          "
+          nzxTr || trTemplate;
+          context: {
+            $implicit: child,
+            level: level + 1,
+            parentIndex: index,
+            row: child,
+            nzData: nzData,
+            nzPageData: basicTable.data,
+            columns: _bodyColumns,
+            index: cIndex,
+            first: cFirst,
+            last: cLast,
+            even: cEven,
+            odd: cOdd,
+            parent: row,
+            pathTrace: [pathTrace, row]
+          }
+        "
       ></ng-container>
     </ng-container>
-
   </ng-template>
 </nz-table>
 
@@ -414,11 +420,37 @@
   <!-- 按钮列-->
   <ng-template #buttonControlTemplate>
     <ng-container *ngIf="data.col.buttons; else widgetControlTemplate">
-      <ng-container *ngFor="let btn of (data.col.buttons | colButtons: row : indexAttr: data.col : parent | async); index as index; count as count; last as last">
-        <ng-container *ngIf="btn && (btn.visible | colButtonVisible)(row, indexAttr, data.col) !== false && (btn.permission | hasAuth | async)">
-          <nzx-table-button *ngIf="btn.link === false" [props]="btn" [row]="row" [indexAttr]="indexAttr" [data]="data"></nzx-table-button>
-          <nzx-table-link *ngIf="btn.link !== false" [props]="btn" [row]="row" [indexAttr]="indexAttr" [data]="data"></nzx-table-link>
-          <nz-divider *ngIf="btn.showDivider !== false && count > 1 && !last" nzType="vertical" ></nz-divider>
+      <ng-container
+        *ngFor="
+          let btn of data.col.buttons | colButtons: row : indexAttr : data.col : parent | async;
+          index as index;
+          count as count;
+          last as last
+        "
+      >
+        <ng-container
+          *ngIf="
+            btn &&
+            (btn.visible | colButtonVisible)(row, indexAttr, data.col) !== false &&
+            (btn.permission | hasAuth | async)
+          "
+        >
+          <nzx-table-button
+            *ngIf="btn.link === false"
+            [props]="btn"
+            [row]="row"
+            [indexAttr]="indexAttr"
+            [data]="data"
+            [column]="data.col"
+          ></nzx-table-button>
+          <nzx-table-link
+            *ngIf="btn.link !== false"
+            [props]="btn"
+            [row]="row"
+            [indexAttr]="indexAttr"
+            [data]="data"
+          ></nzx-table-link>
+          <nz-divider *ngIf="btn.showDivider !== false && count > 1 && !last" nzType="vertical"></nz-divider>
         </ng-container>
       </ng-container>
     </ng-container>
@@ -427,9 +459,22 @@
   <!--自定义部件-->
   <ng-template #widgetControlTemplate>
     <ng-container *ngIf="data.col.widgets; else textValueTemplate">
-      <ng-container *ngFor="let btn of (data.col.widgets | colButtons: row : indexAttr: data.col : parent | async); index as index; count as count; last as last">
-        <ng-container *ngIf="btn && (btn.visible | colButtonVisible)(row, indexAttr, data.col) !== false && (btn.permission | hasAuth | async)">
+      <ng-container *ngFor="let btn of data.col.widgets | colButtons: row : indexAttr : data.col : parent | async">
+        <ng-container
+          *ngIf="
+            btn &&
+            (btn.visible | colButtonVisible)(row, indexAttr, data.col) !== false &&
+            (btn.permission | hasAuth | async)
+          "
+        >
           <ng-template
+            table-widget
+            [widget]="btn"
+            [row]="row"
+            [indexAttr]="indexAttr"
+            [data]="data"
+            [column]="data.col"
+          ></ng-template>
         </ng-container>
       </ng-container>
     </ng-container>
@@ -438,7 +483,7 @@
   <ng-template #textValueTemplate>
     {{
       row
-        | colFormat: data.col:indexAttr.index
+        | colFormat: data.col : indexAttr.index
         | async
         | defaultify: (data.col.nzShowCheckbox ? '' : data.col.defaultify || defaultText)
     }}

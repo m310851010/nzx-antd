@@ -1,4 +1,4 @@
-import {Inject, ModuleWithProviders, NgModule, Optional, Type} from '@angular/core';
+import { Inject, ModuleWithProviders, NgModule, Optional, Type } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzxTableComponent } from './table.component';
@@ -25,13 +25,14 @@ import { HasAuthPipe } from './transform/has-auth.pipe';
 import { ColButtonsPipe } from './transform/col-buttons.pipe';
 import { TABLE_WIDGET, TableWidget } from './table.type';
 import { TableWidgetService } from './table-widget.service';
-import { NzxSwitchComponent, NzxSwitchModule} from '@xmagic/nzx-antd/switch';
-import { NzInputNumberComponent, NzInputNumberModule} from 'ng-zorro-antd/input-number';
+import { NzxSwitchComponent, NzxSwitchModule } from '@xmagic/nzx-antd/switch';
+import { NzInputNumberComponent, NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzTagComponent, NzTagModule } from 'ng-zorro-antd/tag';
 import { TableWidgetModule } from './table-widget/table-widget.module';
 import { TableButtonComponent } from './table-widget/table-button/table-button.component';
 import { TableInputComponent } from './table-widget/table-input/table-input.component';
 import { TableLinkComponent } from './table-widget/table-link/table-link.component';
+import { TableWidgetDirective } from '@xmagic/nzx-antd/table/table-widget.directive';
 
 export function defaultTableWidget(): TableWidget[] {
   return [
@@ -44,16 +45,9 @@ export function defaultTableWidget(): TableWidget[] {
   ];
 }
 
-const COMPONENT = [NzxTableComponent, NzxTableHeaderComponent, NzxColumnSettingComponent];
+const COMPONENT = [NzxTableComponent, NzxTableHeaderComponent, NzxColumnSettingComponent, TableWidgetDirective];
 @NgModule({
-  declarations: [
-    COMPONENT,
-    ColFormatPipe,
-    ColSpanPipe,
-    ColButtonVisiblePipe,
-    HasAuthPipe,
-    ColButtonsPipe
-  ],
+  declarations: [COMPONENT, ColFormatPipe, ColSpanPipe, ColButtonVisiblePipe, HasAuthPipe, ColButtonsPipe],
   imports: [
     CommonModule,
     FormsModule,
@@ -81,11 +75,14 @@ const COMPONENT = [NzxTableComponent, NzxTableHeaderComponent, NzxColumnSettingC
   exports: [COMPONENT]
 })
 export class NzxTableModule {
-  constructor(public service: TableWidgetService, @Optional() @Inject(TABLE_WIDGET) widgets: TableWidget[][] = []) {
+  constructor(
+    public service: TableWidgetService,
+    @Optional() @Inject(TABLE_WIDGET) widgets: TableWidget[][] = []
+  ) {
     if (!widgets) {
       return;
     }
-    widgets.forEach((c) => service.register(c));
+    widgets.forEach(c => service.register(c));
   }
 
   static forRoot(widgets: TableWidget[] = []): ModuleWithProviders<NzxTableModule> {
@@ -93,8 +90,8 @@ export class NzxTableModule {
       ngModule: NzxTableModule,
       providers: [
         { provide: TABLE_WIDGET, multi: true, useFactory: defaultTableWidget },
-        { provide: TABLE_WIDGET, useValue: widgets, multi: true },
-      ],
+        { provide: TABLE_WIDGET, useValue: widgets, multi: true }
+      ]
     };
   }
 
@@ -103,8 +100,8 @@ export class NzxTableModule {
       ngModule: NzxTableModule,
       providers: [
         { provide: TABLE_WIDGET, multi: true, useFactory: defaultTableWidget },
-        { provide: TABLE_WIDGET, useValue: config, multi: true },
-      ],
+        { provide: TABLE_WIDGET, useValue: config, multi: true }
+      ]
     };
   }
 }

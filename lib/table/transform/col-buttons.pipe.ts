@@ -1,20 +1,20 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { IndexAttr, NzxColumn, NzxColumnButton } from '../table.type';
-import { Observable, of } from 'rxjs';
+import { IndexAttr, NzxColumn } from '../table.type';
+import { of } from 'rxjs';
 import { NzxUtils } from '@xmagic/nzx-antd/util';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 
 @Pipe({
   name: 'colButtons'
 })
-export class ColButtonsPipe implements PipeTransform {
+export class ColButtonsPipe<T> implements PipeTransform {
   transform(
-    buttons: NzxColumn['buttons'],
+    buttons: T[] | ((row: NzSafeAny, rowIndex: IndexAttr, column: NzxColumn<NzSafeAny>, parent: NzSafeAny) => T[]),
     row: NzSafeAny,
     rowIndex: IndexAttr,
     column: NzxColumn<NzSafeAny>,
     parent: NzSafeAny
-  ): Observable<NzxColumnButton[] | null> | Promise<NzxColumnButton[]> {
+  ) {
     if (!buttons) {
       return of([]);
     }
@@ -26,9 +26,7 @@ export class ColButtonsPipe implements PipeTransform {
   }
 }
 
-function resolveButton(
-  buttons: NzxColumn['buttons']
-): Observable<NzxColumnButton[] | null> | Promise<NzxColumnButton[]> {
+function resolveButton<T>(buttons: T[]) {
   if (!buttons) {
     return of([]);
   }

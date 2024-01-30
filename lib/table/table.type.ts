@@ -1,4 +1,4 @@
-import {InjectionToken, TemplateRef, Type} from '@angular/core';
+import { InjectionToken, TemplateRef, Type } from '@angular/core';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzTableFilterFn, NzTableSize, NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
 import { Observable } from 'rxjs';
@@ -8,10 +8,10 @@ export const TABLE_WIDGET = new InjectionToken<TableWidget[]>('TABLE_WIDGET');
 
 export interface TableWidget {
   name: string;
-  component: Type<any>
+  component: Type<any>;
 }
 
-export type TableWidgetMap = Record<string, Type<any>>
+export type TableWidgetMap = Record<string, Type<any>>;
 
 /**
  * 列配置
@@ -141,6 +141,9 @@ export type NzxWidgets = NzxWidget[] | Observable<NzxWidget[]> | Promise<NzxWidg
 
 export interface NzxWidget<T = NzSafeAny> {
   type: string;
+  /**
+   * 传给组件的参数，会绑定到组件到属性上
+   */
   props: Record<string, any>;
   /**
    * 是否显示按钮, 在数据中配置 { buttons: { 'name对应的列1': { visible: true, showDivider: true, text: '数据上更新按钮文本'}}}
@@ -155,6 +158,15 @@ export interface NzxWidget<T = NzSafeAny> {
    * 权限标识, 需要配置NzxAntdService.hasAuth
    */
   permission?: NzSafeAny;
+
+  /**
+   * 传给组件的参数，会绑定到组件到属性上
+   * @param row
+   * @param rowIndex
+   * @param column
+   * @param nzData
+   */
+  params?: (row: T, rowIndex: IndexAttr, column: NzxColumn<T>, nzData: T[]) => Record<string, any>;
 }
 
 /**
