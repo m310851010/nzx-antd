@@ -129,13 +129,14 @@ export interface NzxColumn<T = Record<string, NzSafeAny>> {
 
 export type NzxButtons = NzxColumnButton[] | Observable<NzxColumnButton[]> | Promise<NzxColumnButton[]>;
 export type NzxWidgets = NzxWidget[] | Observable<NzxWidget[]> | Promise<NzxWidget[]>;
+export type NzxWidgetProp = Record<string, any> | Observable<Record<string, any>> | Promise<Record<string, any>>;
 
 export interface NzxWidget<T = NzSafeAny> {
   type: string;
   /**
    * 传给组件的参数，会绑定到组件到属性上
    */
-  props?: Record<string, any>;
+  props?: NzxWidgetProp | ((row: T, params: CellArgType<T>) => NzxWidgetProp);
   /**
    * 是否显示按钮, 在数据中配置 { buttons: { 'name对应的列1': { visible: true, showDivider: true, text: '数据上更新按钮文本'}}}
    */
@@ -168,13 +169,6 @@ export interface NzxWidget<T = NzSafeAny> {
       componentRef: ComponentRef<any>;
     } & CellArgType<T>
   ) => void;
-
-  /**
-   * 传给组件的参数，会绑定到组件到属性上
-   * @param row
-   * @param params
-   */
-  params?: (row: T, params: CellArgType<T>) => Record<string, any>;
 
   /**
    * 宿主元素样式
