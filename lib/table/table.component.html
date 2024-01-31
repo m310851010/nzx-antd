@@ -139,13 +139,13 @@
             [nzWidth]="col.nzWidth == null && col.nzShowCheckbox ? '60px' : col.nzWidth"
             [nzLeft]="col.fixed === 'left'"
             [nzRight]="col.fixed === 'right'"
-            [nzAlign]="col.nzAlign"
+            [nzAlign]="col.thAlign"
             [nzBreakWord]="col.nzBreakWord"
             [nzEllipsis]="col.nzEllipsis"
             [colspan]="col.colspan"
             [rowspan]="col.rowspan"
-            [ngClass]="col.thClassName"
-            [ngStyle]="col.thStyle"
+            [ngClass]="col.thNgClass"
+            [ngStyle]="col.thNgStyle"
           >
             <nz-resize-handles [nzDirections]="['right']"></nz-resize-handles>
             <ng-container
@@ -480,7 +480,7 @@
   <ng-template #textValueTemplate>
     {{
       row
-        | colFormat: data.col : data.indexAttr.index
+        | colFormat: data.col : data
         | async
         | defaultify: (data.col.nzShowCheckbox ? '' : data.col.defaultify || defaultText)
     }}
