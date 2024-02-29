@@ -407,7 +407,19 @@
 <ng-template #tdDataRender let-data let-row="row">
   <ng-container *ngIf="!data.col.isIndex; else tdTemplateTemplate">
     <ng-container *ngIf="data.col._tdTemplate; else buttonControlTemplate">
-      <ng-container *ngTemplateOutlet="data.col._tdTemplate; context: { $implicit: data }"></ng-container>
+      <ng-container
+        *ngTemplateOutlet="
+          data.col._tdTemplate;
+          context: {
+            $implicit: row,
+            row: row,
+            data: data,
+            col: data.col,
+            indexAttr: data.indexAttr,
+            parent: data.parent
+          }
+        "
+      ></ng-container>
     </ng-container>
   </ng-container>
 
